@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Home, Building2, MessageSquare } from 'lucide-react';
+import { Home, Building2, Users, MessageSquare } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
@@ -25,7 +25,8 @@ const BottomDock = () => {
   const items = [
     { id: '/', icon: Home, label: 'Home' },
     { id: '/immobili', icon: Building2, label: 'Immobili' },
-    { id: 'contatti', icon: MessageSquare, label: 'Contatti' },
+    { id: '/chi-siamo', icon: Users, label: 'Chi Siamo' },
+    { id: 'contatti', icon: MessageSquare, label: 'Parliamo' },
   ];
 
   return (
@@ -51,8 +52,8 @@ const BottomDock = () => {
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}
-              <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
-              <span className="text-[10px] font-bold mt-1 uppercase tracking-wider">{item.label}</span>
+              <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
+              <span className="text-[8px] font-bold mt-1 uppercase tracking-wider">{item.label}</span>
             </button>
           );
         })}

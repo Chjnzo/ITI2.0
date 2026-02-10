@@ -24,7 +24,7 @@ const Header = () => {
         <nav className="hidden md:flex items-center gap-8">
           <Link to="/" className="text-sm font-bold text-[#1a1a1a]/60 hover:text-[#94b0ab] transition-colors">Home</Link>
           <Link to="/immobili" className="text-sm font-bold text-[#1a1a1a]/60 hover:text-[#94b0ab] transition-colors">Immobili</Link>
-          <button onClick={scrollToContact} className="text-sm font-bold text-[#1a1a1a]/60 hover:text-[#94b0ab] transition-colors">Contatti</button>
+          <Link to="/chi-siamo" className="text-sm font-bold text-[#1a1a1a]/60 hover:text-[#94b0ab] transition-colors">Chi Siamo</Link>
         </nav>
 
         <div className="md:hidden w-6" />
