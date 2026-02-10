@@ -28,7 +28,10 @@ const Header = () => {
         </nav>
 
         <div className="md:hidden w-6" />
-        <button onClick={scrollToContact} className="hidden md:block text-xs font-bold bg-[#1a1a1a] text-white px-5 py-2.5 rounded-2xl hover:bg-[#94b0ab] transition-colors">
+        <button 
+          onClick={scrollToContact} 
+          className="hidden md:block text-xs font-bold bg-[#1a1a1a] text-white px-5 py-2.5 rounded-2xl hover:bg-[#94b0ab] transition-colors"
+        >
           Parliamo
         </button>
       </div>
