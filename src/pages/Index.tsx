@@ -1,15 +1,30 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Header from '@/components/Header';
 import BentoHero from '@/components/BentoHero';
 import StatsBento from '@/components/StatsBento';
 import PropertyBento from '@/components/PropertyBento';
+import ValueProposition from '@/components/ValueProposition';
+import AboutSection from '@/components/AboutSection';
 import TeamContact from '@/components/TeamContact';
 import BottomDock from '@/components/BottomDock';
 import { MadeWithDyad } from "@/components/made-with-dyad";
 
 const Index = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const scrollTo = params.get('scroll');
+    if (scrollTo) {
+      setTimeout(() => {
+        document.getElementById(scrollTo)?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  }, [location]);
+
   return (
     <div className="min-h-screen bg-[#f8f9fa] selection:bg-[#94b0ab] selection:text-white font-sans text-[#1a1a1a]">
       <Header />
@@ -17,6 +32,8 @@ const Index = () => {
       <main className="pb-32 md:pb-12">
         <BentoHero />
         <StatsBento />
+        <ValueProposition />
+        <AboutSection />
         <PropertyBento />
         <TeamContact />
       </main>

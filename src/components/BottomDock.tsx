@@ -10,10 +10,22 @@ const BottomDock = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const handleNav = (id: string) => {
+    if (id === 'contatti') {
+      if (location.pathname !== '/') {
+        navigate('/?scroll=contatti');
+      } else {
+        document.getElementById('contatti')?.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      navigate(id);
+    }
+  };
+
   const items = [
     { id: '/', icon: Home, label: 'Home' },
     { id: '/immobili', icon: Building2, label: 'Immobili' },
-    { id: '/vendi', icon: MessageSquare, label: 'Contatti' },
+    { id: 'contatti', icon: MessageSquare, label: 'Contatti' },
   ];
 
   return (
@@ -21,12 +33,12 @@ const BottomDock = () => {
       <nav className="bg-white/80 backdrop-blur-2xl border border-white/40 shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-full p-2 flex items-center justify-around h-16">
         {items.map((item) => {
           const Icon = item.icon;
-          const isActive = location.pathname === item.id;
+          const isActive = item.id === 'contatti' ? false : location.pathname === item.id;
           
           return (
             <button
-              key={item.id}
-              onClick={() => navigate(item.id)}
+              key={item.label}
+              onClick={() => handleNav(item.id)}
               className={cn(
                 "relative flex-1 flex flex-col items-center justify-center py-2 transition-all duration-300",
                 isActive ? "text-[#94b0ab]" : "text-gray-400"
