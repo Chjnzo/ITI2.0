@@ -14,7 +14,7 @@ const Header = () => {
         
         <nav className="hidden md:flex items-center gap-8">
           <Link to="/vendi" className="text-sm font-medium text-[#1a1a1a]/60 hover:text-[#94b0ab] transition-colors">Vendi</Link>
-          <Link to="/compra" className="text-sm font-medium text-[#1a1a1a]/60 hover:text-[#94b0ab] transition-colors">Compra</Link>
+          <Link to="/immobili" className="text-sm font-medium text-[#1a1a1a]/60 hover:text-[#94b0ab] transition-colors">Compra</Link>
           <Link to="/chi-siamo" className="text-sm font-medium text-[#1a1a1a]/60 hover:text-[#94b0ab] transition-colors">Chi Siamo</Link>
         </nav>
 
