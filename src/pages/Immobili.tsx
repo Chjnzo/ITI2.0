@@ -1,81 +1,14 @@
 "use client";
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import BottomDock from '@/components/BottomDock';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Maximize2, BedDouble, Bath, Search, SlidersHorizontal } from 'lucide-react';
+import { MapPin, Maximize2, BedDouble, Bath } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { properties } from '@/data/properties';
 import { MadeWithDyad } from "@/components/made-with-dyad";
-
-const properties = [
-  {
-    id: 1,
-    title: "Penthouse San Vigilio",
-    location: "Bergamo Alta",
-    category: "Appartamenti",
-    price: "€ 890.000",
-    sqm: 210,
-    rooms: 4,
-    baths: 3,
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1000&auto=format&fit=crop"
-  },
-  {
-    id: 2,
-    title: "Loft Industriale",
-    location: "Centro Città",
-    category: "Loft",
-    price: "€ 345.000",
-    sqm: 125,
-    rooms: 2,
-    baths: 2,
-    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000&auto=format&fit=crop"
-  },
-  {
-    id: 3,
-    title: "Villa Contemporanea",
-    location: "Gorle",
-    category: "Ville",
-    price: "€ 1.250.000",
-    sqm: 450,
-    rooms: 6,
-    baths: 4,
-    image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1000&auto=format&fit=crop"
-  },
-  {
-    id: 4,
-    title: "Appartamento Smart",
-    location: "Ranica",
-    category: "Appartamenti",
-    price: "€ 215.000",
-    sqm: 85,
-    rooms: 3,
-    baths: 1,
-    image: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=1000&auto=format&fit=crop"
-  },
-  {
-    id: 5,
-    title: "Residenza Storica",
-    location: "Città Bassa",
-    category: "Appartamenti",
-    price: "€ 560.000",
-    sqm: 180,
-    rooms: 4,
-    baths: 2,
-    image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=1000&auto=format&fit=crop"
-  },
-  {
-    id: 6,
-    title: "Villa con Parco",
-    location: "Alzano Lombardo",
-    category: "Ville",
-    price: "€ 780.000",
-    sqm: 320,
-    rooms: 5,
-    baths: 3,
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop"
-  }
-];
 
 const categories = ["Tutti", "Appartamenti", "Ville", "Loft"];
 
@@ -134,57 +67,59 @@ const Immobili = () => {
                   transition={{ duration: 0.4 }}
                   className="group"
                 >
-                  <div className="bg-white rounded-[40px] overflow-hidden border border-gray-100 shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-2">
-                    <div className="relative aspect-[4/3] overflow-hidden">
-                      <img 
-                        src={prop.image} 
-                        alt={prop.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      <div className="absolute top-6 left-6">
-                        <span className="px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-[10px] font-bold uppercase tracking-widest">
-                          {prop.category}
-                        </span>
-                      </div>
-                      <div className="absolute bottom-6 right-6">
-                        <span className="px-6 py-3 bg-[#94b0ab] text-white rounded-full text-lg font-bold shadow-lg">
-                          {prop.price}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    <div className="p-8">
-                      <h3 className="text-2xl font-bold mb-2 group-hover:text-[#94b0ab] transition-colors">{prop.title}</h3>
-                      <div className="flex items-center gap-2 text-gray-400 mb-6 font-medium">
-                        <MapPin size={16} className="text-[#94b0ab]" />
-                        {prop.location}, Bergamo
+                  <Link to={`/property/${prop.slug}`} className="block">
+                    <div className="bg-white rounded-[40px] overflow-hidden border border-gray-100 shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-2">
+                      <div className="relative aspect-[4/3] overflow-hidden">
+                        <img 
+                          src={prop.images[0]} 
+                          alt={prop.title}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute top-6 left-6">
+                          <span className="px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-[10px] font-bold uppercase tracking-widest">
+                            {prop.category}
+                          </span>
+                        </div>
+                        <div className="absolute bottom-6 right-6">
+                          <span className="px-6 py-3 bg-[#94b0ab] text-white rounded-full text-lg font-bold shadow-lg">
+                            {prop.price}
+                          </span>
+                        </div>
                       </div>
                       
-                      <div className="grid grid-cols-3 gap-4 pt-6 border-t border-gray-50">
-                        <div className="flex flex-col gap-1">
-                          <div className="flex items-center gap-2 text-[#1a1a1a]">
-                            <Maximize2 size={14} className="text-[#94b0ab]" />
-                            <span className="text-sm font-bold">{prop.sqm}</span>
-                          </div>
-                          <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">mq</span>
+                      <div className="p-8">
+                        <h3 className="text-2xl font-bold mb-2 group-hover:text-[#94b0ab] transition-colors">{prop.title}</h3>
+                        <div className="flex items-center gap-2 text-gray-400 mb-6 font-medium">
+                          <MapPin size={16} className="text-[#94b0ab]" />
+                          {prop.location}, Bergamo
                         </div>
-                        <div className="flex flex-col gap-1">
-                          <div className="flex items-center gap-2 text-[#1a1a1a]">
-                            <BedDouble size={14} className="text-[#94b0ab]" />
-                            <span className="text-sm font-bold">{prop.rooms}</span>
+                        
+                        <div className="grid grid-cols-3 gap-4 pt-6 border-t border-gray-50">
+                          <div className="flex flex-col gap-1">
+                            <div className="flex items-center gap-2 text-[#1a1a1a]">
+                              <Maximize2 size={14} className="text-[#94b0ab]" />
+                              <span className="text-sm font-bold">{prop.specs.mq}</span>
+                            </div>
+                            <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">mq</span>
                           </div>
-                          <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Locali</span>
-                        </div>
-                        <div className="flex flex-col gap-1">
-                          <div className="flex items-center gap-2 text-[#1a1a1a]">
-                            <Bath size={14} className="text-[#94b0ab]" />
-                            <span className="text-sm font-bold">{prop.baths}</span>
+                          <div className="flex flex-col gap-1">
+                            <div className="flex items-center gap-2 text-[#1a1a1a]">
+                              <BedDouble size={14} className="text-[#94b0ab]" />
+                              <span className="text-sm font-bold">{prop.specs.rooms}</span>
+                            </div>
+                            <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Locali</span>
                           </div>
-                          <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Bagni</span>
+                          <div className="flex flex-col gap-1">
+                            <div className="flex items-center gap-2 text-[#1a1a1a]">
+                              <Bath size={14} className="text-[#94b0ab]" />
+                              <span className="text-sm font-bold">{prop.specs.baths}</span>
+                            </div>
+                            <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Bagni</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 </motion.div>
               ))}
             </AnimatePresence>

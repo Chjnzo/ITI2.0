@@ -4,6 +4,7 @@ export interface Property {
   title: string;
   price: string;
   location: string;
+  category: string;
   description: string;
   specs: {
     mq: number;
@@ -25,6 +26,7 @@ export const properties: Property[] = [
     slug: 'penthouse-san-vigilio',
     title: "Penthouse San Vigilio",
     location: "Bergamo Alta",
+    category: "Appartamenti",
     price: "€ 890.000",
     description: "Uno splendido attico situato nel cuore della Città Alta, con una vista mozzafiato sulle valli bergamasche. Questa proprietà unica combina il fascino storico con finiture ultramoderne, domotica di ultima generazione e un terrazzo abitabile di 40mq.",
     specs: { mq: 210, rooms: 4, baths: 3 },
@@ -45,6 +47,7 @@ export const properties: Property[] = [
     slug: 'loft-industriale-centro',
     title: "Loft Industriale",
     location: "Centro Città",
+    category: "Loft",
     price: "€ 345.000",
     description: "Un loft open-space ricavato da un'ex officina meccanica degli anni '50. Altezze incredibili, mattoni a vista e grandi vetrate rendono questo spazio ideale per chi cerca una soluzione abitativa non convenzionale a pochi passi da Via XX Settembre.",
     specs: { mq: 125, rooms: 2, baths: 2 },
@@ -65,6 +68,7 @@ export const properties: Property[] = [
     slug: 'villa-contemporanea-gorle',
     title: "Villa Contemporanea",
     location: "Gorle",
+    category: "Ville",
     price: "€ 1.250.000",
     description: "Villa unifamiliare di nuova costruzione certificata in Classe A4. Immersa nel verde della zona residenziale di Gorle, la villa offre ampi spazi esterni, piscina a sfioro e un design architettonico che fonde interni ed esterni in un unico ambiente armonioso.",
     specs: { mq: 450, rooms: 6, baths: 4 },
