@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Maximize2, Bed, Bath } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const properties = [
   {
