@@ -2,14 +2,13 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, Users, Clock, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const stats = [
-  { label: "Commissioni Venditore", value: "0%", sub: "Sempre, per ogni immobile", icon: Star, color: "text-blue-600" },
-  { label: "Tempo Medio Vendita", value: "45", sub: "Giorni dalla messa online", icon: Clock, color: "text-orange-500" },
-  { label: "Recensioni Positive", value: "4.9", sub: "Valutazione media Google", icon: TrendingUp, color: "text-green-500" },
-  { label: "Copertura", value: "100%", sub: "Provincia di Bergamo", icon: Users, color: "text-[#0a2540]" }
+  { label: "Vendita Media", value: "45", sub: "Giorni", color: "text-[#94b0ab]" },
+  { label: "Commissioni", value: "0%", sub: "Venditori", color: "text-[#1a1a1a]" },
+  { label: "Rating", value: "4.9", sub: "Google", color: "text-[#94b0ab]" },
+  { label: "Partner", value: "100+", sub: "Locali", color: "text-[#1a1a1a]" }
 ];
 
 const StatsBento = () => {
@@ -24,14 +23,11 @@ const StatsBento = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm text-center lg:text-left flex flex-col items-center lg:items-start"
+              className="bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm text-center"
             >
-              <div className={cn("p-3 rounded-2xl bg-gray-50 mb-6", stat.color)}>
-                <stat.icon size={24} />
-              </div>
-              <p className="text-4xl md:text-5xl font-mono font-bold text-[#0a2540] mb-2">{stat.value}</p>
-              <h4 className="font-serif text-lg text-[#0a2540] mb-2">{stat.label}</h4>
-              <p className="text-sm text-gray-400 font-medium">{stat.sub}</p>
+              <p className={cn("text-5xl font-bold mb-1 tracking-tighter", stat.color)}>{stat.value}</p>
+              <p className="text-sm font-bold text-[#1a1a1a] uppercase tracking-widest">{stat.label}</p>
+              <p className="text-xs text-gray-400 font-medium mt-1">{stat.sub}</p>
             </motion.div>
           ))}
         </div>

@@ -8,20 +8,20 @@ const VisionLab = () => {
   return (
     <section className="py-12 px-4 md:px-6">
       <div className="container mx-auto">
-        <div className="bg-[#0a2540] rounded-[40px] overflow-hidden relative p-8 md:p-16 text-white">
+        <div className="bg-[#1a1a1a] rounded-[40px] overflow-hidden relative p-8 md:p-16 text-white">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-sm font-bold mb-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#94b0ab]/10 border border-[#94b0ab]/20 rounded-full text-[#94b0ab] text-sm font-bold mb-6">
                 <Sparkles size={16} />
-                Vision Lab AI
+                Vision Lab
               </div>
-              <h2 className="text-4xl md:text-6xl font-serif mb-6 leading-tight">
-                Vendi più velocemente con il <span className="italic text-blue-400">Virtual Staging.</span>
+              <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight tracking-tighter">
+                Vendi più velocemente con il <span className="text-[#94b0ab]">Virtual Staging.</span>
               </h2>
               <p className="text-gray-400 text-lg mb-8 max-w-md">
-                Trasformiamo stanze vuote in spazi mozzafiato grazie all'intelligenza artificiale, aiutando gli acquirenti a vedere il potenziale della tua casa.
+                Trasformiamo stanze vuote in spazi mozzafiato, aiutando gli acquirenti a vedere il potenziale della tua casa.
               </p>
-              <button className="h-14 px-8 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold transition-all flex items-center gap-2">
+              <button className="h-14 px-8 bg-[#94b0ab] hover:bg-[#83a19b] text-white rounded-2xl font-bold transition-all flex items-center gap-2">
                 Prova lo Staging <Wand2 size={20} />
               </button>
             </div>
@@ -42,7 +42,7 @@ const VisionLab = () => {
                     className="w-full h-full object-cover"
                     alt="After"
                   />
-                  <span className="absolute top-4 right-4 px-3 py-1 bg-blue-600 rounded-full text-[10px] uppercase font-bold tracking-widest">AI Enhanced</span>
+                  <span className="absolute top-4 right-4 px-3 py-1 bg-[#94b0ab] rounded-full text-[10px] uppercase font-bold tracking-widest">Enhanced</span>
                 </div>
               </div>
               <div className="absolute inset-y-0 left-1/2 w-1 bg-white/20 backdrop-blur-sm" />
