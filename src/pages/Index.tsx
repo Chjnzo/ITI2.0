@@ -14,14 +14,14 @@ const Index = () => {
     <div className="min-h-screen bg-[#f8f9fa] selection:bg-[#94b0ab] selection:text-white font-sans text-[#1a1a1a]">
       <Header />
       
-      <main className="pb-32">
+      <main className="pb-32 md:pb-12">
         <BentoHero />
         <StatsBento />
         <PropertyBento />
         <TeamContact />
       </main>
 
-      <footer className="py-20 bg-white border-t border-gray-100 text-center">
+      <footer className="py-20 bg-white border-t border-gray-100 text-center pb-40 md:pb-20">
         <div className="container mx-auto px-4">
           <p className="text-[#1a1a1a]/20 text-xs font-bold uppercase tracking-[0.5em] mb-4">Il Tuo Immobiliare</p>
           <div className="mt-8">
