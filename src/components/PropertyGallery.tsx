@@ -2,45 +2,33 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Maximize2, Bed, Bath } from 'lucide-react';
+import { MapPin, Maximize2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const properties = [
   {
     id: 1,
     title: "Attico Vista Mura",
-    zone: "Città Alta",
+    location: "Città Alta",
     price: "€ 680k",
-    specs: { mq: 160, beds: 3, baths: 2 },
-    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop",
-    size: "md:col-span-2"
+    sqm: "160",
+    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop"
   },
   {
     id: 2,
-    title: "Villa nel Parco",
-    zone: "Torre Boldone",
+    title: "Villa Contemporanea",
+    location: "Gorle",
     price: "€ 1.2M",
-    specs: { mq: 350, beds: 5, baths: 4 },
-    image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2071&auto=format&fit=crop",
-    size: "md:col-span-1"
+    sqm: "350",
+    image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2071&auto=format&fit=crop"
   },
   {
     id: 3,
     title: "Loft Design",
-    zone: "Centro Storico",
+    location: "Centro",
     price: "€ 425k",
-    specs: { mq: 110, beds: 2, baths: 2 },
-    image: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=2070&auto=format&fit=crop",
-    size: "md:col-span-1"
-  },
-  {
-    id: 4,
-    title: "Terratetto Moderno",
-    zone: "Ranica",
-    price: "€ 310k",
-    specs: { mq: 145, beds: 3, baths: 2 },
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop",
-    size: "md:col-span-2"
+    sqm: "110",
+    image: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=2070&auto=format&fit=crop"
   }
 ];
 
@@ -48,61 +36,49 @@ const PropertyGallery = () => {
   return (
     <section className="py-24 px-4 md:px-6 bg-white">
       <div className="container mx-auto">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-          <div className="max-w-2xl">
-            <h2 className="text-4xl md:text-6xl font-serif font-black text-[#0f172a] mb-4">Immobili in Evidenza</h2>
-            <p className="text-xl text-gray-500">Una selezione curata delle migliori opportunità immobiliari a zero provvigioni.</p>
+        <div className="flex items-end justify-between mb-12">
+          <div>
+            <h2 className="text-4xl font-bold text-[#1a1a1a]">Proposte in evidenza</h2>
+            <p className="text-[#1a1a1a]/50 mt-2 font-medium">Scelte con cura per te.</p>
           </div>
-          <button className="px-8 py-4 border-2 border-[#0f172a] text-[#0f172a] rounded-2xl font-bold hover:bg-[#0f172a] hover:text-white transition-all">
-            Vedi tutto il catalogo
+          <button className="hidden md:flex items-center gap-2 font-bold text-[#94b0ab] group">
+            Vedi tutti <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {properties.map((prop) => (
+          {properties.map((prop, i) => (
             <motion.div
               key={prop.id}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className={cn("group relative aspect-[4/5] md:aspect-auto md:h-[600px] rounded-[40px] overflow-hidden bg-gray-100", prop.size)}
+              transition={{ delay: i * 0.1 }}
+              className="group cursor-pointer"
             >
-              <img 
-                src={prop.image} 
-                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
-                alt={prop.title}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/90 via-[#0f172a]/20 to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
-              
-              {/* Zone Overlay */}
-              <div className="absolute top-8 left-8">
-                <span className="px-4 py-2 bg-white/20 backdrop-blur-md rounded-full text-white text-xs font-bold uppercase tracking-widest border border-white/20">
-                  {prop.zone}
-                </span>
+              <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden bg-gray-100 mb-6">
+                <img 
+                  src={prop.image} 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                  alt={prop.title}
+                />
+                <div className="absolute top-6 left-6">
+                  <span className="px-4 py-2 bg-white/60 backdrop-blur-md border border-white/20 rounded-full text-[#1a1a1a] text-xs font-bold shadow-sm">
+                    {prop.location}
+                  </span>
+                </div>
+                <div className="absolute bottom-6 right-6">
+                  <span className="px-6 py-3 bg-[#94b0ab] text-white rounded-full text-lg font-bold shadow-lg">
+                    {prop.price}
+                  </span>
+                </div>
               </div>
 
-              {/* Hover Details */}
-              <div className="absolute bottom-0 left-0 right-0 p-10 translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
-                <div className="flex justify-between items-end mb-6">
-                  <div>
-                    <h3 className="text-3xl font-serif font-bold text-white mb-1">{prop.title}</h3>
-                    <p className="text-white/60 flex items-center gap-2"><MapPin size={16} /> Bergamo</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-3xl font-serif font-black text-[#f97316]">{prop.price}</p>
-                  </div>
-                </div>
-
-                <div className="flex gap-8 border-t border-white/10 pt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100">
-                  <div className="flex items-center gap-2 text-white/80">
-                    <Maximize2 size={18} /> <span className="text-sm font-bold uppercase tracking-tighter">{prop.specs.mq} m²</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-white/80">
-                    <Bed size={18} /> <span className="text-sm font-bold uppercase tracking-tighter">{prop.specs.beds} Camere</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-white/80">
-                    <Bath size={18} /> <span className="text-sm font-bold uppercase tracking-tighter">{prop.specs.baths} Bagni</span>
-                  </div>
+              <div className="px-4">
+                <h3 className="text-2xl font-bold text-[#1a1a1a] mb-2">{prop.title}</h3>
+                <div className="flex items-center gap-4 text-[#1a1a1a]/40 text-sm font-medium">
+                  <span className="flex items-center gap-1.5"><Maximize2 size={16} /> {prop.sqm} m²</span>
+                  <span className="flex items-center gap-1.5"><MapPin size={16} /> Bergamo</span>
                 </div>
               </div>
             </motion.div>
@@ -112,5 +88,22 @@ const PropertyGallery = () => {
     </section>
   );
 };
+
+const ArrowRight = ({ size, className }: { size: number, className?: string }) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2.5" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    <path d="M5 12h14m-7-7 7 7-7 7" />
+  </svg>
+);
 
 export default PropertyGallery;

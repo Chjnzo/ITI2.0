@@ -11,7 +11,7 @@ import { MadeWithDyad } from "@/components/made-with-dyad";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-[#FAFAF9] selection:bg-[#f97316] selection:text-white">
+    <div className="min-h-screen bg-[#f8f9fa] selection:bg-[#94b0ab] selection:text-white font-sans text-[#1a1a1a]">
       <Header />
       
       <main className="pb-32">
@@ -21,10 +21,9 @@ const Index = () => {
         <TeamContact />
       </main>
 
-      <footer className="py-20 bg-white border-t border-gray-100 text-center">
+      <footer className="py-20 bg-white border-t border-[#94b0ab]/10 text-center">
         <div className="container mx-auto px-4">
-          <p className="text-gray-400 text-sm font-bold uppercase tracking-[0.3em] mb-4">Il Tuo Immobiliare</p>
-          <p className="text-gray-300 text-xs">© 2025 - Rivoluzione Immobiliare a Bergamo.</p>
+          <p className="text-[#1a1a1a]/30 text-xs font-bold uppercase tracking-[0.4em] mb-4">Il Tuo Immobiliare</p>
           <div className="mt-8">
             <MadeWithDyad />
           </div>
