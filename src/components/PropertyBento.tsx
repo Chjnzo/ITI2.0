@@ -4,27 +4,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-const properties = [
-  {
-    id: 1,
-    title: "Penthouse San Vigilio",
-    location: "Bergamo Alta",
-    price: "€ 890k",
-    sqm: "210",
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1000&auto=format&fit=crop"
-  },
-  {
-    id: 2,
-    title: "Loft Industriale",
-    location: "Centro",
-    price: "€ 345k",
-    sqm: "125",
-    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000&auto=format&fit=crop"
-  }
-];
+import { properties } from '@/data/properties';
 
 const PropertyBento = () => {
+  // Mostriamo solo i primi 2 nella bento home
+  const featured = properties.slice(0, 2);
+
   return (
     <section className="py-12 md:py-24 px-4 md:px-6">
       <div className="container mx-auto">
@@ -39,11 +24,11 @@ const PropertyBento = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {properties.map((prop) => (
-            <Link key={prop.id} to="/immobili" className="group block">
+          {featured.map((prop) => (
+            <Link key={prop.id} to={`/property/${prop.slug}`} className="group block">
               <div className="relative aspect-[16/10] md:aspect-[16/9] rounded-[32px] md:rounded-[40px] overflow-hidden mb-6 shadow-md">
                 <img 
-                  src={prop.image} 
+                  src={prop.images[0]} 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   alt={prop.title}
                 />
@@ -68,16 +53,12 @@ const PropertyBento = () => {
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-bold text-[#1a1a1a] uppercase tracking-widest">{prop.sqm} m²</p>
+                    <p className="text-sm font-bold text-[#1a1a1a] uppercase tracking-widest">{prop.specs.mq} m²</p>
                   </div>
                 </div>
               </div>
             </Link>
           ))}
-          
-          <Link to="/immobili" className="md:hidden w-full h-16 border-2 border-gray-100 text-gray-400 rounded-3xl font-bold flex items-center justify-center gap-2 mt-4 active:scale-95 transition-transform">
-            Esplora tutti gli Immobili <ArrowUpRight size={20} />
-          </Link>
         </div>
       </div>
     </section>
