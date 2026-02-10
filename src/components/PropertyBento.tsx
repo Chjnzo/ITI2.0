@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Maximize2, Sparkles, TrendingUp } from 'lucide-react';
+import { MapPin, Maximize2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const properties = [
   {

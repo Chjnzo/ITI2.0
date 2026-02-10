@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { TrendingUp, Users, Clock, Star } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const stats = [
   { label: "Commissioni Venditore", value: "0%", sub: "Sempre, per ogni immobile", icon: Star, color: "text-blue-600" },
