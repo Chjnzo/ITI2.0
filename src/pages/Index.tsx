@@ -4,7 +4,6 @@ import React from 'react';
 import Header from '@/components/Header';
 import BentoHero from '@/components/BentoHero';
 import StatsBento from '@/components/StatsBento';
-import VisionLab from '@/components/VisionLab';
 import PropertyBento from '@/components/PropertyBento';
 import TeamContact from '@/components/TeamContact';
 import BottomDock from '@/components/BottomDock';
@@ -19,7 +18,6 @@ const Index = () => {
         <BentoHero />
         <StatsBento />
         <PropertyBento />
-        <VisionLab />
         <TeamContact />
       </main>
 
