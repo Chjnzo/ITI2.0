@@ -2,9 +2,8 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Search, Sparkles } from 'lucide-react';
-
-const tags = ["Zero Provvigioni", "Bergamo Alta", "Giardino Privato"];
+import { ArrowRight, Sparkles } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const BentoHero = () => {
   return (
@@ -13,43 +12,40 @@ const BentoHero = () => {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-[32px] md:rounded-[40px] p-6 md:p-16 shadow-sm border border-gray-100 overflow-hidden relative"
+          className="bg-white rounded-[32px] md:rounded-[48px] p-8 md:p-24 shadow-sm border border-gray-100 overflow-hidden relative"
         >
-          <div className="absolute top-0 right-0 w-1/3 h-1/2 bg-[#94b0ab]/10 blur-[80px] rounded-full -mr-20 -mt-20" />
+          {/* Sfondo decorativo */}
+          <div className="absolute top-0 right-0 w-2/3 h-full bg-gradient-to-bl from-[#94b0ab]/10 via-transparent to-transparent -z-10" />
+          <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-[#94b0ab]/5 blur-3xl rounded-full" />
           
           <div className="max-w-4xl mx-auto text-center relative z-10">
-            <h1 className="text-4xl md:text-7xl font-sans font-bold text-[#1a1a1a] mb-6 md:mb-8 leading-[1.1] tracking-tighter">
-              La tua casa, <br />
-              <span className="text-[#94b0ab] italic">senza compromessi.</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#94b0ab]/10 border border-[#94b0ab]/20 rounded-full text-[#94b0ab] text-[10px] font-bold uppercase tracking-widest mb-8">
+              <Sparkles size={12} /> L'immobiliare a Bergamo
+            </div>
+            
+            <h1 className="text-5xl md:text-8xl font-sans font-bold text-[#1a1a1a] mb-8 leading-[1] tracking-tighter">
+              Vendi casa a <br />
+              <span className="text-[#94b0ab] italic underline decoration-[#94b0ab]/30 decoration-wavy underline-offset-8">zero provvigioni.</span>
             </h1>
             
-            <div className="relative group max-w-2xl mx-auto">
-              <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none">
-                <Search className="text-gray-400" size={20} />
-              </div>
-              <input 
-                type="text" 
-                placeholder="Appartamento a Bergamo..."
-                className="w-full h-14 md:h-20 pl-14 pr-6 bg-gray-50 border-2 border-transparent focus:border-[#94b0ab]/20 focus:bg-white rounded-2xl md:rounded-[24px] text-base md:text-lg transition-all outline-none"
-              />
-              <button className="hidden sm:flex absolute right-3 top-3 bottom-3 px-6 bg-[#1a1a1a] text-white rounded-[18px] font-medium items-center gap-2">
-                <Sparkles size={18} /> AI Search
-              </button>
+            <p className="text-lg md:text-2xl text-gray-500 font-medium mb-12 max-w-2xl mx-auto leading-relaxed">
+              Dimentica le vecchie agenzie. Un servizio premium per chi vende, senza costi nascosti e con la massima trasparenza.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link to="/vendi" className="w-full sm:w-auto h-16 px-10 bg-[#1a1a1a] text-white rounded-3xl font-bold flex items-center justify-center gap-3 hover:bg-[#94b0ab] transition-all shadow-xl shadow-black/5 group">
+                Vendi il tuo Immobile
+                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link to="/immobili" className="w-full sm:w-auto h-16 px-10 bg-white border-2 border-gray-100 text-[#1a1a1a] rounded-3xl font-bold flex items-center justify-center hover:bg-gray-50 transition-all">
+                Sfoglia Catalogo
+              </Link>
             </div>
 
-            <button className="sm:hidden w-full mt-4 h-14 bg-[#1a1a1a] text-white rounded-2xl font-bold flex items-center justify-center gap-2">
-              <Sparkles size={18} /> AI Search
-            </button>
-
-            <div className="mt-8 flex flex-wrap justify-center gap-2">
-              {tags.map((tag, i) => (
-                <span
-                  key={tag}
-                  className="px-4 py-2 bg-white border border-gray-200 rounded-full text-xs font-medium text-gray-600 shadow-sm"
-                >
-                  {tag}
-                </span>
-              ))}
+            <div className="mt-16 flex flex-wrap justify-center gap-8 md:gap-16 opacity-40 grayscale">
+              <span className="text-sm font-bold tracking-widest uppercase">Affidabilità</span>
+              <span className="text-sm font-bold tracking-widest uppercase">Trasparenza</span>
+              <span className="text-sm font-bold tracking-widest uppercase">Innovazione</span>
             </div>
           </div>
         </motion.div>

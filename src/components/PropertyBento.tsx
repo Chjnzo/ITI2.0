@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, ArrowUpRight } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Link } from 'react-router-dom';
 
 const properties = [
   {
@@ -12,8 +12,7 @@ const properties = [
     location: "Bergamo Alta",
     price: "€ 890k",
     sqm: "210",
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1000&auto=format&fit=crop",
-    span: "md:col-span-2 md:row-span-2"
+    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1000&auto=format&fit=crop"
   },
   {
     id: 2,
@@ -21,8 +20,7 @@ const properties = [
     location: "Centro",
     price: "€ 345k",
     sqm: "125",
-    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000&auto=format&fit=crop",
-    span: "md:col-span-1 md:row-span-1"
+    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000&auto=format&fit=crop"
   }
 ];
 
@@ -32,53 +30,54 @@ const PropertyBento = () => {
       <div className="container mx-auto">
         <div className="flex items-end justify-between mb-8 md:mb-12">
           <div>
-            <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a] tracking-tighter">In Evidenza</h2>
-            <p className="text-gray-400 mt-1 font-medium">Selezionati • 0% commissioni</p>
+            <h2 className="text-4xl md:text-5xl font-bold text-[#1a1a1a] tracking-tighter">In Evidenza</h2>
+            <p className="text-gray-400 mt-1 font-medium italic">Selezionati • 0% commissioni per te</p>
           </div>
-          <button className="hidden md:flex items-center gap-2 font-bold text-[#94b0ab] hover:gap-3 transition-all">
+          <Link to="/immobili" className="hidden md:flex items-center gap-2 font-bold text-[#94b0ab] hover:gap-3 transition-all">
             Vedi Tutti <ArrowUpRight size={18} />
-          </button>
+          </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {properties.map((prop) => (
-            <motion.div
-              key={prop.id}
-              className="group"
-            >
-              <div className="relative aspect-[4/5] rounded-[24px] md:rounded-[40px] overflow-hidden mb-4 shadow-md">
+            <Link key={prop.id} to="/immobili" className="group block">
+              <div className="relative aspect-[16/10] md:aspect-[16/9] rounded-[32px] md:rounded-[40px] overflow-hidden mb-6 shadow-md">
                 <img 
                   src={prop.image} 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   alt={prop.title}
                 />
-                <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1 bg-white/20 backdrop-blur-md border border-white/30 rounded-full text-white text-[10px] font-bold uppercase tracking-widest">
-                    Zero Fees
+                <div className="absolute top-6 left-6">
+                  <span className="px-4 py-2 bg-white/20 backdrop-blur-md border border-white/30 rounded-full text-white text-[10px] font-bold uppercase tracking-widest">
+                    Zero Provvigioni
                   </span>
+                </div>
+                <div className="absolute bottom-6 right-6">
+                   <div className="px-6 py-3 bg-white text-[#1a1a1a] rounded-2xl font-bold shadow-lg">
+                    {prop.price}
+                  </div>
                 </div>
               </div>
               
-              <div className="px-1">
-                <div className="flex justify-between items-start">
+              <div className="px-2">
+                <div className="flex justify-between items-end">
                   <div>
-                    <h3 className="text-xl font-bold text-[#1a1a1a]">{prop.title}</h3>
-                    <p className="text-gray-400 text-sm flex items-center gap-1 mt-1">
-                      <MapPin size={14} className="text-[#94b0ab]" /> {prop.location}
+                    <h3 className="text-2xl md:text-3xl font-bold text-[#1a1a1a] mb-1 group-hover:text-[#94b0ab] transition-colors">{prop.title}</h3>
+                    <p className="text-gray-400 font-medium flex items-center gap-2">
+                      <MapPin size={16} className="text-[#94b0ab]" /> {prop.location}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-xl font-bold text-[#94b0ab]">{prop.price}</p>
-                    <p className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">{prop.sqm} m²</p>
+                    <p className="text-sm font-bold text-[#1a1a1a] uppercase tracking-widest">{prop.sqm} m²</p>
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </Link>
           ))}
           
-          <button className="md:hidden w-full h-14 border-2 border-gray-100 text-gray-400 rounded-2xl font-bold mt-4">
-            Vedi Tutti gli Immobili
-          </button>
+          <Link to="/immobili" className="md:hidden w-full h-16 border-2 border-gray-100 text-gray-400 rounded-3xl font-bold flex items-center justify-center gap-2 mt-4 active:scale-95 transition-transform">
+            Esplora tutti gli Immobili <ArrowUpRight size={20} />
+          </Link>
         </div>
       </div>
     </section>
