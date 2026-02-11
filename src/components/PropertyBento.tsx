@@ -1,14 +1,55 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, ArrowUpRight } from 'lucide-react';
+import { MapPin, ArrowUpRight, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { properties } from '@/data/properties';
+import { supabase } from '@/lib/supabaseClient';
+import { Property } from '@/data/properties';
 
 const PropertyBento = () => {
-  // Mostriamo solo i primi 2 nella bento home
-  const featured = properties.slice(0, 2);
+  const [featured, setFeatured] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFeatured = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('immobili')
+          .select('*')
+          .limit(2);
+
+        if (error) throw error;
+
+        if (data) {
+          const mapped = data.map((db: any) => ({
+            id: db.id,
+            slug: db.slug,
+            title: db.titolo,
+            price: `€ ${db.prezzo.toLocaleString('it-IT')}`,
+            location: db.zona,
+            specs: { mq: db.mq },
+            images: [db.copertina_url]
+          }));
+          setFeatured(mapped as any);
+        }
+      } catch (err) {
+        console.error("Error fetching featured properties:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFeatured();
+  }, []);
+
+  if (loading) return (
+    <div className="py-24 flex justify-center">
+      <Loader2 className="w-8 h-8 text-[#94b0ab] animate-spin" />
+    </div>
+  );
+
+  if (featured.length === 0) return null;
 
   return (
     <section className="py-12 md:py-24 px-4 md:px-6">

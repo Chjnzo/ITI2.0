@@ -1,19 +1,76 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { properties } from '@/data/properties';
+import { supabase } from '@/lib/supabaseClient';
+import { Property } from '@/data/properties';
 import Header from '@/components/Header';
-import { MapPin, Maximize2, BedDouble, Bath, ArrowLeft, Phone, MessageCircle, Mail, Check } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { MapPin, Maximize2, BedDouble, Bath, ArrowLeft, Phone, MessageCircle, Mail, Check, Loader2 } from 'lucide-react';
 import { MadeWithDyad } from "@/components/made-with-dyad";
 
 const PropertyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const property = properties.find((p) => p.slug === slug);
+  const [property, setProperty] = useState<Property | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!property) {
+  useEffect(() => {
+    const fetchProperty = async () => {
+      try {
+        setLoading(true);
+        const { data, error: supabaseError } = await supabase
+          .from('immobili')
+          .select('*')
+          .eq('slug', slug)
+          .single();
+
+        if (supabaseError) throw supabaseError;
+
+        if (data) {
+          const mapped: Property = {
+            id: data.id,
+            slug: data.slug,
+            title: data.titolo,
+            price: `€ ${data.prezzo.toLocaleString('it-IT')}`,
+            location: data.zona,
+            category: data.categoria,
+            description: data.descrizione,
+            specs: {
+              mq: data.mq,
+              rooms: data.locali,
+              baths: data.bagni
+            },
+            features: data.caratteristiche || [],
+            images: [data.copertina_url, ...(data.galleria || [])],
+            agent: {
+              name: data.agente_nome || "Team Il Tuo Immobiliare",
+              phone: data.agente_tel || "+39 035 123 4567",
+              email: data.agente_email || "info@iltuoimmobiliare.it"
+            }
+          };
+          setProperty(mapped);
+        }
+      } catch (err: any) {
+        setError(err.message || "Immobile non trovato");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (slug) fetchProperty();
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8f9fa]">
+        <Loader2 className="w-12 h-12 text-[#94b0ab] animate-spin mb-4" />
+        <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Caricamento dettagli...</p>
+      </div>
+    );
+  }
+
+  if (error || !property) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#f8f9fa] p-6">
         <div className="bg-white p-12 rounded-[40px] shadow-sm border border-gray-100 text-center max-w-md">
@@ -33,29 +90,26 @@ const PropertyDetail = () => {
       
       <main className="pt-32 pb-32 md:pb-20">
         <div className="container mx-auto px-4">
-          {/* Back Button */}
           <Link to="/immobili" className="inline-flex items-center gap-2 text-gray-400 font-bold mb-8 hover:text-[#94b0ab] transition-colors group">
             <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
             Torna alla ricerca
           </Link>
 
-          {/* Bento Gallery */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
             <div className="md:col-span-3 aspect-[16/10] md:aspect-[16/8] rounded-[32px] overflow-hidden bg-gray-200">
               <img src={property.images[0]} alt={property.title} className="w-full h-full object-cover" />
             </div>
             <div className="hidden md:grid grid-cols-1 gap-4">
               <div className="aspect-square rounded-[24px] overflow-hidden bg-gray-200">
-                <img src={property.images[1]} alt={property.title} className="w-full h-full object-cover" />
+                <img src={property.images[1] || property.images[0]} alt={property.title} className="w-full h-full object-cover" />
               </div>
               <div className="aspect-square rounded-[24px] overflow-hidden bg-gray-200">
-                <img src={property.images[2]} alt={property.title} className="w-full h-full object-cover" />
+                <img src={property.images[2] || property.images[0]} alt={property.title} className="w-full h-full object-cover" />
               </div>
             </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* Left Content */}
             <div className="lg:col-span-2 space-y-12">
               <div>
                 <h1 className="text-4xl md:text-6xl font-bold tracking-tighter mb-4">{property.title}</h1>
@@ -65,7 +119,6 @@ const PropertyDetail = () => {
                 </div>
               </div>
 
-              {/* Specs Grid */}
               <div className="grid grid-cols-3 gap-6 p-8 bg-white rounded-[32px] border border-gray-100 shadow-sm">
                 <div className="space-y-1">
                   <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">Superficie</p>
@@ -103,7 +156,6 @@ const PropertyDetail = () => {
               </div>
             </div>
 
-            {/* Right Sticky Sidebar (Desktop) */}
             <div className="hidden lg:block">
               <div className="sticky top-32 space-y-6">
                 <div className="bg-white/70 backdrop-blur-xl p-8 rounded-[40px] border border-white/40 shadow-xl shadow-black/5">
@@ -141,7 +193,6 @@ const PropertyDetail = () => {
         </div>
       </main>
 
-      {/* Mobile Sticky Bottom Bar */}
       <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden p-4 bg-white/80 backdrop-blur-xl border-t border-gray-100 flex items-center gap-4">
         <div className="flex-1">
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Prezzo</p>

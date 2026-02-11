@@ -1,19 +1,67 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import BottomDock from '@/components/BottomDock';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Maximize2, BedDouble, Bath } from 'lucide-react';
+import { MapPin, Maximize2, BedDouble, Bath, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { properties } from '@/data/properties';
+import { supabase } from '@/lib/supabaseClient';
+import { Property } from '@/data/properties';
 import { MadeWithDyad } from "@/components/made-with-dyad";
 
 const categories = ["Tutti", "Appartamenti", "Ville", "Loft"];
 
 const Immobili = () => {
   const [filter, setFilter] = useState("Tutti");
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        setLoading(true);
+        const { data, error: supabaseError } = await supabase
+          .from('immobili')
+          .select('*');
+
+        if (supabaseError) throw supabaseError;
+
+        if (data) {
+          const mappedData: Property[] = data.map((db: any) => ({
+            id: db.id,
+            slug: db.slug,
+            title: db.titolo,
+            price: `€ ${db.prezzo.toLocaleString('it-IT')}`,
+            location: db.zona,
+            category: db.categoria,
+            description: db.descrizione,
+            specs: {
+              mq: db.mq,
+              rooms: db.locali,
+              baths: db.bagni
+            },
+            features: db.caratteristiche || [],
+            images: [db.copertina_url, ...(db.galleria || [])],
+            agent: {
+              name: db.agente_nome || "Team Il Tuo Immobiliare",
+              phone: db.agente_tel || "+39 035 123 4567",
+              email: db.agente_email || "info@iltuoimmobiliare.it"
+            }
+          }));
+          setProperties(mappedData);
+        }
+      } catch (err: any) {
+        setError(err.message || "Errore durante il caricamento degli immobili");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProperties();
+  }, []);
 
   const filteredProperties = filter === "Tutti" 
     ? properties 
@@ -52,78 +100,90 @@ const Immobili = () => {
             </div>
           </div>
 
-          <motion.div 
-            layout
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            <AnimatePresence mode="popLayout">
-              {filteredProperties.map((prop) => (
-                <motion.div
-                  layout
-                  key={prop.id}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.4 }}
-                  className="group"
-                >
-                  <Link to={`/property/${prop.slug}`} className="block">
-                    <div className="bg-white rounded-[40px] overflow-hidden border border-gray-100 shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-2">
-                      <div className="relative aspect-[4/3] overflow-hidden">
-                        <img 
-                          src={prop.images[0]} 
-                          alt={prop.title}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
-                        <div className="absolute top-6 left-6">
-                          <span className="px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-[10px] font-bold uppercase tracking-widest">
-                            {prop.category}
-                          </span>
-                        </div>
-                        <div className="absolute bottom-6 right-6">
-                          <span className="px-6 py-3 bg-[#94b0ab] text-white rounded-full text-lg font-bold shadow-lg">
-                            {prop.price}
-                          </span>
-                        </div>
-                      </div>
-                      
-                      <div className="p-8">
-                        <h3 className="text-2xl font-bold mb-2 group-hover:text-[#94b0ab] transition-colors">{prop.title}</h3>
-                        <div className="flex items-center gap-2 text-gray-400 mb-6 font-medium">
-                          <MapPin size={16} className="text-[#94b0ab]" />
-                          {prop.location}, Bergamo
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-32 gap-4">
+              <Loader2 className="w-12 h-12 text-[#94b0ab] animate-spin" />
+              <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Caricamento immobili...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-32">
+              <p className="text-red-500 font-bold mb-4">{error}</p>
+              <button onClick={() => window.location.reload()} className="text-[#94b0ab] font-bold underline">Riprova</button>
+            </div>
+          ) : (
+            <motion.div 
+              layout
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
+              <AnimatePresence mode="popLayout">
+                {filteredProperties.map((prop) => (
+                  <motion.div
+                    layout
+                    key={prop.id}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.4 }}
+                    className="group"
+                  >
+                    <Link to={`/property/${prop.slug}`} className="block">
+                      <div className="bg-white rounded-[40px] overflow-hidden border border-gray-100 shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-2">
+                        <div className="relative aspect-[4/3] overflow-hidden">
+                          <img 
+                            src={prop.images[0]} 
+                            alt={prop.title}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          />
+                          <div className="absolute top-6 left-6">
+                            <span className="px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-[10px] font-bold uppercase tracking-widest">
+                              {prop.category}
+                            </span>
+                          </div>
+                          <div className="absolute bottom-6 right-6">
+                            <span className="px-6 py-3 bg-[#94b0ab] text-white rounded-full text-lg font-bold shadow-lg">
+                              {prop.price}
+                            </span>
+                          </div>
                         </div>
                         
-                        <div className="grid grid-cols-3 gap-4 pt-6 border-t border-gray-50">
-                          <div className="flex flex-col gap-1">
-                            <div className="flex items-center gap-2 text-[#1a1a1a]">
-                              <Maximize2 size={14} className="text-[#94b0ab]" />
-                              <span className="text-sm font-bold">{prop.specs.mq}</span>
-                            </div>
-                            <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">mq</span>
+                        <div className="p-8">
+                          <h3 className="text-2xl font-bold mb-2 group-hover:text-[#94b0ab] transition-colors">{prop.title}</h3>
+                          <div className="flex items-center gap-2 text-gray-400 mb-6 font-medium">
+                            <MapPin size={16} className="text-[#94b0ab]" />
+                            {prop.location}, Bergamo
                           </div>
-                          <div className="flex flex-col gap-1">
-                            <div className="flex items-center gap-2 text-[#1a1a1a]">
-                              <BedDouble size={14} className="text-[#94b0ab]" />
-                              <span className="text-sm font-bold">{prop.specs.rooms}</span>
+                          
+                          <div className="grid grid-cols-3 gap-4 pt-6 border-t border-gray-50">
+                            <div className="flex flex-col gap-1">
+                              <div className="flex items-center gap-2 text-[#1a1a1a]">
+                                <Maximize2 size={14} className="text-[#94b0ab]" />
+                                <span className="text-sm font-bold">{prop.specs.mq}</span>
+                              </div>
+                              <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">mq</span>
                             </div>
-                            <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Locali</span>
-                          </div>
-                          <div className="flex flex-col gap-1">
-                            <div className="flex items-center gap-2 text-[#1a1a1a]">
-                              <Bath size={14} className="text-[#94b0ab]" />
-                              <span className="text-sm font-bold">{prop.specs.baths}</span>
+                            <div className="flex flex-col gap-1">
+                              <div className="flex items-center gap-2 text-[#1a1a1a]">
+                                <BedDouble size={14} className="text-[#94b0ab]" />
+                                <span className="text-sm font-bold">{prop.specs.rooms}</span>
+                              </div>
+                              <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Locali</span>
                             </div>
-                            <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Bagni</span>
+                            <div className="flex flex-col gap-1">
+                              <div className="flex items-center gap-2 text-[#1a1a1a]">
+                                <Bath size={14} className="text-[#94b0ab]" />
+                                <span className="text-sm font-bold">{prop.specs.baths}</span>
+                              </div>
+                              <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Bagni</span>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+          )}
         </div>
       </main>
 
