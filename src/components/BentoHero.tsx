@@ -7,12 +7,15 @@ import { Link } from 'react-router-dom';
 
 const BentoHero = () => {
   return (
-    <section className="pt-24 pb-12 px-4 md:px-6">
+    <section className="pt-24 pb-12 px-4 md:px-6 relative overflow-hidden">
+      {/* Aurora Glow Effect */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#94b0ab]/15 blur-[120px] rounded-full -z-10" />
+      
       <div className="container mx-auto">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-[32px] md:rounded-[48px] p-8 md:p-24 shadow-sm border border-gray-100 overflow-hidden relative"
+          className="bg-white/40 backdrop-blur-md rounded-[32px] md:rounded-[48px] p-8 md:p-24 shadow-sm border border-white/40 overflow-hidden relative"
         >
           {/* Sfondo decorativo */}
           <div className="absolute top-0 right-0 w-2/3 h-full bg-gradient-to-bl from-[#94b0ab]/10 via-transparent to-transparent -z-10" />
@@ -25,10 +28,12 @@ const BentoHero = () => {
             
             <h1 className="text-5xl md:text-8xl font-sans font-bold text-[#1a1a1a] mb-8 leading-[1] tracking-tighter">
               Vendi casa a <br />
-              <span className="text-[#94b0ab] italic underline decoration-[#94b0ab]/30 decoration-wavy underline-offset-8">zero provvigioni.</span>
+              <span className="relative inline-block mt-4 px-6 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl text-[#94b0ab] italic underline decoration-[#94b0ab]/30 decoration-wavy underline-offset-8">
+                zero provvigioni.
+              </span>
             </h1>
             
-            <p className="text-lg md:text-2xl text-gray-500 font-medium mb-12 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-2xl text-gray-500 font-medium mb-12 max-w-2xl mx-auto leading-relaxed tracking-tight">
               Dimentica le vecchie agenzie. Un servizio premium per chi vende, senza costi nascosti e con la massima trasparenza.
             </p>
 
