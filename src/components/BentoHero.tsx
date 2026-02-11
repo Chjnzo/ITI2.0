@@ -3,9 +3,20 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const BentoHero = () => {
+  const navigate = useNavigate();
+
+  const scrollToContact = () => {
+    const contactSection = document.getElementById('contatti');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/?scroll=contatti');
+    }
+  };
+
   return (
     <section className="relative pt-44 pb-24 px-4 md:px-6 overflow-hidden bg-[#f8f9fa]">
       {/* Aurora Glow Effect - Luce ambientale diffusa */}
@@ -22,7 +33,7 @@ const BentoHero = () => {
             <Sparkles size={12} /> L'immobiliare a Bergamo
           </div>
           
-          {/* Titolo Monumentale senza card o ondine */}
+          {/* Titolo Monumentale */}
           <h1 className="text-6xl md:text-9xl font-bold text-[#1a1a1a] mb-10 leading-[0.95] tracking-tighter max-w-5xl mx-auto">
             Vendi casa a <br />
             <span className="text-[#94b0ab] italic">zero provvigioni.</span>
@@ -35,10 +46,13 @@ const BentoHero = () => {
 
           {/* Azioni */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <Link to="/vendi" className="w-full sm:w-auto h-16 px-12 bg-[#1a1a1a] text-white rounded-3xl font-bold flex items-center justify-center gap-3 hover:bg-[#94b0ab] transition-all shadow-2xl shadow-black/5 group">
-              Vendi il tuo Immobile
+            <button 
+              onClick={scrollToContact}
+              className="w-full sm:w-auto h-16 px-12 bg-[#1a1a1a] text-white rounded-3xl font-bold flex items-center justify-center gap-3 hover:bg-[#94b0ab] transition-all shadow-2xl shadow-black/5 group"
+            >
+              Richiedi Valutazione
               <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
+            </button>
             <Link to="/immobili" className="w-full sm:w-auto h-16 px-12 bg-white border-2 border-gray-100 text-[#1a1a1a] rounded-3xl font-bold flex items-center justify-center hover:bg-gray-50 transition-all">
               Sfoglia Catalogo
             </Link>
