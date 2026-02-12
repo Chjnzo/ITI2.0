@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import BottomDock from '@/components/BottomDock';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Maximize2, BedDouble, Bath, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabaseClient';
 import { Property } from '@/data/properties';
 import { MadeWithDyad } from "@/components/made-with-dyad";
+import PropertyCard from '@/components/PropertyCard';
 
 const categories = ["Tutti", "Appartamenti", "Ville", "Loft"];
 
@@ -44,7 +44,7 @@ const Immobili = () => {
               baths: db.bagni
             },
             features: db.caratteristiche || [],
-            images: [db.copertina_url, ...(db.galleria || [])],
+            images: [db.copertina_url, ...(db.immagini_urls || [])],
             agent: {
               name: db.agente_nome || "Team Il Tuo Immobiliare",
               phone: db.agente_tel || "+39 035 123 4567",
@@ -124,61 +124,8 @@ const Immobili = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={{ duration: 0.4 }}
-                    className="group"
                   >
-                    <Link to={`/property/${prop.slug}`} className="block">
-                      <div className="bg-white rounded-[40px] overflow-hidden border border-gray-100 shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-2">
-                        <div className="relative aspect-[4/3] overflow-hidden">
-                          <img 
-                            src={prop.images[0]} 
-                            alt={prop.title}
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                          />
-                          <div className="absolute top-6 left-6">
-                            <span className="px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-[10px] font-bold uppercase tracking-widest">
-                              {prop.category}
-                            </span>
-                          </div>
-                          <div className="absolute bottom-6 right-6">
-                            <span className="px-6 py-3 bg-[#94b0ab] text-white rounded-full text-lg font-bold shadow-lg">
-                              {prop.price}
-                            </span>
-                          </div>
-                        </div>
-                        
-                        <div className="p-8">
-                          <h3 className="text-2xl font-bold mb-2 group-hover:text-[#94b0ab] transition-colors">{prop.title}</h3>
-                          <div className="flex items-center gap-2 text-gray-400 mb-6 font-medium">
-                            <MapPin size={16} className="text-[#94b0ab]" />
-                            {prop.location}, Bergamo
-                          </div>
-                          
-                          <div className="grid grid-cols-3 gap-4 pt-6 border-t border-gray-50">
-                            <div className="flex flex-col gap-1">
-                              <div className="flex items-center gap-2 text-[#1a1a1a]">
-                                <Maximize2 size={14} className="text-[#94b0ab]" />
-                                <span className="text-sm font-bold">{prop.specs.mq}</span>
-                              </div>
-                              <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">mq</span>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                              <div className="flex items-center gap-2 text-[#1a1a1a]">
-                                <BedDouble size={14} className="text-[#94b0ab]" />
-                                <span className="text-sm font-bold">{prop.specs.rooms}</span>
-                              </div>
-                              <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Locali</span>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                              <div className="flex items-center gap-2 text-[#1a1a1a]">
-                                <Bath size={14} className="text-[#94b0ab]" />
-                                <span className="text-sm font-bold">{prop.specs.baths}</span>
-                              </div>
-                              <span className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Bagni</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
+                    <PropertyCard property={prop} />
                   </motion.div>
                 ))}
               </AnimatePresence>

@@ -2,11 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { supabase } from '@/lib/supabaseClient';
 import { Property } from '@/data/properties';
 import Header from '@/components/Header';
-import { MapPin, Maximize2, BedDouble, Bath, ArrowLeft, Phone, MessageCircle, Mail, Check, Loader2 } from 'lucide-react';
+import { MapPin, ArrowLeft, Phone, MessageCircle, Mail, Check, Loader2 } from 'lucide-react';
 import { MadeWithDyad } from "@/components/made-with-dyad";
 
 const PropertyDetail = () => {
@@ -42,7 +41,7 @@ const PropertyDetail = () => {
               baths: data.bagni
             },
             features: data.caratteristiche || [],
-            images: [data.copertina_url, ...(data.galleria || [])],
+            images: [data.copertina_url, ...(data.immagini_urls || [])],
             agent: {
               name: data.agente_nome || "Team Il Tuo Immobiliare",
               phone: data.agente_tel || "+39 035 123 4567",
@@ -95,17 +94,27 @@ const PropertyDetail = () => {
             Torna alla ricerca
           </Link>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
-            <div className="md:col-span-3 aspect-[16/10] md:aspect-[16/8] rounded-[32px] overflow-hidden bg-gray-200">
-              <img src={property.images[0]} alt={property.title} className="w-full h-full object-cover" />
+          {/* Horizontal Scroll Gallery */}
+          <div className="relative mb-12 -mx-4 px-4 md:mx-0 md:px-0">
+            <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-4">
+              {property.images.map((img, idx) => (
+                <div 
+                  key={idx} 
+                  className="relative flex-none w-[85vw] md:w-[70vw] lg:w-[60vw] aspect-[16/10] md:aspect-[16/8] snap-center rounded-[32px] overflow-hidden bg-gray-100 shadow-md"
+                >
+                  <img 
+                    src={img} 
+                    alt={`${property.title} - ${idx + 1}`} 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
             </div>
-            <div className="hidden md:grid grid-cols-1 gap-4">
-              <div className="aspect-square rounded-[24px] overflow-hidden bg-gray-200">
-                <img src={property.images[1] || property.images[0]} alt={property.title} className="w-full h-full object-cover" />
-              </div>
-              <div className="aspect-square rounded-[24px] overflow-hidden bg-gray-200">
-                <img src={property.images[2] || property.images[0]} alt={property.title} className="w-full h-full object-cover" />
-              </div>
+            {/* Scroll Indicator for Desktop */}
+            <div className="hidden md:flex justify-center gap-2 mt-4">
+              {property.images.map((_, idx) => (
+                <div key={idx} className="w-1.5 h-1.5 rounded-full bg-gray-200" />
+              ))}
             </div>
           </div>
 
