@@ -1,9 +1,8 @@
 "use client";
 
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Phone, MapPin, Send, User, Mail } from 'lucide-react';
-import CustomInput from './CustomInput';
+import { Phone, MapPin } from 'lucide-react';
+import ContactForm from './ContactForm';
 
 const TeamContact = () => {
   return (
@@ -41,32 +40,7 @@ const TeamContact = () => {
             </div>
 
             <div className="bg-[#f8f9fa] p-8 md:p-16 border-l border-gray-100">
-              <form className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <CustomInput 
-                    label="Nome" 
-                    placeholder="Mario Rossi" 
-                    icon={User}
-                  />
-                  <CustomInput 
-                    label="Email" 
-                    type="email" 
-                    placeholder="mario@esempio.it" 
-                    icon={Mail}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-1">Messaggio</label>
-                  <textarea 
-                    rows={4} 
-                    placeholder="Come possiamo aiutarti?" 
-                    className="w-full bg-white border border-gray-200 rounded-2xl px-5 py-4 text-[#1a1a1a] focus:border-[#94b0ab] outline-none transition-all shadow-sm resize-none"
-                  ></textarea>
-                </div>
-                <button className="w-full py-5 bg-[#94b0ab] text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-[#83a19b] transition-all shadow-lg shadow-[#94b0ab]/20">
-                  Invia Messaggio <Send size={18} />
-                </button>
-              </form>
+              <ContactForm />
             </div>
           </div>
         </div>
