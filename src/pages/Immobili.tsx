@@ -11,7 +11,13 @@ import { Property } from '@/data/properties';
 import { MadeWithDyad } from "@/components/made-with-dyad";
 import PropertyCard from '@/components/PropertyCard';
 
-const categories = ["Tutti", "Appartamenti", "Ville", "Loft"];
+const filterOptions = [
+  { label: "Tutti", value: "Tutti" },
+  { label: "Bilocali", value: "Bilocale" },
+  { label: "Trilocali", value: "Trilocale" },
+  { label: "Quadrilocali", value: "Quadrilocale" },
+  { label: "Ville/Indipendenti", value: "Villa" }
+];
 
 const Immobili = () => {
   const [filter, setFilter] = useState("Tutti");
@@ -36,7 +42,7 @@ const Immobili = () => {
             title: db.titolo,
             price: `€ ${db.prezzo.toLocaleString('it-IT')}`,
             location: db.zona,
-            category: db.locali || db.categoria, // Usiamo 'locali' per il badge
+            category: db.locali || "Appartamento",
             description: db.descrizione,
             piano: db.piano,
             garage: db.garage,
@@ -67,7 +73,11 @@ const Immobili = () => {
 
   const filteredProperties = filter === "Tutti" 
     ? properties 
-    : properties.filter(p => p.category.includes(filter) || p.specs.rooms.toString().includes(filter));
+    : properties.filter(p => {
+        const locali = p.category.toLowerCase();
+        if (filter === "Villa") return locali.includes("villa") || locali.includes("indipendente");
+        return locali.includes(filter.toLowerCase());
+      });
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] font-sans text-[#1a1a1a]">
@@ -82,20 +92,20 @@ const Immobili = () => {
               <p className="text-lg text-gray-500 font-medium">Esplora le nostre proprietà selezionate a zero provvigioni.</p>
             </div>
             
-            <div className="w-full md:w-auto flex flex-col gap-4">
-              <div className="flex items-center gap-2 p-1.5 bg-white border border-gray-100 rounded-2xl shadow-sm overflow-x-auto no-scrollbar">
-                {categories.map((cat) => (
+            <div className="w-full md:w-auto overflow-x-auto no-scrollbar pb-2">
+              <div className="flex items-center gap-2 p-1.5 bg-white border border-gray-100 rounded-2xl shadow-sm w-max">
+                {filterOptions.map((opt) => (
                   <button
-                    key={cat}
-                    onClick={() => setFilter(cat)}
+                    key={opt.value}
+                    onClick={() => setFilter(opt.value)}
                     className={cn(
                       "px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap",
-                      filter === cat 
-                        ? "bg-[#94b0ab] text-white" 
+                      filter === opt.value 
+                        ? "bg-[#94b0ab] text-white shadow-lg shadow-[#94b0ab]/20" 
                         : "text-gray-400 hover:text-[#1a1a1a] hover:bg-gray-50"
                     )}
                   >
-                    {cat}
+                    {opt.label}
                   </button>
                 ))}
               </div>
@@ -106,11 +116,6 @@ const Immobili = () => {
             <div className="flex flex-col items-center justify-center py-32 gap-4">
               <Loader2 className="w-12 h-12 text-[#94b0ab] animate-spin" />
               <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Caricamento immobili...</p>
-            </div>
-          ) : error ? (
-            <div className="text-center py-32">
-              <p className="text-red-500 font-bold mb-4">{error}</p>
-              <button onClick={() => window.location.reload()} className="text-[#94b0ab] font-bold underline">Riprova</button>
             </div>
           ) : (
             <motion.div 
