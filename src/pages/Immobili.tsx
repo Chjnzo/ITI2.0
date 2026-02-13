@@ -36,8 +36,10 @@ const Immobili = () => {
             title: db.titolo,
             price: `€ ${db.prezzo.toLocaleString('it-IT')}`,
             location: db.zona,
-            category: db.categoria,
+            category: db.locali || db.categoria, // Usiamo 'locali' per il badge
             description: db.descrizione,
+            piano: db.piano,
+            garage: db.garage,
             specs: {
               mq: db.mq,
               rooms: db.locali,
@@ -65,7 +67,7 @@ const Immobili = () => {
 
   const filteredProperties = filter === "Tutti" 
     ? properties 
-    : properties.filter(p => p.category === filter);
+    : properties.filter(p => p.category.includes(filter) || p.specs.rooms.toString().includes(filter));
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] font-sans text-[#1a1a1a]">
