@@ -8,6 +8,7 @@ export interface Property {
   description: string;
   piano?: string;
   garage?: boolean;
+  stato?: string;
   specs: {
     mq: number;
     rooms: string | number;

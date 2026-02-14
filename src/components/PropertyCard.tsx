@@ -4,12 +4,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Maximize2, Euro, Layers, Package } from 'lucide-react';
 import { Property } from '@/data/properties';
+import { cn } from '@/lib/utils';
 
 interface PropertyCardProps {
   property: Property;
 }
 
 const PropertyCard = ({ property }: PropertyCardProps) => {
+  const isSold = property.stato === 'Venduto';
+
   const formatPiano = (piano?: string, garage?: boolean) => {
     if (!piano) return garage ? "Box Auto" : "Disponibile";
     
@@ -22,48 +25,77 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
     return piano;
   };
 
+  // Tipizzato come any per evitare conflitti tra LinkProps (to richiesto) e DivProps (to inesistente)
+  const CardWrapper: any = isSold ? 'div' : Link;
+
   return (
-    <Link to={`/property/${property.slug}`} className="group block h-full">
-      <div className="bg-white rounded-[40px] overflow-hidden border border-gray-100 shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-2 flex flex-col h-full">
+    <CardWrapper 
+      {...(!isSold ? { to: `/property/${property.slug}` } : {})} 
+      className={cn(
+        "group block h-full select-none",
+        !isSold && "transition-all duration-500 hover:shadow-xl hover:-translate-y-2"
+      )}
+    >
+      <div className="bg-white rounded-[40px] overflow-hidden border border-gray-100 shadow-sm flex flex-col h-full relative">
+        
+        {/* Image Container */}
         <div className="relative aspect-[4/3] overflow-hidden shrink-0">
           <img 
             src={property.images[0]} 
             alt={property.title}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            className={cn(
+              "w-full h-full object-cover transition-transform duration-700",
+              !isSold && "group-hover:scale-110",
+              isSold && "grayscale opacity-80"
+            )}
           />
           
-          {/* Glassmorphism Badge */}
+          {/* Top-Left Badge: Override if Sold */}
           <div className="absolute top-6 left-6">
-            <span className="px-4 py-2 bg-white/20 backdrop-blur-md border border-white/30 rounded-full text-white text-[10px] font-bold uppercase tracking-widest drop-shadow-md shadow-lg">
-              {property.category}
+            <span className={cn(
+              "px-4 py-2 rounded-full text-white text-[10px] font-bold uppercase tracking-widest shadow-lg",
+              isSold 
+                ? "bg-red-600 shadow-red-600/20" 
+                : "bg-white/20 backdrop-blur-md border border-white/30 drop-shadow-md"
+            )}>
+              {isSold ? "VENDUTO" : property.category}
             </span>
           </div>
         </div>
         
+        {/* Content Area */}
         <div className="p-8 flex flex-col flex-1">
           <div className="mb-6">
-            <h3 className="text-2xl font-bold mb-2 group-hover:text-[#94b0ab] transition-colors line-clamp-1">
+            <h3 className={cn(
+              "text-2xl font-bold mb-2 transition-colors line-clamp-1",
+              !isSold && "group-hover:text-[#94b0ab]"
+            )}>
               {property.title}
             </h3>
             <div className="flex items-center gap-2 text-gray-400 font-medium">
-              <MapPin size={16} className="text-[#94b0ab]" />
+              <MapPin size={16} className={cn(!isSold ? "text-[#94b0ab]" : "text-gray-300")} />
               <span className="line-clamp-1">{property.location}, Bergamo</span>
             </div>
           </div>
           
+          {/* Bottom Info Row */}
           <div className="grid grid-cols-3 gap-2 pt-6 border-t border-gray-50 mt-auto">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-1.5 text-[#1a1a1a]">
-                <Euro size={14} className="text-[#94b0ab] shrink-0" />
-                <span className="text-xs font-bold truncate">{property.price.replace('€ ', '')}</span>
+                <Euro size={14} className={cn("shrink-0", !isSold ? "text-[#94b0ab]" : "text-gray-300")} />
+                <span className={cn("text-xs font-bold truncate", isSold && "text-gray-400")}>
+                  {property.price.replace('€ ', '')}
+                </span>
               </div>
               <span className="text-[9px] text-gray-400 uppercase font-bold tracking-widest">Prezzo</span>
             </div>
 
             <div className="flex flex-col gap-1 border-x border-gray-50 px-2">
               <div className="flex items-center gap-1.5 text-[#1a1a1a]">
-                <Maximize2 size={14} className="text-[#94b0ab] shrink-0" />
-                <span className="text-xs font-bold truncate">{property.specs.mq} mq</span>
+                <Maximize2 size={14} className={cn("shrink-0", !isSold ? "text-[#94b0ab]" : "text-gray-300")} />
+                <span className={cn("text-xs font-bold truncate", isSold && "text-gray-400")}>
+                  {property.specs.mq} mq
+                </span>
               </div>
               <span className="text-[9px] text-gray-400 uppercase font-bold tracking-widest">Superficie</span>
             </div>
@@ -71,11 +103,11 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             <div className="flex flex-col gap-1 pl-2">
               <div className="flex items-center gap-1.5 text-[#1a1a1a]">
                 {property.piano ? (
-                  <Layers size={14} className="text-[#94b0ab] shrink-0" />
+                  <Layers size={14} className={cn("shrink-0", !isSold ? "text-[#94b0ab]" : "text-gray-300")} />
                 ) : (
-                  <Package size={14} className="text-[#94b0ab] shrink-0" />
+                  <Package size={14} className={cn("shrink-0", !isSold ? "text-[#94b0ab]" : "text-gray-300")} />
                 )}
-                <span className="text-xs font-bold truncate">
+                <span className={cn("text-xs font-bold truncate", isSold && "text-gray-400")}>
                   {formatPiano(property.piano, property.garage)}
                 </span>
               </div>
@@ -86,7 +118,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           </div>
         </div>
       </div>
-    </Link>
+    </CardWrapper>
   );
 };
 
