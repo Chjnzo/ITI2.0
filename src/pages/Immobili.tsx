@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import BottomDock from '@/components/BottomDock';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Search, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabaseClient';
 import { Property } from '@/data/properties';
@@ -21,6 +21,7 @@ const filterOptions = [
 
 const Immobili = () => {
   const [filter, setFilter] = useState("Tutti");
+  const [searchQuery, setSearchQuery] = useState("");
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -46,6 +47,7 @@ const Immobili = () => {
             description: db.descrizione,
             piano: db.piano,
             garage: db.garage,
+            stato: db.stato,
             specs: {
               mq: db.mq,
               rooms: db.locali,
@@ -71,13 +73,26 @@ const Immobili = () => {
     fetchProperties();
   }, []);
 
-  const filteredProperties = filter === "Tutti" 
-    ? properties 
-    : properties.filter(p => {
-        const locali = p.category.toLowerCase();
-        if (filter === "Villa") return locali.includes("villa") || locali.includes("indipendente");
-        return locali.includes(filter.toLowerCase());
-      });
+  const filteredProperties = properties.filter(p => {
+    // Category Matching
+    const locali = p.category.toLowerCase();
+    let matchesCategory = true;
+    if (filter !== "Tutti") {
+      if (filter === "Villa") {
+        matchesCategory = locali.includes("villa") || locali.includes("indipendente");
+      } else {
+        matchesCategory = locali.includes(filter.toLowerCase());
+      }
+    }
+
+    // Search Query Matching
+    const query = searchQuery.toLowerCase();
+    const matchesSearch = 
+      p.title.toLowerCase().includes(query) || 
+      p.location.toLowerCase().includes(query);
+
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] font-sans text-[#1a1a1a]">
@@ -85,29 +100,54 @@ const Immobili = () => {
       
       <main className="pt-44 pb-32">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-8">
+          <div className="flex flex-col mb-16 gap-10">
+            {/* Header Text */}
             <div className="max-w-xl">
               <span className="text-[10px] font-bold tracking-[0.2em] text-[#94b0ab] uppercase mb-4 block">Portfolio</span>
               <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-4 leading-none">Scatola dei <br />Sogni.</h1>
               <p className="text-lg text-gray-500 font-medium">Esplora le nostre proprietà selezionate a zero provvigioni.</p>
             </div>
             
-            <div className="w-full md:w-auto overflow-x-auto no-scrollbar pb-2">
-              <div className="flex items-center gap-2 p-1.5 bg-white border border-gray-100 rounded-2xl shadow-sm w-max">
-                {filterOptions.map((opt) => (
-                  <button
-                    key={opt.value}
-                    onClick={() => setFilter(opt.value)}
-                    className={cn(
-                      "px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap",
-                      filter === opt.value 
-                        ? "bg-[#94b0ab] text-white shadow-lg shadow-[#94b0ab]/20" 
-                        : "text-gray-400 hover:text-[#1a1a1a] hover:bg-gray-50"
-                    )}
+            {/* Search & Filter Controls */}
+            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 w-full">
+              {/* Live Search Input */}
+              <div className="relative w-full lg:max-w-sm">
+                <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                <input
+                  type="text"
+                  placeholder="Cerca zona, via o parola chiave..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full h-14 bg-white border border-gray-100 rounded-2xl pl-14 pr-12 text-sm font-medium focus:outline-none focus:border-[#94b0ab] focus:ring-4 focus:ring-[#94b0ab]/5 transition-all shadow-sm"
+                />
+                {searchQuery && (
+                  <button 
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 w-7 h-7 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 hover:text-[#1a1a1a] transition-colors"
                   >
-                    {opt.label}
+                    <X size={14} />
                   </button>
-                ))}
+                )}
+              </div>
+
+              {/* Category Filter Buttons */}
+              <div className="w-full lg:w-auto overflow-x-auto no-scrollbar pb-2 lg:pb-0">
+                <div className="flex items-center gap-2 p-1.5 bg-white border border-gray-100 rounded-2xl shadow-sm w-max">
+                  {filterOptions.map((opt) => (
+                    <button
+                      key={opt.value}
+                      onClick={() => setFilter(opt.value)}
+                      className={cn(
+                        "px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap",
+                        filter === opt.value 
+                          ? "bg-[#94b0ab] text-white shadow-lg shadow-[#94b0ab]/20" 
+                          : "text-gray-400 hover:text-[#1a1a1a] hover:bg-gray-50"
+                      )}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -118,25 +158,39 @@ const Immobili = () => {
               <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Caricamento immobili...</p>
             </div>
           ) : (
-            <motion.div 
-              layout
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-            >
-              <AnimatePresence mode="popLayout">
-                {filteredProperties.map((prop) => (
-                  <motion.div
-                    layout
-                    key={prop.id}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.4 }}
-                  >
-                    <PropertyCard property={prop} />
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </motion.div>
+            <div className="space-y-12">
+              {filteredProperties.length === 0 ? (
+                <motion.div 
+                  initial={{ opacity: 0 }} 
+                  animate={{ opacity: 1 }}
+                  className="text-center py-32 bg-white rounded-[40px] border border-dashed border-gray-200"
+                >
+                  <Search size={48} className="text-gray-200 mx-auto mb-6" />
+                  <h3 className="text-xl font-bold mb-2">Nessun risultato trovato</h3>
+                  <p className="text-gray-400">Prova a modificare i filtri o la query di ricerca.</p>
+                </motion.div>
+              ) : (
+                <motion.div 
+                  layout
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                >
+                  <AnimatePresence mode="popLayout">
+                    {filteredProperties.map((prop) => (
+                      <motion.div
+                        layout
+                        key={prop.id}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        transition={{ duration: 0.4 }}
+                      >
+                        <PropertyCard property={prop} />
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </motion.div>
+              )}
+            </div>
           )}
         </div>
       </main>
