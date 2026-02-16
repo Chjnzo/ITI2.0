@@ -36,22 +36,22 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         !isSold && "transition-all duration-500 hover:shadow-xl hover:-translate-y-2"
       )}
     >
-      <div className="bg-white rounded-[40px] overflow-hidden border border-gray-100 shadow-sm flex flex-col h-full relative">
+      <div className="bg-white rounded-[40px] overflow-hidden border border-gray-100 shadow-sm flex flex-col h-full relative isolate">
         
-        {/* Image Container - Dynamic Aspect Ratio */}
-        <div className="relative aspect-[4/5] md:aspect-[4/3] overflow-hidden shrink-0">
+        {/* Image Container - Dynamic Aspect Ratio with explicit clipping */}
+        <div className="relative aspect-[4/5] md:aspect-[4/3] overflow-hidden shrink-0 rounded-t-[40px]">
           <img 
             src={property.images[0]} 
             alt={property.title}
             className={cn(
-              "w-full h-full object-cover transition-transform duration-700",
+              "w-full h-full object-cover transition-transform duration-700 transform-gpu rounded-t-[40px]",
               !isSold && "group-hover:scale-110",
               isSold && "grayscale opacity-80"
             )}
           />
           
           {/* Top-Left Badge: Override if Sold */}
-          <div className="absolute top-6 left-6">
+          <div className="absolute top-6 left-6 z-10">
             <span className={cn(
               "px-4 py-2 rounded-full text-white text-[10px] font-bold uppercase tracking-widest shadow-lg",
               isSold 
@@ -63,8 +63,8 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           </div>
         </div>
         
-        {/* Content Area */}
-        <div className="p-8 flex flex-col flex-1">
+        {/* Content Area with explicit bottom rounding */}
+        <div className="p-8 flex flex-col flex-1 rounded-b-[40px] bg-white">
           <div className="mb-6">
             <h3 className={cn(
               "text-2xl font-bold mb-2 transition-colors line-clamp-1",
