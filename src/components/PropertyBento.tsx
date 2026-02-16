@@ -2,10 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, ArrowUpRight, Loader2 } from 'lucide-react';
+import { ArrowUpRight, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabaseClient';
 import { Property } from '@/data/properties';
+import PropertyCard from './PropertyCard';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const PropertyBento = () => {
   const [featured, setFeatured] = useState<Property[]>([]);
@@ -14,9 +16,12 @@ const PropertyBento = () => {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
+        setLoading(true);
         const { data, error } = await supabase
           .from('immobili')
           .select('*')
+          .eq('stato', 'Disponibile')
+          .eq('in_evidenza', true)
           .limit(2);
 
         if (error) throw error;
@@ -28,10 +33,25 @@ const PropertyBento = () => {
             title: db.titolo,
             price: `€ ${db.prezzo.toLocaleString('it-IT')}`,
             location: db.zona,
-            specs: { mq: db.mq },
-            images: [db.copertina_url]
+            category: db.locali || "Appartamento",
+            description: db.descrizione,
+            piano: db.piano,
+            garage: db.garage,
+            stato: db.stato,
+            specs: {
+              mq: db.mq,
+              rooms: db.locali,
+              baths: db.bagni
+            },
+            features: db.caratteristiche || [],
+            images: [db.copertina_url, ...(db.immagini_urls || [])],
+            agent: {
+              name: db.agente_nome || "Team Il Tuo Immobiliare",
+              phone: db.agente_tel || "+39 035 123 4567",
+              email: db.agente_email || "info@iltuoimmobiliare.it"
+            }
           }));
-          setFeatured(mapped as any);
+          setFeatured(mapped as Property[]);
         }
       } catch (err) {
         console.error("Error fetching featured properties:", err);
@@ -43,19 +63,15 @@ const PropertyBento = () => {
     fetchFeatured();
   }, []);
 
-  if (loading) return (
-    <div className="py-24 flex justify-center">
-      <Loader2 className="w-8 h-8 text-[#94b0ab] animate-spin" />
-    </div>
-  );
-
-  if (featured.length === 0) return null;
+  // Fallback: Se non ci sono immobili in evidenza, non renderizziamo la sezione
+  if (!loading && featured.length === 0) return null;
 
   return (
     <section className="py-12 md:py-24 px-4 md:px-6">
       <div className="container mx-auto">
         <div className="flex items-end justify-between mb-8 md:mb-12">
           <div>
+            <span className="text-[10px] font-bold tracking-[0.2em] text-[#94b0ab] uppercase mb-2 block">Selezione Premium</span>
             <h2 className="text-4xl md:text-5xl font-bold text-[#1a1a1a] tracking-tighter">In Evidenza</h2>
             <p className="text-gray-400 mt-1 font-medium italic">Selezionati • 0% commissioni per te</p>
           </div>
@@ -65,41 +81,29 @@ const PropertyBento = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {featured.map((prop) => (
-            <Link key={prop.id} to={`/property/${prop.slug}`} className="group block">
-              <div className="relative aspect-[16/10] md:aspect-[16/9] rounded-[32px] md:rounded-[40px] overflow-hidden mb-6 shadow-md">
-                <img 
-                  src={prop.images[0]} 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  alt={prop.title}
-                />
-                <div className="absolute top-6 left-6">
-                  <span className="px-4 py-2 bg-white/20 backdrop-blur-md border border-white/30 rounded-full text-white text-[10px] font-bold uppercase tracking-widest">
-                    Zero Provvigioni
-                  </span>
-                </div>
-                <div className="absolute bottom-6 right-6">
-                   <div className="px-6 py-3 bg-white text-[#1a1a1a] rounded-2xl font-bold shadow-lg">
-                    {prop.price}
-                  </div>
+          {loading ? (
+            // Skeletons during loading
+            Array.from({ length: 2 }).map((_, i) => (
+              <div key={i} className="space-y-6">
+                <Skeleton className="aspect-[16/10] md:aspect-[16/9] rounded-[40px]" />
+                <div className="space-y-3 px-2">
+                  <Skeleton className="h-8 w-2/3 rounded-lg" />
+                  <Skeleton className="h-4 w-1/3 rounded-lg" />
                 </div>
               </div>
-              
-              <div className="px-2">
-                <div className="flex justify-between items-end">
-                  <div>
-                    <h3 className="text-2xl md:text-3xl font-bold text-[#1a1a1a] mb-1 group-hover:text-[#94b0ab] transition-colors">{prop.title}</h3>
-                    <p className="text-gray-400 font-medium flex items-center gap-2">
-                      <MapPin size={16} className="text-[#94b0ab]" /> {prop.location}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-bold text-[#1a1a1a] uppercase tracking-widest">{prop.specs.mq} m²</p>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ))}
+            ))
+          ) : (
+            featured.map((prop) => (
+              <PropertyCard key={prop.id} property={prop} />
+            ))
+          )}
+        </div>
+
+        {/* Mobile View All Link */}
+        <div className="mt-10 md:hidden">
+          <Link to="/immobili" className="flex items-center justify-center gap-2 h-14 bg-white border border-gray-100 rounded-2xl font-bold text-[#94b0ab]">
+            Sfoglia Catalogo <ArrowUpRight size={18} />
+          </Link>
         </div>
       </div>
     </section>
