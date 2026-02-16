@@ -38,8 +38,8 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
     >
       <div className="bg-white rounded-[40px] overflow-hidden border border-gray-100 shadow-sm flex flex-col h-full relative">
         
-        {/* Image Container */}
-        <div className="relative aspect-[4/3] overflow-hidden shrink-0">
+        {/* Image Container - Dynamic Aspect Ratio */}
+        <div className="relative aspect-[4/5] md:aspect-[4/3] overflow-hidden shrink-0">
           <img 
             src={property.images[0]} 
             alt={property.title}

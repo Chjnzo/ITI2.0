@@ -74,7 +74,6 @@ const Immobili = () => {
   }, []);
 
   const filteredProperties = properties.filter(p => {
-    // Category Matching
     const locali = p.category.toLowerCase();
     let matchesCategory = true;
     if (filter !== "Tutti") {
@@ -85,7 +84,6 @@ const Immobili = () => {
       }
     }
 
-    // Search Query Matching
     const query = searchQuery.toLowerCase();
     const matchesSearch = 
       p.title.toLowerCase().includes(query) || 
@@ -98,24 +96,24 @@ const Immobili = () => {
     <div className="min-h-screen bg-[#f8f9fa] font-sans text-[#1a1a1a]">
       <Header />
       
-      <main className="pt-44 pb-32">
+      <main className="pt-32 md:pt-44 pb-32">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col mb-16 gap-10">
+          <div className="flex flex-col mb-8 md:mb-16 gap-6 md:gap-10">
             {/* Header Text */}
             <div className="max-w-xl">
-              <span className="text-[10px] font-bold tracking-[0.2em] text-[#94b0ab] uppercase mb-4 block">Portfolio</span>
-              <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-4 leading-none">Scatola dei <br />Sogni.</h1>
-              <p className="text-lg text-gray-500 font-medium">Esplora le nostre proprietà selezionate a zero provvigioni.</p>
+              <span className="text-[10px] font-bold tracking-[0.2em] text-[#94b0ab] uppercase mb-3 block">Portfolio</span>
+              <h1 className="text-4xl md:text-7xl font-bold tracking-tighter mb-3 leading-none">Scatola dei <br />Sogni.</h1>
+              <p className="text-base md:text-lg text-gray-500 font-medium">Esplora le nostre proprietà selezionate a zero provvigioni.</p>
             </div>
             
             {/* Search & Filter Controls */}
-            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 w-full">
+            <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-4 md:gap-6 w-full">
               {/* Live Search Input */}
               <div className="relative w-full lg:max-w-sm">
                 <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                 <input
                   type="text"
-                  placeholder="Cerca zona, via o parola chiave..."
+                  placeholder="Cerca zona o via..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full h-14 bg-white border border-gray-100 rounded-2xl pl-14 pr-12 text-sm font-medium focus:outline-none focus:border-[#94b0ab] focus:ring-4 focus:ring-[#94b0ab]/5 transition-all shadow-sm"
@@ -130,15 +128,15 @@ const Immobili = () => {
                 )}
               </div>
 
-              {/* Category Filter Buttons */}
-              <div className="w-full lg:w-auto overflow-x-auto no-scrollbar pb-2 lg:pb-0">
-                <div className="flex items-center gap-2 p-1.5 bg-white border border-gray-100 rounded-2xl shadow-sm w-max">
+              {/* Category Filter Buttons - NO SCROLL ON MOBILE */}
+              <div className="w-full lg:w-auto">
+                <div className="flex flex-wrap items-center gap-2 p-1.5 bg-white border border-gray-100 rounded-2xl shadow-sm w-full">
                   {filterOptions.map((opt) => (
                     <button
                       key={opt.value}
                       onClick={() => setFilter(opt.value)}
                       className={cn(
-                        "px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap",
+                        "flex-1 min-w-[100px] md:min-w-0 md:flex-none px-4 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap text-center",
                         filter === opt.value 
                           ? "bg-[#94b0ab] text-white shadow-lg shadow-[#94b0ab]/20" 
                           : "text-gray-400 hover:text-[#1a1a1a] hover:bg-gray-50"
@@ -155,7 +153,7 @@ const Immobili = () => {
           {loading ? (
             <div className="flex flex-col items-center justify-center py-32 gap-4">
               <Loader2 className="w-12 h-12 text-[#94b0ab] animate-spin" />
-              <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Caricamento immobili...</p>
+              <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Caricamento...</p>
             </div>
           ) : (
             <div className="space-y-12">
@@ -163,16 +161,16 @@ const Immobili = () => {
                 <motion.div 
                   initial={{ opacity: 0 }} 
                   animate={{ opacity: 1 }}
-                  className="text-center py-32 bg-white rounded-[40px] border border-dashed border-gray-200"
+                  className="text-center py-24 bg-white rounded-[40px] border border-dashed border-gray-200"
                 >
                   <Search size={48} className="text-gray-200 mx-auto mb-6" />
-                  <h3 className="text-xl font-bold mb-2">Nessun risultato trovato</h3>
-                  <p className="text-gray-400">Prova a modificare i filtri o la query di ricerca.</p>
+                  <h3 className="text-xl font-bold mb-2">Nessun risultato</h3>
+                  <p className="text-gray-400 px-6">Riprova con un'altra zona o cambia categoria.</p>
                 </motion.div>
               ) : (
                 <motion.div 
                   layout
-                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
                 >
                   <AnimatePresence mode="popLayout">
                     {filteredProperties.map((prop) => (
