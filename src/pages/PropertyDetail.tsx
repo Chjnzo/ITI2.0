@@ -126,19 +126,19 @@ const PropertyDetail = () => {
                 </div>
               </div>
 
-              {/* Quick Stats KPI (Mobile Scrollable / Desktop Grid) */}
-              <div className="overflow-x-auto no-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
-                <div className="flex md:grid md:grid-cols-4 gap-4 w-max md:w-full">
+              {/* Quick Stats KPI - Optimized for Mobile (No Horizontal Scroll) */}
+              <div className="w-full">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                   {[
                     { label: 'Superficie', value: `${property.mq} m²`, icon: Maximize2 },
                     { label: 'Locali', value: property.locali, icon: Home },
                     { label: 'Bagni', value: property.bagni, icon: Bath },
                     { label: 'Piano', value: property.piano || 'Terra', icon: Layers },
                   ].map((stat, i) => (
-                    <div key={i} className="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm min-w-[140px] flex-1">
-                      <stat.icon size={20} className="text-[#94b0ab] mb-4" />
-                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{stat.label}</p>
-                      <p className="text-lg font-bold">{stat.value}</p>
+                    <div key={i} className="bg-white p-5 md:p-6 rounded-[24px] md:rounded-[32px] border border-gray-100 shadow-sm flex flex-col items-start">
+                      <stat.icon size={18} className="text-[#94b0ab] mb-3 md:mb-4" />
+                      <p className="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{stat.label}</p>
+                      <p className="text-base md:text-lg font-bold">{stat.value}</p>
                     </div>
                   ))}
                 </div>
@@ -181,7 +181,6 @@ const PropertyDetail = () => {
                       </div>
                       <ChevronDown size={18} className="text-gray-300" />
                     </button>
-                    {/* Simplified for demo - usually a nested motion.div */}
                   </div>
                 ))}
               </div>
@@ -204,7 +203,7 @@ const PropertyDetail = () => {
                 </div>
               </section>
 
-              {/* Mobile Agent Profile (Appears here on mobile, hidden on desktop sidebar) */}
+              {/* Mobile Agent Profile */}
               <div className="lg:hidden bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm space-y-8">
                 <div className="flex items-center gap-6">
                   <div className="w-20 h-20 bg-[#94b0ab] rounded-[24px] flex items-center justify-center text-white text-3xl font-bold">
@@ -220,10 +219,9 @@ const PropertyDetail = () => {
 
             </div>
 
-            {/* Desktop Sticky Sidebar (35%) */}
+            {/* Desktop Sticky Sidebar */}
             <div className="hidden lg:block lg:col-span-4">
               <div className="sticky top-32 space-y-8">
-                {/* Main Conversion Card */}
                 <div className="bg-white p-10 rounded-[48px] border border-gray-100 shadow-xl shadow-black/5 space-y-10">
                   <div>
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Prezzo Richiesto</p>
@@ -246,7 +244,6 @@ const PropertyDetail = () => {
                   </div>
                 </div>
 
-                {/* Trust Badge */}
                 <div className="p-8 bg-[#94b0ab]/5 rounded-[40px] border border-[#94b0ab]/10 flex items-center gap-4">
                   <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-[#94b0ab] shadow-sm">
                     <ShieldCheck size={24} />
