@@ -4,44 +4,64 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { supabase } from '@/lib/supabaseClient';
-import { Property } from '@/data/properties';
 import Header from '@/components/Header';
 import { 
   MapPin, ArrowLeft, ExternalLink, 
   Loader2, Maximize2, Layers, Bath, 
-  ChevronDown, Home, ShieldCheck, Calendar
+  ChevronDown, Home, ShieldCheck, Calendar,
+  Users
 } from 'lucide-react';
 import { MadeWithDyad } from "@/components/made-with-dyad";
 import ContactForm from '@/components/ContactForm';
+import OpenHouseBooking from '@/components/OpenHouseBooking';
 import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
+import { it } from 'date-fns/locale';
 
 const PropertyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const [property, setProperty] = useState<any>(null);
+  const [openHouse, setOpenHouse] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isDescExpanded, setIsDescExpanded] = useState(false);
   const [currentImgIdx, setCurrentImgIdx] = useState(1);
   const galleryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const fetchProperty = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const { data, error } = await supabase
+        // 1. Fetch Property
+        const { data: propData, error: propError } = await supabase
           .from('immobili')
           .select('*')
           .eq('slug', slug)
           .single();
 
-        if (error) throw error;
-        setProperty(data);
+        if (propError) throw propError;
+        setProperty(propData);
+
+        // 2. Fetch Active Open House
+        if (propData) {
+          const today = new Date().toISOString().split('T')[0];
+          const { data: ohData } = await supabase
+            .from('open_houses')
+            .select('*')
+            .eq('immobile_id', propData.id)
+            .gte('data_evento', today)
+            .order('data_evento', { ascending: true })
+            .limit(1)
+            .maybeSingle();
+          
+          setOpenHouse(ohData);
+        }
       } catch (err) {
-        console.error("Error fetching property:", err);
+        console.error("Error fetching data:", err);
       } finally {
         setLoading(false);
       }
     };
-    fetchProperty();
+    fetchData();
   }, [slug]);
 
   const handleScroll = () => {
@@ -69,8 +89,6 @@ const PropertyDetail = () => {
 
   const images = [property.copertina_url, ...(property.immagini_urls || [])];
   const priceFormatted = `€ ${property.prezzo?.toLocaleString('it-IT')}`;
-  
-  // Encode address for Google Maps
   const encodedAddress = encodeURIComponent(`${property.indirizzo || ''} ${property.zona || ''} Bergamo Italia`);
   const mapUrl = `https://maps.google.com/maps?q=${encodedAddress}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
 
@@ -78,7 +96,6 @@ const PropertyDetail = () => {
     <div className="min-h-screen bg-[#f8f9fa] font-sans text-[#1a1a1a] pb-32 md:pb-0">
       <Header />
       
-      {/* Mobile Back Button Overlay */}
       <div className="fixed top-20 left-4 z-40 md:hidden">
         <Link to="/immobili" className="w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center shadow-lg border border-white/40">
           <ArrowLeft size={20} />
@@ -90,9 +107,38 @@ const PropertyDetail = () => {
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
             
-            {/* Left Column: Media & Info (65%) */}
             <div className="lg:col-span-8 space-y-10">
               
+              {/* Open House Banner */}
+              {openHouse && (
+                <motion.div 
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-[#94b0ab] text-white p-6 rounded-[32px] flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl shadow-[#94b0ab]/20"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center">
+                      <Calendar className="text-white" size={24} />
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-80">Evento in programma</p>
+                      <h4 className="text-lg md:text-xl font-bold">
+                        Open House: {format(new Date(openHouse.data_evento), 'd MMMM', { locale: it })} • {openHouse.ora_inizio.slice(0,5)}-{openHouse.ora_fine.slice(0,5)}
+                      </h4>
+                    </div>
+                  </div>
+                  <OpenHouseBooking 
+                    openHouse={openHouse}
+                    propertyTitle={property.titolo}
+                    trigger={
+                      <button className="h-12 px-6 bg-white text-[#94b0ab] rounded-xl font-bold text-sm hover:bg-gray-50 transition-colors">
+                        Prenota Ora
+                      </button>
+                    }
+                  />
+                </motion.div>
+              )}
+
               {/* Header Info */}
               <div className="space-y-4">
                 <div className="flex flex-wrap gap-3">
@@ -184,7 +230,6 @@ const PropertyDetail = () => {
                 </div>
               </div>
 
-              {/* Mobile Contact Anchor */}
               <div id="contact-section-mobile" className="lg:hidden p-8 bg-white rounded-[32px] border border-gray-100 shadow-sm">
                  <h3 className="text-xl font-bold mb-6">Inviaci un messaggio</h3>
                  <ContactForm propertyTitle={property.titolo} />
@@ -192,12 +237,11 @@ const PropertyDetail = () => {
 
             </div>
 
-            {/* Desktop Sticky Sidebar (35%) */}
+            {/* Desktop Sticky Sidebar */}
             <div className="hidden lg:block lg:col-span-4">
               <div className="sticky top-32 space-y-6">
                 <div id="contact-sidebar" className="bg-white p-6 rounded-[32px] border border-gray-100 shadow-xl shadow-black/5 space-y-6 overflow-hidden">
                   
-                  {/* Compact Header */}
                   <div className="flex items-end justify-between border-b border-gray-50 pb-6">
                     <div>
                       <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Prezzo Richiesto</p>
@@ -211,13 +255,33 @@ const PropertyDetail = () => {
                     </div>
                   </div>
                   
-                  {/* Inline Form */}
                   <div className="space-y-4">
+                    {openHouse ? (
+                      <div className="space-y-3">
+                        <OpenHouseBooking 
+                          openHouse={openHouse}
+                          propertyTitle={property.titolo}
+                          trigger={
+                            <button className="w-full h-16 bg-[#94b0ab] text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-[#94b0ab]/20 hover:scale-[1.02] transition-transform">
+                              Prenota Open House <Calendar size={18} />
+                            </button>
+                          }
+                        />
+                        <div className="flex items-center justify-center gap-2 text-gray-400">
+                          <Users size={14} />
+                          <span className="text-[10px] font-bold uppercase tracking-widest">Posti limitati (Max {openHouse.posti_totali})</span>
+                        </div>
+                        <div className="relative py-4">
+                          <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-gray-100"></span></div>
+                          <div className="relative flex justify-center"><span className="bg-white px-3 text-[10px] font-bold text-gray-300 uppercase tracking-widest">oppure</span></div>
+                        </div>
+                      </div>
+                    ) : null}
+                    
                     <p className="text-[11px] font-bold text-gray-500 uppercase tracking-widest px-1">Richiedi Informazioni</p>
                     <ContactForm propertyTitle={property.titolo} />
                   </div>
 
-                  {/* Secondary Actions */}
                   {property.link_immobiliare && (
                     <div className="pt-2">
                       <a 
@@ -264,12 +328,24 @@ const PropertyDetail = () => {
           )}
         </div>
         
-        <button 
-          onClick={scrollToContact}
-          className="flex-1 h-14 bg-[#1a1a1a] text-white rounded-2xl font-bold text-sm tracking-tight shadow-xl shadow-black/10 flex items-center justify-center gap-2"
-        >
-          <Calendar size={18} /> Prenota Visita
-        </button>
+        {openHouse ? (
+          <OpenHouseBooking 
+            openHouse={openHouse}
+            propertyTitle={property.titolo}
+            trigger={
+              <button className="flex-1 h-14 bg-[#94b0ab] text-white rounded-2xl font-bold text-sm tracking-tight shadow-xl shadow-[#94b0ab]/10 flex items-center justify-center gap-2">
+                Prenota Open House <Calendar size={18} />
+              </button>
+            }
+          />
+        ) : (
+          <button 
+            onClick={scrollToContact}
+            className="flex-1 h-14 bg-[#1a1a1a] text-white rounded-2xl font-bold text-sm tracking-tight shadow-xl shadow-black/10 flex items-center justify-center gap-2"
+          >
+            <Calendar size={18} /> Prenota Visita
+          </button>
+        )}
       </div>
 
       <footer className="py-20 mt-12 bg-white border-t border-gray-100 text-center">
