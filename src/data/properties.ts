@@ -9,7 +9,6 @@ export interface Property {
   piano?: string;
   garage?: boolean;
   stato?: string;
-  link_immobiliare?: string;
   specs: {
     mq: number;
     rooms: string | number;
