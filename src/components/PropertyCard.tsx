@@ -25,12 +25,11 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
     return piano;
   };
 
-  // Tipizzato come any per evitare conflitti tra LinkProps (to richiesto) e DivProps (to inesistente)
   const CardWrapper: any = isSold ? 'div' : Link;
 
   return (
     <CardWrapper 
-      {...(!isSold ? { to: `/property/${property.slug}` } : {})} 
+      {...(!isSold ? { to: `/immobile/${property.id}` } : {})} 
       className={cn(
         "group block h-full select-none",
         !isSold && "transition-all duration-500 hover:shadow-xl hover:-translate-y-2"
@@ -38,7 +37,6 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
     >
       <div className="bg-white rounded-[40px] overflow-hidden border border-gray-100 shadow-sm flex flex-col h-full relative isolate">
         
-        {/* Image Container - Dynamic Aspect Ratio with explicit clipping */}
         <div className="relative aspect-[4/5] md:aspect-[4/3] overflow-hidden shrink-0 rounded-t-[40px]">
           <img 
             src={property.images[0]} 
@@ -50,7 +48,6 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             )}
           />
           
-          {/* Top-Left Badge: Override if Sold */}
           <div className="absolute top-6 left-6 z-10">
             <span className={cn(
               "px-4 py-2 rounded-full text-white text-[10px] font-bold uppercase tracking-widest shadow-lg",
@@ -63,7 +60,6 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           </div>
         </div>
         
-        {/* Content Area with explicit bottom rounding */}
         <div className="p-8 flex flex-col flex-1 rounded-b-[40px] bg-white">
           <div className="mb-6">
             <h3 className={cn(
@@ -78,7 +74,6 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             </div>
           </div>
           
-          {/* Bottom Info Row */}
           <div className="grid grid-cols-3 gap-2 pt-6 border-t border-gray-50 mt-auto">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-1.5 text-[#1a1a1a]">

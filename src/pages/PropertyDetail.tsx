@@ -19,7 +19,7 @@ import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 
 const PropertyDetail = () => {
-  const { slug } = useParams<{ slug: string }>();
+  const { id } = useParams<{ id: string }>();
   const [property, setProperty] = useState<any>(null);
   const [openHouse, setOpenHouse] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -31,11 +31,11 @@ const PropertyDetail = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        // 1. Fetch Property
+        // 1. Fetch Property by ID
         const { data: propData, error: propError } = await supabase
           .from('immobili')
           .select('*')
-          .eq('slug', slug)
+          .eq('id', id)
           .single();
 
         if (propError) throw propError;
@@ -61,8 +61,8 @@ const PropertyDetail = () => {
         setLoading(false);
       }
     };
-    fetchData();
-  }, [slug]);
+    if (id) fetchData();
+  }, [id]);
 
   const handleScroll = () => {
     if (galleryRef.current) {
@@ -85,7 +85,12 @@ const PropertyDetail = () => {
     </div>
   );
 
-  if (!property) return null;
+  if (!property) return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8f9fa]">
+      <h2 className="text-2xl font-bold mb-4">Immobile non trovato</h2>
+      <Link to="/immobili" className="text-[#94b0ab] font-bold">Torna al catalogo</Link>
+    </div>
+  );
 
   const images = [property.copertina_url, ...(property.immagini_urls || [])];
   const priceFormatted = `€ ${property.prezzo?.toLocaleString('it-IT')}`;
@@ -109,7 +114,6 @@ const PropertyDetail = () => {
             
             <div className="lg:col-span-8 space-y-10">
               
-              {/* Open House Banner */}
               {openHouse && (
                 <motion.div 
                   initial={{ opacity: 0, y: -20 }}
@@ -139,7 +143,6 @@ const PropertyDetail = () => {
                 </motion.div>
               )}
 
-              {/* Header Info */}
               <div className="space-y-4">
                 <div className="flex flex-wrap gap-3">
                   <span className="px-4 py-1.5 bg-[#94b0ab]/10 text-[#94b0ab] border border-[#94b0ab]/20 rounded-full text-[10px] font-bold uppercase tracking-widest">
@@ -156,7 +159,6 @@ const PropertyDetail = () => {
                 </div>
               </div>
 
-              {/* Gallery */}
               <div className="relative group">
                 <div 
                   ref={galleryRef}
@@ -175,7 +177,6 @@ const PropertyDetail = () => {
                 </div>
               </div>
 
-              {/* Quick Stats Grid */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
                   { label: 'Superficie', value: `${property.mq} m²`, icon: Maximize2 },
@@ -191,7 +192,6 @@ const PropertyDetail = () => {
                 ))}
               </div>
 
-              {/* Description */}
               <div className="space-y-6">
                 <h3 className="text-2xl font-bold tracking-tight">Descrizione</h3>
                 <div className="relative">
@@ -214,7 +214,6 @@ const PropertyDetail = () => {
                 </button>
               </div>
 
-              {/* Live Google Map */}
               <div className="space-y-6">
                 <h3 className="text-2xl font-bold tracking-tight">Posizione</h3>
                 <div className="w-full h-[400px] rounded-[32px] md:rounded-[40px] overflow-hidden border border-gray-100 shadow-sm bg-gray-100">
@@ -237,7 +236,6 @@ const PropertyDetail = () => {
 
             </div>
 
-            {/* Desktop Sticky Sidebar */}
             <div className="hidden lg:block lg:col-span-4">
               <div className="sticky top-32 space-y-6">
                 <div id="contact-sidebar" className="bg-white p-6 rounded-[32px] border border-gray-100 shadow-xl shadow-black/5 space-y-6 overflow-hidden">
@@ -294,11 +292,6 @@ const PropertyDetail = () => {
                       </a>
                     </div>
                   )}
-
-                  <p className="text-[10px] text-gray-400 font-medium text-center leading-relaxed pt-2">
-                    Risposta garantita entro 24 ore. <br />
-                    Nessuna commissione per chi vende.
-                  </p>
                 </div>
               </div>
             </div>
@@ -307,7 +300,6 @@ const PropertyDetail = () => {
         </div>
       </main>
 
-      {/* Mobile Sticky Action Bar */}
       <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 backdrop-blur-xl border-t border-gray-100 p-4 pb-8 flex items-center justify-between gap-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
         <div className="pl-2">
           {property.link_immobiliare ? (
