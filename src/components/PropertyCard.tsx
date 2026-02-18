@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Maximize2, Euro, Layers, Package } from 'lucide-react';
+import { MapPin, Maximize2, Euro, Layers, Package, ExternalLink } from 'lucide-react';
 import { Property } from '@/data/properties';
 import { cn } from '@/lib/utils';
 
@@ -25,7 +25,6 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
     return piano;
   };
 
-  // Tipizzato come any per evitare conflitti tra LinkProps (to richiesto) e DivProps (to inesistente)
   const CardWrapper: any = isSold ? 'div' : Link;
 
   return (
@@ -38,7 +37,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
     >
       <div className="bg-white rounded-[40px] overflow-hidden border border-gray-100 shadow-sm flex flex-col h-full relative isolate">
         
-        {/* Image Container - Dynamic Aspect Ratio with explicit clipping */}
+        {/* Image Container */}
         <div className="relative aspect-[4/5] md:aspect-[4/3] overflow-hidden shrink-0 rounded-t-[40px]">
           <img 
             src={property.images[0]} 
@@ -50,8 +49,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             )}
           />
           
-          {/* Top-Left Badge: Override if Sold */}
-          <div className="absolute top-6 left-6 z-10">
+          <div className="absolute top-6 left-6 z-10 flex flex-col gap-2">
             <span className={cn(
               "px-4 py-2 rounded-full text-white text-[10px] font-bold uppercase tracking-widest shadow-lg",
               isSold 
@@ -61,9 +59,23 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
               {isSold ? "VENDUTO" : property.category}
             </span>
           </div>
+
+          {/* Quick Action Button for External Link */}
+          {!isSold && property.link_immobiliare && (
+            <a 
+              href={property.link_immobiliare}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="absolute top-6 right-6 z-20 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-[#1a1a1a] hover:bg-[#94b0ab] hover:text-white transition-all shadow-lg"
+              title="Vedi su Immobiliare.it"
+            >
+              <ExternalLink size={18} />
+            </a>
+          )}
         </div>
         
-        {/* Content Area with explicit bottom rounding */}
+        {/* Content Area */}
         <div className="p-8 flex flex-col flex-1 rounded-b-[40px] bg-white">
           <div className="mb-6">
             <h3 className={cn(
@@ -78,7 +90,6 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             </div>
           </div>
           
-          {/* Bottom Info Row */}
           <div className="grid grid-cols-3 gap-2 pt-6 border-t border-gray-50 mt-auto">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-1.5 text-[#1a1a1a]">
