@@ -8,7 +8,7 @@ import Header from '@/components/Header';
 import { 
   MapPin, ArrowLeft, ExternalLink, 
   Loader2, Maximize2, Layers, Bath, 
-  ChevronDown, Home, ShieldCheck, Calendar,
+  ChevronDown, Home, Calendar,
   Users
 } from 'lucide-react';
 import { MadeWithDyad } from "@/components/made-with-dyad";
@@ -31,7 +31,6 @@ const PropertyDetail = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        // 1. Fetch Property by ID
         const { data: propData, error: propError } = await supabase
           .from('immobili')
           .select('*')
@@ -41,7 +40,6 @@ const PropertyDetail = () => {
         if (propError) throw propError;
         setProperty(propData);
 
-        // 2. Fetch Active Open House
         if (propData) {
           const today = new Date().toISOString().split('T')[0];
           const { data: ohData } = await supabase
@@ -101,9 +99,10 @@ const PropertyDetail = () => {
     <div className="min-h-screen bg-[#f8f9fa] font-sans text-[#1a1a1a] pb-32 md:pb-0">
       <Header />
       
-      <div className="fixed top-20 left-4 z-40 md:hidden">
-        <Link to="/immobili" className="w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center shadow-lg border border-white/40">
-          <ArrowLeft size={20} />
+      {/* Absolute Mobile Back Button - Optimized Position */}
+      <div className="fixed top-6 left-6 z-[60] md:hidden">
+        <Link to="/immobili" className="w-12 h-12 bg-white/90 backdrop-blur-xl rounded-full flex items-center justify-center shadow-xl border border-white/50">
+          <ArrowLeft size={24} />
         </Link>
       </div>
 
@@ -145,9 +144,6 @@ const PropertyDetail = () => {
 
               <div className="space-y-4">
                 <div className="flex flex-wrap gap-3">
-                  <span className="px-4 py-1.5 bg-[#94b0ab]/10 text-[#94b0ab] border border-[#94b0ab]/20 rounded-full text-[10px] font-bold uppercase tracking-widest">
-                    Zero Provvigioni
-                  </span>
                   <span className="px-4 py-1.5 bg-white border border-gray-100 rounded-full text-[10px] font-bold uppercase tracking-widest text-gray-400">
                     {property.locali}
                   </span>
@@ -214,6 +210,20 @@ const PropertyDetail = () => {
                 </button>
               </div>
 
+              {/* Secondary External Link Button */}
+              {property.link_immobiliare && (
+                <div className="pt-4">
+                  <a 
+                    href={property.link_immobiliare}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full h-16 border-2 border-gray-200 text-[#1a1a1a] bg-transparent hover:bg-gray-50 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all"
+                  >
+                    Vedi su Immobiliare.it <ExternalLink size={20} />
+                  </a>
+                </div>
+              )}
+
               <div className="space-y-6">
                 <h3 className="text-2xl font-bold tracking-tight">Posizione</h3>
                 <div className="w-full h-[400px] rounded-[32px] md:rounded-[40px] overflow-hidden border border-gray-100 shadow-sm bg-gray-100">
@@ -236,6 +246,7 @@ const PropertyDetail = () => {
 
             </div>
 
+            {/* Desktop Sidebar */}
             <div className="hidden lg:block lg:col-span-4">
               <div className="sticky top-32 space-y-6">
                 <div id="contact-sidebar" className="bg-white p-6 rounded-[32px] border border-gray-100 shadow-xl shadow-black/5 space-y-6 overflow-hidden">
@@ -244,12 +255,6 @@ const PropertyDetail = () => {
                     <div>
                       <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Prezzo Richiesto</p>
                       <p className="text-4xl font-bold tracking-tighter">{priceFormatted}</p>
-                    </div>
-                    <div className="flex flex-col items-end gap-1">
-                      <div className="flex items-center gap-1.5 px-2.5 py-1 bg-[#94b0ab]/10 rounded-full border border-[#94b0ab]/20">
-                        <ShieldCheck size={12} className="text-[#94b0ab]" />
-                        <span className="text-[9px] font-bold uppercase tracking-tight text-[#94b0ab]">Zero Provvigioni</span>
-                      </div>
                     </div>
                   </div>
                   
@@ -279,19 +284,6 @@ const PropertyDetail = () => {
                     <p className="text-[11px] font-bold text-gray-500 uppercase tracking-widest px-1">Richiedi Informazioni</p>
                     <ContactForm propertyTitle={property.titolo} />
                   </div>
-
-                  {property.link_immobiliare && (
-                    <div className="pt-2">
-                      <a 
-                        href={property.link_immobiliare}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full h-14 bg-white border border-gray-200 text-gray-600 rounded-2xl font-bold text-sm hover:bg-gray-50 transition-all flex items-center justify-center gap-2 group"
-                      >
-                        Vedi su Immobiliare.it <ExternalLink size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                      </a>
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
@@ -300,24 +292,11 @@ const PropertyDetail = () => {
         </div>
       </main>
 
-      <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 backdrop-blur-xl border-t border-gray-100 p-4 pb-8 flex items-center justify-between gap-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
-        <div className="pl-2">
-          {property.link_immobiliare ? (
-             <a 
-               href={property.link_immobiliare}
-               target="_blank"
-               rel="noopener noreferrer"
-               className="flex flex-col items-center justify-center w-12 h-12 bg-gray-50 rounded-xl border border-gray-100 text-gray-400"
-             >
-               <ExternalLink size={20} />
-               <span className="text-[8px] font-bold mt-0.5">PORTALE</span>
-             </a>
-          ) : (
-            <>
-              <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Prezzo</p>
-              <p className="text-2xl font-bold tracking-tighter">{priceFormatted}</p>
-            </>
-          )}
+      {/* NEW HIGH-CONVERSION MOBILE STICKY FOOTER */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 backdrop-blur-xl border-t border-gray-100 px-6 py-4 pb-8 flex items-center justify-between gap-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
+        <div className="flex flex-col">
+          <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Prezzo</p>
+          <div className="text-2xl font-bold text-[#1a1a1a] tracking-tight">{priceFormatted}</div>
         </div>
         
         {openHouse ? (
@@ -325,17 +304,17 @@ const PropertyDetail = () => {
             openHouse={openHouse}
             propertyTitle={property.titolo}
             trigger={
-              <button className="flex-1 h-14 bg-[#94b0ab] text-white rounded-2xl font-bold text-sm tracking-tight shadow-xl shadow-[#94b0ab]/10 flex items-center justify-center gap-2">
-                Prenota Open House <Calendar size={18} />
+              <button className="h-14 px-8 bg-[#94b0ab] text-white rounded-2xl font-bold text-sm tracking-tight shadow-xl shadow-[#94b0ab]/20 flex items-center justify-center gap-2">
+                Prenota <Calendar size={18} />
               </button>
             }
           />
         ) : (
           <button 
             onClick={scrollToContact}
-            className="flex-1 h-14 bg-[#1a1a1a] text-white rounded-2xl font-bold text-sm tracking-tight shadow-xl shadow-black/10 flex items-center justify-center gap-2"
+            className="h-14 px-8 bg-[#94b0ab] text-white rounded-2xl font-bold text-sm tracking-tight shadow-xl shadow-[#94b0ab]/20 flex items-center justify-center gap-2"
           >
-            <Calendar size={18} /> Prenota Visita
+            Contattaci <Calendar size={18} />
           </button>
         )}
       </div>
