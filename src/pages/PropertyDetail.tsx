@@ -93,7 +93,7 @@ const PropertyDetail = () => {
   const images = [property.copertina_url, ...(property.immagini_urls || [])];
   const priceFormatted = `€ ${property.prezzo?.toLocaleString('it-IT')}`;
   const encodedAddress = encodeURIComponent(`${property.indirizzo || ''} ${property.zona || ''} Bergamo Italia`);
-  const mapUrl = `https://maps.google.com/maps?q=${encodedAddress}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+  const externalMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] font-sans text-[#1a1a1a] pb-32 md:pb-0">
@@ -219,16 +219,34 @@ const PropertyDetail = () => {
 
               <div className="space-y-6">
                 <h3 className="text-2xl font-bold tracking-tight">Posizione</h3>
-                <div className="w-full h-[400px] rounded-[32px] md:rounded-[40px] overflow-hidden border border-gray-100 shadow-sm bg-gray-100">
-                  <iframe
-                    width="100%"
-                    height="100%"
-                    className="border-0 grayscale-[0.2]"
-                    loading="lazy"
-                    allowFullScreen
-                    referrerPolicy="no-referrer-when-downgrade"
-                    src={mapUrl}
-                  ></iframe>
+                {/* Premium Location Card */}
+                <div className="relative w-full rounded-[32px] md:rounded-[40px] overflow-hidden border border-gray-100 bg-white shadow-sm isolate">
+                  {/* Abstract Background Pattern (Subtle Grid) */}
+                  <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
+                       style={{ backgroundImage: 'radial-gradient(#1a1a1a 1px, transparent 1px)', backgroundSize: '24px 24px' }} 
+                  />
+                  
+                  <div className="relative p-10 md:p-16 flex flex-col items-center justify-center text-center">
+                    <div className="w-16 h-16 bg-[#94b0ab]/10 rounded-full flex items-center justify-center mb-6">
+                      <MapPin size={28} className="text-[#94b0ab]" />
+                    </div>
+                    
+                    <h4 className="text-2xl md:text-3xl font-bold text-[#1a1a1a] mb-2">
+                      {property.zona || property.citta || 'Bergamo'}
+                    </h4>
+                    <p className="text-gray-400 font-medium mb-8 max-w-sm">
+                      Posizione approssimativa. L'indirizzo esatto verrà fornito in fase di appuntamento.
+                    </p>
+                    
+                    <a 
+                      href={externalMapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-8 py-4 bg-[#1a1a1a] text-white rounded-2xl font-bold hover:bg-[#94b0ab] hover:-translate-y-1 transition-all shadow-lg shadow-black/10"
+                    >
+                      Apri in Google Maps <ExternalLink size={18} />
+                    </a>
+                  </div>
                 </div>
               </div>
 
