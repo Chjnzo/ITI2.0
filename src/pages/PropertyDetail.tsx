@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { supabase } from '@/lib/supabaseClient';
 import Header from '@/components/Header';
 import { 
-  MapPin, ArrowLeft, ExternalLink, 
+  MapPin, ExternalLink, 
   Loader2, Maximize2, Layers, Bath, 
   ChevronDown, Home, Calendar,
   Users
@@ -99,13 +99,6 @@ const PropertyDetail = () => {
     <div className="min-h-screen bg-[#f8f9fa] font-sans text-[#1a1a1a] pb-32 md:pb-0">
       <Header />
       
-      {/* Absolute Mobile Back Button - Optimized Position */}
-      <div className="fixed top-6 left-6 z-[60] md:hidden">
-        <Link to="/immobili" className="w-12 h-12 bg-white/90 backdrop-blur-xl rounded-full flex items-center justify-center shadow-xl border border-white/50">
-          <ArrowLeft size={24} />
-        </Link>
-      </div>
-
       <main className="pt-24 md:pt-32">
         <div className="container mx-auto px-4">
           
