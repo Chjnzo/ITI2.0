@@ -31,11 +31,11 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
     <CardWrapper 
       {...(!isSold ? { to: `/immobile/${property.id}` } : {})} 
       className={cn(
-        "group block h-full select-none",
-        !isSold && "transition-all duration-500 hover:shadow-xl hover:-translate-y-2"
+        "group block h-full select-none rounded-[40px] shadow-sm",
+        !isSold && "transition-all duration-500 hover:shadow-2xl hover:-translate-y-2"
       )}
     >
-      <div className="bg-white rounded-[40px] overflow-hidden border border-gray-100 shadow-sm flex flex-col h-full relative isolate">
+      <div className="bg-white rounded-[40px] overflow-hidden border border-gray-100 flex flex-col h-full relative isolate">
         
         {/* Image Container with strict Safari clipping */}
         <div className="relative aspect-[4/5] md:aspect-[4/3] overflow-hidden shrink-0 rounded-t-[40px] z-10 [transform:translateZ(0)] [-webkit-mask-image:-webkit-radial-gradient(white,black)]">
