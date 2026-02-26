@@ -37,13 +37,13 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
     >
       <div className="bg-white rounded-[40px] overflow-hidden border border-gray-100 shadow-sm flex flex-col h-full relative isolate">
         
-        {/* Image Container with Badge - FIXED CLIPPING GLITCH */}
-        <div className="relative aspect-[4/5] md:aspect-[4/3] overflow-hidden shrink-0 rounded-t-[40px] transform-gpu [backface-visibility:hidden] [mask-image:radial-gradient(white,black)]">
+        {/* Image Container with strict Safari clipping */}
+        <div className="relative aspect-[4/5] md:aspect-[4/3] overflow-hidden shrink-0 rounded-t-[40px] z-10 [transform:translateZ(0)] [-webkit-mask-image:-webkit-radial-gradient(white,black)]">
           <img 
             src={property.images[0]} 
             alt={property.title}
             className={cn(
-              "w-full h-full object-cover transition-transform duration-700 transform-gpu rounded-t-[40px]",
+              "w-full h-full object-cover transition-transform duration-700 will-change-transform",
               !isSold && "group-hover:scale-110",
               isSold && "grayscale opacity-80"
             )}
