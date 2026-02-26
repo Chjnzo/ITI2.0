@@ -10,6 +10,10 @@ const BottomDock = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Hide dock on detail pages to avoid UI clutter
+  const isDetailPage = location.pathname.startsWith('/immobile') || location.pathname.startsWith('/property');
+  if (isDetailPage) return null;
+
   const handleNav = (id: string) => {
     if (id === 'contatti') {
       if (location.pathname !== '/') {

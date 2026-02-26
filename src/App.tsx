@@ -9,6 +9,7 @@ import PropertyDetail from "./pages/PropertyDetail";
 import ChiSiamo from "./pages/ChiSiamo";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
+import BottomDock from "./components/BottomDock";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/property/:slug" element={<PropertyDetail />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <BottomDock />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

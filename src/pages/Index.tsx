@@ -9,7 +9,6 @@ import PropertyBento from '@/components/PropertyBento';
 import ValueProposition from '@/components/ValueProposition';
 import AboutSection from '@/components/AboutSection';
 import TeamContact from '@/components/TeamContact';
-import BottomDock from '@/components/BottomDock';
 import { MadeWithDyad } from "@/components/made-with-dyad";
 
 const Index = () => {
@@ -46,8 +45,6 @@ const Index = () => {
           </div>
         </div>
       </footer>
-
-      <BottomDock />
     </div>
   );
 };

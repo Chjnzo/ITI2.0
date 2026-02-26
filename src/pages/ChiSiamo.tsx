@@ -2,11 +2,9 @@
 
 import React from 'react';
 import Header from '@/components/Header';
-import BottomDock from '@/components/BottomDock';
 import { motion, Variants } from 'framer-motion';
 import { MadeWithDyad } from "@/components/made-with-dyad";
 import { Cpu, Map as MapIcon, Coffee, ArrowUpRight } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
 const ChiSiamo = () => {
   const containerVariants: Variants = {
@@ -198,8 +196,6 @@ const ChiSiamo = () => {
           <MadeWithDyad />
         </div>
       </footer>
-      
-      <BottomDock />
     </div>
   );
 };

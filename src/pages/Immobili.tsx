@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
-import BottomDock from '@/components/BottomDock';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, Search, X, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -227,7 +226,6 @@ const Immobili = () => {
       <footer className="py-20 bg-white border-t border-gray-100 text-center">
         <MadeWithDyad />
       </footer>
-      <BottomDock />
     </div>
   );
 };
