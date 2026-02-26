@@ -9,7 +9,7 @@ import {
   MapPin, ExternalLink, 
   Loader2, Maximize2, Layers, Bath, 
   ChevronDown, Home, Calendar,
-  Users
+  Users, Check, ShieldCheck
 } from 'lucide-react';
 import { MadeWithDyad } from "@/components/made-with-dyad";
 import ContactForm from '@/components/ContactForm';
@@ -94,6 +94,11 @@ const PropertyDetail = () => {
   const priceFormatted = `€ ${property.prezzo?.toLocaleString('it-IT')}`;
   const encodedAddress = encodeURIComponent(`${property.indirizzo || ''} ${property.zona || ''} Bergamo Italia`);
   const externalMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+  
+  // Features fallback for UI consistency
+  const comfortFeatures = property.caratteristiche && property.caratteristiche.length > 0 
+    ? property.caratteristiche 
+    : ['Aria Condizionata', 'Ascensore', 'Balcone', 'Box Auto', 'Cantina'];
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] font-sans text-[#1a1a1a] pb-32 md:pb-0">
@@ -104,8 +109,9 @@ const PropertyDetail = () => {
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
             
-            <div className="lg:col-span-8 space-y-10">
+            <div className="lg:col-span-8 space-y-12">
               
+              {/* 1. Open House Banner */}
               {openHouse && (
                 <motion.div 
                   initial={{ opacity: 0, y: -20 }}
@@ -135,6 +141,7 @@ const PropertyDetail = () => {
                 </motion.div>
               )}
 
+              {/* 2. Title, Tags, Location */}
               <div className="space-y-4">
                 <div className="flex flex-wrap gap-3">
                   <span className="px-4 py-1.5 bg-white border border-gray-100 rounded-full text-[10px] font-bold uppercase tracking-widest text-gray-400">
@@ -148,6 +155,7 @@ const PropertyDetail = () => {
                 </div>
               </div>
 
+              {/* 3. Image Gallery */}
               <div className="relative group">
                 <div 
                   ref={galleryRef}
@@ -166,6 +174,7 @@ const PropertyDetail = () => {
                 </div>
               </div>
 
+              {/* 4. Quick Stats Grid */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
                   { label: 'Superficie', value: `${property.mq} m²`, icon: Maximize2 },
@@ -181,6 +190,19 @@ const PropertyDetail = () => {
                 ))}
               </div>
 
+              {/* 5. Comfort e Dotazioni (NEW) */}
+              <div className="space-y-6">
+                <h3 className="text-2xl font-bold tracking-tight">Comfort e Dotazioni</h3>
+                <div className="flex flex-wrap gap-2">
+                  {comfortFeatures.map((item: string, i: number) => (
+                    <div key={i} className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-100 rounded-xl text-sm font-bold text-gray-600 shadow-sm">
+                      <Check size={16} className="text-[#94b0ab]" /> {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 6. Descrizione (Expandable) */}
               <div className="space-y-6">
                 <h3 className="text-2xl font-bold tracking-tight">Descrizione</h3>
                 <div className="relative">
@@ -203,20 +225,43 @@ const PropertyDetail = () => {
                 </button>
               </div>
 
-              {/* Secondary External Link Button */}
-              {property.link_immobiliare && (
-                <div className="pt-4">
-                  <a 
-                    href={property.link_immobiliare}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full h-16 border-2 border-gray-200 text-[#1a1a1a] bg-transparent hover:bg-gray-50 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all"
-                  >
-                    Vedi su Immobiliare.it <ExternalLink size={20} />
-                  </a>
-                </div>
-              )}
+              {/* 7. Il Dossier Verificato (NEW) */}
+              <div className="space-y-6">
+                <div className="bg-[#94b0ab]/5 border border-[#94b0ab]/20 rounded-[32px] p-6 md:p-10 space-y-8">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-[#94b0ab] shadow-sm shrink-0">
+                      <ShieldCheck size={28} />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold">Dossier Casa Verificata</h3>
+                      <p className="text-gray-500 text-sm">Dati tecnici controllati dai nostri agenti.</p>
+                    </div>
+                  </div>
 
+                  <div className="grid grid-cols-2 gap-y-8 gap-x-4">
+                    <div>
+                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Classe Energetica</p>
+                      <p className="text-base font-bold text-[#1a1a1a]">{property.classe_energetica || 'N/D'}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Spese Condominiali</p>
+                      <p className="text-base font-bold text-[#1a1a1a]">
+                        {property.spese_condominiali ? `€ ${property.spese_condominiali}/mese` : 'N/D'}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Stato Immobile</p>
+                      <p className="text-base font-bold text-[#1a1a1a]">{property.stato_immobile || 'Ottimo/Ristrutturato'}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Anno Costruzione</p>
+                      <p className="text-base font-bold text-[#1a1a1a]">{property.anno_costruzione || 'N/D'}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 8. Posizione (Location Card) */}
               <div className="space-y-6">
                 <h3 className="text-2xl font-bold tracking-tight">Posizione</h3>
                 {/* Premium Location Card */}
@@ -250,6 +295,21 @@ const PropertyDetail = () => {
                 </div>
               </div>
 
+              {/* Secondary Link for external reference */}
+              {property.link_immobiliare && (
+                <div className="pt-4">
+                  <a 
+                    href={property.link_immobiliare}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full h-16 border-2 border-gray-200 text-[#1a1a1a] bg-transparent hover:bg-gray-50 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all"
+                  >
+                    Vedi su Immobiliare.it <ExternalLink size={20} />
+                  </a>
+                </div>
+              )}
+
+              {/* Mobile Contact Section */}
               <div id="contact-section-mobile" className="lg:hidden p-8 bg-white rounded-[32px] border border-gray-100 shadow-sm">
                  <h3 className="text-xl font-bold mb-6">Inviaci un messaggio</h3>
                  <ContactForm propertyTitle={property.titolo} />
@@ -303,7 +363,7 @@ const PropertyDetail = () => {
         </div>
       </main>
 
-      {/* NEW HIGH-CONVERSION MOBILE STICKY FOOTER */}
+      {/* MOBILE STICKY FOOTER */}
       <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 backdrop-blur-xl border-t border-gray-100 px-6 py-4 pb-8 flex items-center justify-between gap-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
         <div className="flex flex-col">
           <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Prezzo</p>
