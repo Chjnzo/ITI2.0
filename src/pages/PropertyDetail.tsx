@@ -6,13 +6,13 @@ import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { supabase } from '@/lib/supabaseClient';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import { 
   MapPin, ExternalLink, 
   Loader2, Maximize2, Layers, Bath, 
   ChevronDown, Home, Calendar,
   Users, Check, ShieldCheck
 } from 'lucide-react';
-import { MadeWithDyad } from "@/components/made-with-dyad";
 import ContactForm from '@/components/ContactForm';
 import OpenHouseBooking from '@/components/OpenHouseBooking';
 import { cn } from '@/lib/utils';
@@ -404,9 +404,7 @@ const PropertyDetail = () => {
         )}
       </div>
 
-      <footer className="py-20 mt-12 bg-white border-t border-gray-100 text-center">
-        <MadeWithDyad />
-      </footer>
+      <Footer />
     </div>
   );
 };

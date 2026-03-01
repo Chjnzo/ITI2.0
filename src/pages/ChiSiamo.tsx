@@ -2,8 +2,8 @@
 
 import React from 'react';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import { motion, Variants } from 'framer-motion';
-import { MadeWithDyad } from "@/components/made-with-dyad";
 import { Cpu, Map as MapIcon, Coffee, ArrowUpRight } from 'lucide-react';
 
 const ChiSiamo = () => {
@@ -190,12 +190,7 @@ const ChiSiamo = () => {
         </section>
       </main>
 
-      <footer className="py-20 bg-white border-t border-gray-100 text-center">
-        <div className="container mx-auto px-4">
-          <p className="text-[#1a1a1a]/20 text-xs font-bold uppercase tracking-[0.5em] mb-4">Il Tuo Immobiliare</p>
-          <MadeWithDyad />
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

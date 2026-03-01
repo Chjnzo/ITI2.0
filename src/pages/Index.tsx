@@ -4,13 +4,13 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import BentoHero from '@/components/BentoHero';
 import StatsBento from '@/components/StatsBento';
 import PropertyBento from '@/components/PropertyBento';
 import ValueProposition from '@/components/ValueProposition';
 import AboutSection from '@/components/AboutSection';
 import TeamContact from '@/components/TeamContact';
-import { MadeWithDyad } from "@/components/made-with-dyad";
 
 const Index = () => {
   const location = useLocation();
@@ -43,14 +43,7 @@ const Index = () => {
         <TeamContact />
       </main>
 
-      <footer className="py-20 bg-white border-t border-gray-100 text-center pb-40 md:pb-20">
-        <div className="container mx-auto px-4">
-          <p className="text-[#1a1a1a]/20 text-xs font-bold uppercase tracking-[0.5em] mb-4">Il Tuo Immobiliare</p>
-          <div className="mt-8">
-            <MadeWithDyad />
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

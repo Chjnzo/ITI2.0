@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, Search, X, CheckCircle2 } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabaseClient';
 import { Property } from '@/data/properties';
-import { MadeWithDyad } from "@/components/made-with-dyad";
 import PropertyCard from '@/components/PropertyCard';
 
 const filterOptions = [
@@ -229,9 +229,7 @@ const Immobili = () => {
         </div>
       </main>
 
-      <footer className="py-20 bg-white border-t border-gray-100 text-center">
-        <MadeWithDyad />
-      </footer>
+      <Footer />
     </div>
   );
 };

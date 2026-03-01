@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Immobili from "./pages/Immobili";
 import PropertyDetail from "./pages/PropertyDetail";
 import ChiSiamo from "./pages/ChiSiamo";
+import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 import BottomDock from "./components/BottomDock";
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/immobili" element={<Immobili />} />
             <Route path="/immobile/:id" element={<PropertyDetail />} />
             <Route path="/chi-siamo" element={<ChiSiamo />} />
+            <Route path="/privacy" element={<Privacy />} />
             <Route path="/property/:slug" element={<PropertyDetail />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
