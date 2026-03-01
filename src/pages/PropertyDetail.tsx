@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { supabase } from '@/lib/supabaseClient';
 import Header from '@/components/Header';
 import { 
@@ -102,6 +103,19 @@ const PropertyDetail = () => {
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] font-sans text-[#1a1a1a] pb-32 md:pb-0">
+      {property && (
+        <Helmet>
+          <title>{property.titolo} a {property.zona || 'Bergamo'} | Il Tuo Immobiliare</title>
+          <meta name="description" content={`In vendita: ${property.titolo} a ${property.zona || 'Bergamo'} - € ${property.prezzo?.toLocaleString('it-IT')}. ${property.locali} locali, ${property.mq} mq. Scopri di più!`} />
+          
+          {/* Open Graph / Social Media Preview Tags */}
+          <meta property="og:title" content={`${property.titolo} a ${property.zona || 'Bergamo'}`} />
+          <meta property="og:description" content={`Prezzo richiesto: € ${property.prezzo?.toLocaleString('it-IT')} | ${property.mq} mq`} />
+          <meta property="og:image" content={property.copertina_url} />
+          <meta property="og:type" content="website" />
+        </Helmet>
+      )}
+
       <Header />
       
       <main className="pt-24 md:pt-32">

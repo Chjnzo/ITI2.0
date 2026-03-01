@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2, Search, X, CheckCircle2 } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabaseClient';
 import { Property } from '@/data/properties';
@@ -99,6 +100,11 @@ const Immobili = () => {
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] font-sans text-[#1a1a1a]">
+      <Helmet>
+        <title>Immobili in Vendita | Il Tuo Immobiliare</title>
+        <meta name="description" content="Esplora la nostra selezione di immobili in vendita a Bergamo e provincia. Appartamenti, ville e loft a zero commissioni per l'acquirente." />
+      </Helmet>
+
       <Header />
       
       <main className="pt-32 md:pt-44 pb-32">

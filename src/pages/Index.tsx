@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import Header from '@/components/Header';
 import BentoHero from '@/components/BentoHero';
 import StatsBento from '@/components/StatsBento';
@@ -26,6 +27,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] selection:bg-[#94b0ab] selection:text-white font-sans text-[#1a1a1a]">
+      <Helmet>
+        <title>Il Tuo Immobiliare | Agenzia Immobiliare a Bergamo</title>
+        <meta name="description" content="Vendi o compra casa a Bergamo a zero provvigioni per chi vende. Scopri il nostro metodo verificato e i nostri immobili in esclusiva." />
+      </Helmet>
+
       <Header />
       
       <main className="pb-32 md:pb-12">
