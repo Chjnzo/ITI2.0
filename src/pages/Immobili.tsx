@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabaseClient';
 import { Property } from '@/data/properties';
 import PropertyCard from '@/components/PropertyCard';
+import { useQuery } from '@tanstack/react-query';
 
 const filterOptions = [
   { label: "Tutti", value: "Tutti" },
@@ -22,57 +23,44 @@ const filterOptions = [
 const Immobili = () => {
   const [filter, setFilter] = useState("Tutti");
   const [searchQuery, setSearchQuery] = useState("");
-  const [properties, setProperties] = useState<Property[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        setLoading(true);
-        const { data, error: supabaseError } = await supabase
-          .from('immobili')
-          .select('*')
-          .order('created_at', { ascending: false });
+  const { data: properties = [], isLoading: loading, error } = useQuery({
+    queryKey: ['immobili'],
+    queryFn: async () => {
+      const { data, error: supabaseError } = await supabase
+        .from('immobili')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-        if (supabaseError) throw supabaseError;
+      if (supabaseError) throw supabaseError;
 
-        if (data) {
-          const mappedData: Property[] = data.map((db: any) => ({
-            id: db.id,
-            slug: db.slug,
-            title: db.titolo,
-            price: `€ ${db.prezzo.toLocaleString('it-IT')}`,
-            location: db.zona,
-            category: db.locali || "Appartamento",
-            description: db.descrizione,
-            piano: db.piano,
-            garage: db.garage,
-            stato: db.stato,
-            specs: {
-              mq: db.mq,
-              rooms: db.locali,
-              baths: db.bagni
-            },
-            features: db.caratteristiche || [],
-            images: [db.copertina_url, ...(db.immagini_urls || [])],
-            agent: {
-              name: db.agente_nome || "Team Il Tuo Immobiliare",
-              phone: db.agente_tel || "+39 035 123 4567",
-              email: db.agente_email || "info@iltuoimmobiliare.it"
-            }
-          }));
-          setProperties(mappedData);
+      return (data || []).map((db: any) => ({
+        id: db.id,
+        slug: db.slug,
+        title: db.titolo,
+        price: `€ ${db.prezzo?.toLocaleString('it-IT')}`,
+        location: db.zona,
+        category: db.locali || "Appartamento",
+        description: db.descrizione,
+        piano: db.piano,
+        garage: db.garage,
+        stato: db.stato,
+        specs: {
+          mq: db.mq,
+          rooms: db.locali,
+          baths: db.bagni
+        },
+        features: db.caratteristiche || [],
+        images: [db.copertina_url, ...(db.immagini_urls || [])],
+        agent: {
+          name: db.agente_nome || "Team Il Tuo Immobiliare",
+          phone: db.agente_tel || "+39 035 123 4567",
+          email: db.agente_email || "info@iltuoimmobiliare.it"
         }
-      } catch (err: any) {
-        setError(err.message || "Errore durante il caricamento degli immobili");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProperties();
-  }, []);
+      }));
+    },
+    staleTime: 1000 * 60 * 5, // Cache per 5 minuti
+  });
 
   // Filter Logic
   const filteredAll = properties.filter(p => {
@@ -160,6 +148,10 @@ const Immobili = () => {
             <div className="flex flex-col items-center justify-center py-32 gap-4">
               <Loader2 className="w-12 h-12 text-[#94b0ab] animate-spin" />
               <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Caricamento...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-20 bg-white rounded-[40px] border border-red-100">
+              <p className="text-red-500 font-medium">Si è verificato un errore nel caricamento degli immobili.</p>
             </div>
           ) : (
             <div className="space-y-32">

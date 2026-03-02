@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
@@ -18,50 +18,41 @@ import OpenHouseBooking from '@/components/OpenHouseBooking';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
+import { useQuery } from '@tanstack/react-query';
 
 const PropertyDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const [property, setProperty] = useState<any>(null);
-  const [openHouse, setOpenHouse] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
   const [isDescExpanded, setIsDescExpanded] = useState(false);
   const [currentImgIdx, setCurrentImgIdx] = useState(1);
   const galleryRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const { data: propData, error: propError } = await supabase
-          .from('immobili')
-          .select('*')
-          .eq('id', id)
-          .single();
+  const { data: combinedData, isLoading: loading } = useQuery({
+    queryKey: ['property', id],
+    queryFn: async () => {
+      // 1. Fetch Property
+      const { data: propData, error: propError } = await supabase
+        .from('immobili').select('*').eq('id', id).single();
+      if (propError) throw propError;
 
-        if (propError) throw propError;
-        setProperty(propData);
+      // 2. Fetch Open House
+      const today = new Date().toISOString().split('T')[0];
+      const { data: ohData } = await supabase
+        .from('open_houses')
+        .select('*')
+        .eq('immobile_id', propData.id)
+        .gte('data_evento', today)
+        .order('data_evento', { ascending: true })
+        .limit(1)
+        .maybeSingle();
 
-        if (propData) {
-          const today = new Date().toISOString().split('T')[0];
-          const { data: ohData } = await supabase
-            .from('open_houses')
-            .select('*')
-            .eq('immobile_id', propData.id)
-            .gte('data_evento', today)
-            .order('data_evento', { ascending: true })
-            .limit(1)
-            .maybeSingle();
-          
-          setOpenHouse(ohData);
-        }
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (id) fetchData();
-  }, [id]);
+      return { property: propData, openHouse: ohData };
+    },
+    enabled: !!id,
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const property = combinedData?.property;
+  const openHouse = combinedData?.openHouse;
 
   const handleScroll = () => {
     if (galleryRef.current) {
@@ -96,36 +87,24 @@ const PropertyDetail = () => {
   const encodedAddress = encodeURIComponent(`${property.indirizzo || ''} ${property.zona || ''} Bergamo Italia`);
   const externalMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
   
-  // Features fallback for UI consistency
   const comfortFeatures = property.caratteristiche && property.caratteristiche.length > 0 
     ? property.caratteristiche 
     : ['Aria Condizionata', 'Ascensore', 'Balcone', 'Box Auto', 'Cantina'];
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] font-sans text-[#1a1a1a] pb-32 md:pb-0">
-      {property && (
-        <Helmet>
-          <title>{property.titolo} a {property.zona || 'Bergamo'} | Il Tuo Immobiliare</title>
-          <meta name="description" content={`In vendita: ${property.titolo} a ${property.zona || 'Bergamo'} - € ${property.prezzo?.toLocaleString('it-IT')}. ${property.locali} locali, ${property.mq} mq. Scopri di più!`} />
-          
-          {/* Open Graph / Social Media Preview Tags */}
-          <meta property="og:title" content={`${property.titolo} a ${property.zona || 'Bergamo'}`} />
-          <meta property="og:description" content={`Prezzo richiesto: € ${property.prezzo?.toLocaleString('it-IT')} | ${property.mq} mq`} />
-          <meta property="og:image" content={property.copertina_url} />
-          <meta property="og:type" content="website" />
-        </Helmet>
-      )}
+      <Helmet>
+        <title>{property.titolo} a {property.zona || 'Bergamo'} | Il Tuo Immobiliare</title>
+        <meta name="description" content={`In vendita: ${property.titolo} a ${property.zona || 'Bergamo'} - € ${property.prezzo?.toLocaleString('it-IT')}. ${property.locali} locali, ${property.mq} mq. Scopri di più!`} />
+      </Helmet>
 
       <Header />
       
       <main className="pt-24 md:pt-32">
         <div className="container mx-auto px-4">
-          
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
-            
             <div className="lg:col-span-8 space-y-12">
               
-              {/* 1. Open House Banner */}
               {openHouse && (
                 <motion.div 
                   initial={{ opacity: 0, y: -20 }}
@@ -155,7 +134,6 @@ const PropertyDetail = () => {
                 </motion.div>
               )}
 
-              {/* 2. Title, Tags, Location */}
               <div className="space-y-4">
                 <div className="flex flex-wrap gap-3">
                   <span className="px-4 py-1.5 bg-white border border-gray-100 rounded-full text-[10px] font-bold uppercase tracking-widest text-gray-400">
@@ -169,7 +147,6 @@ const PropertyDetail = () => {
                 </div>
               </div>
 
-              {/* 3. Image Gallery */}
               <div className="relative group">
                 <div 
                   ref={galleryRef}
@@ -178,17 +155,15 @@ const PropertyDetail = () => {
                 >
                   {images.map((img, i) => (
                     <div key={i} className="flex-none w-full h-full snap-center">
-                      <img src={img} className="w-full h-full object-cover" alt={`${property.titolo} ${i + 1}`} />
+                      <img src={img} className="w-full h-full object-cover" loading="lazy" alt={`${property.titolo} ${i + 1}`} />
                     </div>
                   ))}
                 </div>
-                
                 <div className="absolute bottom-6 right-6 px-4 py-2 bg-black/50 backdrop-blur-md text-white text-[10px] font-bold rounded-full border border-white/10">
                   {currentImgIdx} / {images.length}
                 </div>
               </div>
 
-              {/* 4. Quick Stats Grid */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
                   { label: 'Superficie', value: `${property.mq} m²`, icon: Maximize2 },
@@ -204,7 +179,6 @@ const PropertyDetail = () => {
                 ))}
               </div>
 
-              {/* 5. Comfort e Dotazioni (NEW) */}
               <div className="space-y-6">
                 <h3 className="text-2xl font-bold tracking-tight">Comfort e Dotazioni</h3>
                 <div className="flex flex-wrap gap-2">
@@ -216,7 +190,6 @@ const PropertyDetail = () => {
                 </div>
               </div>
 
-              {/* 6. Descrizione (Expandable) */}
               <div className="space-y-6">
                 <h3 className="text-2xl font-bold tracking-tight">Descrizione</h3>
                 <div className="relative">
@@ -239,7 +212,6 @@ const PropertyDetail = () => {
                 </button>
               </div>
 
-              {/* 7. Il Dossier Verificato (NEW) */}
               <div className="space-y-6">
                 <div className="bg-[#94b0ab]/5 border border-[#94b0ab]/20 rounded-[32px] p-6 md:p-10 space-y-8">
                   <div className="flex items-start gap-4">
@@ -251,7 +223,6 @@ const PropertyDetail = () => {
                       <p className="text-gray-500 text-sm">Dati tecnici controllati dai nostri agenti.</p>
                     </div>
                   </div>
-
                   <div className="grid grid-cols-2 gap-y-8 gap-x-4">
                     <div>
                       <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Classe Energetica</p>
@@ -275,28 +246,22 @@ const PropertyDetail = () => {
                 </div>
               </div>
 
-              {/* 8. Posizione (Location Card) */}
               <div className="space-y-6">
                 <h3 className="text-2xl font-bold tracking-tight">Posizione</h3>
-                {/* Premium Location Card */}
                 <div className="relative w-full rounded-[32px] md:rounded-[40px] overflow-hidden border border-gray-100 bg-white shadow-sm isolate">
-                  {/* Abstract Background Pattern (Subtle Grid) */}
                   <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
                        style={{ backgroundImage: 'radial-gradient(#1a1a1a 1px, transparent 1px)', backgroundSize: '24px 24px' }} 
                   />
-                  
                   <div className="relative p-10 md:p-16 flex flex-col items-center justify-center text-center">
                     <div className="w-16 h-16 bg-[#94b0ab]/10 rounded-full flex items-center justify-center mb-6">
                       <MapPin size={28} className="text-[#94b0ab]" />
                     </div>
-                    
                     <h4 className="text-2xl md:text-3xl font-bold text-[#1a1a1a] mb-2">
                       {property.zona || property.citta || 'Bergamo'}
                     </h4>
                     <p className="text-gray-400 font-medium mb-8 max-w-sm">
                       Posizione approssimativa. L'indirizzo esatto verrà fornito in fase di appuntamento.
                     </p>
-                    
                     <a 
                       href={externalMapUrl}
                       target="_blank"
@@ -309,7 +274,6 @@ const PropertyDetail = () => {
                 </div>
               </div>
 
-              {/* Secondary Link for external reference */}
               {property.link_immobiliare && (
                 <div className="pt-4">
                   <a 
@@ -323,7 +287,6 @@ const PropertyDetail = () => {
                 </div>
               )}
 
-              {/* Mobile Contact Section */}
               <div id="contact-section-mobile" className="lg:hidden p-8 bg-white rounded-[32px] border border-gray-100 shadow-sm">
                  <h3 className="text-xl font-bold mb-6">Inviaci un messaggio</h3>
                  <ContactForm propertyTitle={property.titolo} />
@@ -331,18 +294,15 @@ const PropertyDetail = () => {
 
             </div>
 
-            {/* Desktop Sidebar */}
             <div className="hidden lg:block lg:col-span-4">
               <div className="sticky top-32 space-y-6">
                 <div id="contact-sidebar" className="bg-white p-6 rounded-[32px] border border-gray-100 shadow-xl shadow-black/5 space-y-6 overflow-hidden">
-                  
                   <div className="flex items-end justify-between border-b border-gray-50 pb-6">
                     <div>
                       <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Prezzo Richiesto</p>
                       <p className="text-4xl font-bold tracking-tighter">{priceFormatted}</p>
                     </div>
                   </div>
-                  
                   <div className="space-y-4">
                     {openHouse ? (
                       <div className="space-y-3">
@@ -365,25 +325,21 @@ const PropertyDetail = () => {
                         </div>
                       </div>
                     ) : null}
-                    
                     <p className="text-[11px] font-bold text-gray-500 uppercase tracking-widest px-1">Richiedi Informazioni</p>
                     <ContactForm propertyTitle={property.titolo} />
                   </div>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </main>
 
-      {/* MOBILE STICKY FOOTER */}
       <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 backdrop-blur-xl border-t border-gray-100 px-6 py-4 pb-8 flex items-center justify-between gap-4 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
         <div className="flex flex-col">
           <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Prezzo</p>
           <div className="text-2xl font-bold text-[#1a1a1a] tracking-tight">{priceFormatted}</div>
         </div>
-        
         {openHouse ? (
           <OpenHouseBooking 
             openHouse={openHouse}

@@ -42,6 +42,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           <img 
             src={property.images[0]} 
             alt={property.title}
+            loading="lazy"
             className={cn(
               "w-full h-full object-cover transition-transform duration-700 will-change-transform",
               !isSold && "group-hover:scale-110",
