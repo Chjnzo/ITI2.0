@@ -39,11 +39,11 @@ const Index = () => {
       <main className="pb-32 md:pb-12">
         <BentoHero />
         <StatsBento />
-        <ValueProposition />
         <MethodSection />
-        <AboutSection />
-        <PropertyBento />
+        <ValueProposition />
         <TestimonialsBento />
+        <PropertyBento />
+        <AboutSection />
         <TeamContact />
       </main>
 
