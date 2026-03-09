@@ -3,6 +3,7 @@
 import React from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import ManifestoSection from '@/components/ManifestoSection';
 import { motion, Variants } from 'framer-motion';
 import { Cpu, Map as MapIcon, Coffee, ArrowUpRight } from 'lucide-react';
 
@@ -50,8 +51,11 @@ const ChiSiamo = () => {
           </motion.div>
         </section>
 
+        {/* NEW MANIFESTO SECTION */}
+        <ManifestoSection />
+
         {/* Philosophy Bento Grid */}
-        <section className="container mx-auto px-4 mb-40">
+        <section className="container mx-auto px-4 mb-40 mt-20">
           <motion.div 
             variants={containerVariants}
             initial="hidden"
