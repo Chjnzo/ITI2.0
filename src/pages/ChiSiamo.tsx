@@ -42,20 +42,16 @@ const ChiSiamo = () => {
             className="max-w-4xl mx-auto text-center"
           >
             <h1 className="text-5xl md:text-8xl font-bold tracking-tighter mb-8 leading-[1.1]">
-              L'evoluzione immobiliare a <span className="text-[#94b0ab]">Bergamo.</span>
+              Il nuovo standard immobiliare a <span className="text-[#94b0ab]">Bergamo.</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-500 font-medium max-w-2xl mx-auto leading-relaxed">
-              Abbiamo tolto le commissioni a chi vende. <br className="hidden md:block" />
-              Abbiamo tenuto solo la qualità.
+              Abbiamo eliminato le provvigioni per chi vende, elevando la qualità del servizio. I risultati dei nostri clienti dimostrano che un'alternativa equa e sicura esiste.
             </p>
           </motion.div>
         </section>
 
-        {/* NEW MANIFESTO SECTION */}
-        <ManifestoSection />
-
         {/* Philosophy Bento Grid */}
-        <section className="container mx-auto px-4 mb-40 mt-20">
+        <section className="container mx-auto px-4 mb-40">
           <motion.div 
             variants={containerVariants}
             initial="hidden"
@@ -74,7 +70,7 @@ const ChiSiamo = () => {
                   <span className="text-[#94b0ab]">Zero</span> Provvigioni.
                 </h3>
                 <p className="text-lg md:text-xl text-gray-500 leading-relaxed max-w-md">
-                  Il principio è semplice: chi possiede il bene non deve pagare per venderlo. È una questione di etica e trasparenza radicale.
+                  Un modello equo. Chi possiede l'immobile non deve pagare per venderlo. È una questione di etica professionale, supportata da garanzie contrattuali chiare.
                 </p>
               </div>
               <div className="mt-12 flex items-center gap-2 text-[#94b0ab] font-bold uppercase tracking-widest text-xs">
@@ -93,7 +89,7 @@ const ChiSiamo = () => {
               <div>
                 <h3 className="text-2xl font-bold mb-4">Data Driven</h3>
                 <p className="text-gray-400 leading-relaxed">
-                  Marketing digitale avanzato e valutazioni basate sui dati, non sulle opinioni.
+                  La matematica non ha opinioni. Realizziamo valutazioni oggettive basate sui dati reali del mercato di Bergamo, per farti ottenere il massimo valore possibile.
                 </p>
               </div>
             </motion.div>
@@ -107,9 +103,9 @@ const ChiSiamo = () => {
                 <div className="w-14 h-14 bg-[#94b0ab]/10 rounded-2xl flex items-center justify-center text-[#94b0ab] mb-6">
                   <MapIcon size={28} />
                 </div>
-                <h3 className="text-2xl font-bold mb-4">Esperti del territorio</h3>
+                <h3 className="text-2xl font-bold mb-4">Radici solide</h3>
                 <p className="text-gray-500 leading-relaxed max-w-sm">
-                  Conosciamo ogni angolo di Bergamo e provincia. Da Ranica a Città Alta, siamo i tuoi vicini di casa.
+                  Conosciamo le dinamiche di ogni singolo quartiere, da Ranica a Città Alta, perché operiamo e viviamo esattamente dove investi tu.
                 </p>
               </div>
               <div className="flex-1 w-full h-48 bg-[#f8f9fa] rounded-[32px] relative overflow-hidden border border-gray-100">
@@ -122,17 +118,28 @@ const ChiSiamo = () => {
           </motion.div>
         </section>
 
+        {/* MANIFESTO SECTION - Repositioned here for funnel flow */}
+        <ManifestoSection />
+
         {/* Team Section */}
-        <section className="container mx-auto px-4 mb-40">
+        <section className="container mx-auto px-4 mb-40 mt-40">
           <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-4">I Volti della Rivoluzione.</h2>
-            <p className="text-gray-400 font-medium">Trasparenza significa metterci la faccia.</p>
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-4">I professionisti al tuo fianco.</h2>
+            <p className="text-gray-400 font-medium">Competenza, trasparenza e un unico obiettivo: tutelare i tuoi interessi.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {[
-              { name: "Matteo Roggeri", role: "Founder", quote: "La trasparenza paga più delle provvigioni." },
-              { name: "Gabriele", role: "Co-Founder", quote: "Abbiamo riscritto le regole per proteggere il tuo patrimonio." }
+              { 
+                name: "Matteo Roggeri", 
+                role: "Founder", 
+                quote: "Il nostro successo si misura sui risultati che facciamo ottenere ai clienti, non sulle provvigioni." 
+              },
+              { 
+                name: "Gabriele", 
+                role: "Co-Founder", 
+                quote: "Uniamo la tecnologia più avanzata all'esperienza umana per vendere il tuo immobile alle migliori condizioni di mercato." 
+              }
             ].map((member, i) => (
               <motion.div
                 key={i}
@@ -186,7 +193,7 @@ const ChiSiamo = () => {
                   24020 Ranica (BG)
                 </p>
                 <button className="w-fit h-16 px-10 border-2 border-[#94b0ab] text-[#94b0ab] rounded-3xl font-bold flex items-center gap-3 hover:bg-[#94b0ab] hover:text-white transition-all group">
-                  Vieni a prendere un caffè <Coffee size={20} className="group-hover:rotate-12 transition-transform" />
+                  Prendiamo un caffè e valutiamo il tuo immobile <Coffee size={20} className="group-hover:rotate-12 transition-transform" />
                 </button>
               </div>
             </div>
