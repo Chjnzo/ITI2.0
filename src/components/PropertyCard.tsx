@@ -31,14 +31,13 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
     <CardWrapper 
       {...(!isSold ? { to: `/immobile/${property.id}` } : {})} 
       className={cn(
-        "group block h-full select-none rounded-[40px] shadow-sm",
+        "group block h-full select-none rounded-3xl md:rounded-[40px] shadow-sm",
         !isSold && "transition-all duration-500 hover:shadow-2xl hover:-translate-y-2"
       )}
     >
-      <div className="bg-white rounded-[40px] overflow-hidden border border-gray-100 flex flex-col h-full relative isolate">
+      <div className="bg-white rounded-3xl md:rounded-[40px] overflow-hidden border border-gray-100 flex flex-col h-full relative isolate">
         
-        {/* Image Container with strict Safari clipping */}
-        <div className="relative aspect-[4/5] md:aspect-[4/3] overflow-hidden shrink-0 rounded-t-[40px] z-10 [transform:translateZ(0)] [-webkit-mask-image:-webkit-radial-gradient(white,black)]">
+        <div className="relative aspect-[4/5] md:aspect-[4/3] overflow-hidden shrink-0 rounded-t-3xl md:rounded-t-[40px] z-10 [transform:translateZ(0)] [-webkit-mask-image:-webkit-radial-gradient(white,black)]">
           <img 
             src={property.images[0]} 
             alt={property.title}
@@ -50,10 +49,9 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             )}
           />
           
-          {/* Overlay Status Badge */}
-          <div className="absolute top-6 left-6 z-10">
+          <div className="absolute top-4 left-4 md:top-6 md:left-6 z-10">
             <span className={cn(
-              "px-4 py-2 rounded-full text-white text-[10px] font-bold uppercase tracking-widest shadow-lg",
+              "px-3 py-1.5 md:px-4 md:py-2 rounded-full text-white text-[9px] md:text-[10px] font-bold uppercase tracking-widest shadow-lg",
               isSold 
                 ? "bg-red-600 shadow-red-600/20" 
                 : "bg-white/20 backdrop-blur-md border border-white/30 drop-shadow-md"
@@ -63,55 +61,53 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           </div>
         </div>
         
-        {/* Content */}
-        <div className="p-8 flex flex-col flex-1 rounded-b-[40px] bg-white">
-          <div className="mb-6">
+        <div className="p-6 md:p-8 flex flex-col flex-1 rounded-b-3xl md:rounded-b-[40px] bg-white">
+          <div className="mb-4 md:mb-6">
             <h3 className={cn(
-              "text-2xl font-bold mb-2 transition-colors line-clamp-1",
+              "text-xl md:text-2xl font-bold mb-1 md:mb-2 transition-colors line-clamp-1",
               !isSold && "group-hover:text-[#94b0ab]"
             )}>
               {property.title}
             </h3>
-            <div className="flex items-center gap-2 text-gray-400 font-medium">
-              <MapPin size={16} className={cn(!isSold ? "text-[#94b0ab]" : "text-gray-300")} />
+            <div className="flex items-center gap-2 text-gray-400 text-sm font-medium">
+              <MapPin size={14} className={cn(!isSold ? "text-[#94b0ab]" : "text-gray-300")} />
               <span className="line-clamp-1">{property.location}, Bergamo</span>
             </div>
           </div>
           
-          {/* Specs Grid */}
-          <div className="grid grid-cols-3 gap-2 pt-6 border-t border-gray-50 mt-auto">
+          <div className="grid grid-cols-3 gap-2 pt-4 md:pt-6 border-t border-gray-50 mt-auto">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-1.5 text-[#1a1a1a]">
-                <Euro size={14} className={cn("shrink-0", !isSold ? "text-[#94b0ab]" : "text-gray-300")} />
-                <span className={cn("text-xs font-bold truncate", isSold && "text-gray-400")}>
+                <Euro size={12} className={cn("shrink-0", !isSold ? "text-[#94b0ab]" : "text-gray-300")} />
+                <span className={cn("text-[11px] md:text-xs font-bold truncate", isSold && "text-gray-400")}>
                   {property.price.replace('€ ', '')}
                 </span>
               </div>
-              <span className="text-[9px] text-gray-400 uppercase font-bold tracking-widest">Prezzo</span>
+              <span className="text-[8px] md:text-[9px] text-gray-400 uppercase font-bold tracking-widest">Prezzo</span>
             </div>
 
             <div className="flex flex-col gap-1 border-x border-gray-50 px-2">
               <div className="flex items-center gap-1.5 text-[#1a1a1a]">
-                <Maximize2 size={14} className={cn("shrink-0", !isSold ? "text-[#94b0ab]" : "text-gray-300")} />
-                <span className={cn("text-xs font-bold truncate", isSold && "text-gray-400")}>
+                <Maximize2 size={12} className={cn("shrink-0", !isSold ? "text-[#94b0ab]" : "text-gray-300")} />
+                <span className={cn("text-[11px] md:text-xs font-bold truncate", isSold && "text-gray-400")}>
                   {property.specs.mq} mq
                 </span>
               </div>
-              <span className="text-[9px] text-gray-400 uppercase font-bold tracking-widest">Superficie</span>
+              <span className="text-[8px] md:text-[9px] text-gray-400 uppercase font-bold tracking-widest">Superficie</span>
             </div>
 
             <div className="flex flex-col gap-1 pl-2">
               <div className="flex items-center gap-1.5 text-[#1a1a1a]">
                 {property.piano ? (
-                  <Layers size={14} className={cn("shrink-0", !isSold ? "text-[#94b0ab]" : "text-gray-300")} />
+                  <Layers size={12} className={cn("shrink-0", !isSold ? "text-[#94b0ab]" : "text-gray-300")} />
                 ) : (
-                  <Package size={14} className={cn("shrink-0", !isSold ? "text-[#94b0ab]" : "text-gray-300")} />
+                  <Package size={12} className={cn("shrink-0", !isSold ? "text-[#94b0ab]" : "text-gray-300")} />
                 )}
-                <span className={cn("text-xs font-bold truncate", isSold && "text-gray-400")}>
+                <span className={cn("text-[11px] md:text-xs font-bold truncate", isSold && "text-gray-400")}>
                   {formatPiano(property.piano, property.garage)}
                 </span>
               </div>
-              <span className="text-[9px] text-gray-400 uppercase font-bold tracking-widest">
+              <span className="text-[8px] md:text-[9px] text-gray-400 uppercase font-bold tracking-widest">
                 {property.piano ? "Piano" : "Extra"}
               </span>
             </div>

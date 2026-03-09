@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 const AboutSection = () => {
   return (
-    <section id="chi-siamo" className="py-24 px-4 md:px-6 bg-white">
+    <section id="chi-siamo" className="py-16 md:py-24 px-4 md:px-6 bg-white">
       <div className="container mx-auto">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
@@ -14,19 +14,19 @@ const AboutSection = () => {
             viewport={{ once: true }}
           >
             <span className="text-[10px] font-bold tracking-[0.2em] text-[#94b0ab] uppercase mb-6 block">L'Evoluzione</span>
-            <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-8 text-[#1a1a1a]">Da innovatori a nuovo standard di mercato.</h2>
-            <p className="text-lg md:text-xl text-gray-500 leading-relaxed mb-12">
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-6 md:mb-8 text-[#1a1a1a]">Da innovatori a nuovo standard di mercato.</h2>
+            <p className="text-base md:text-xl text-gray-500 leading-relaxed mb-10 md:mb-12">
               Siamo partiti con l'obiettivo di cambiare le regole. Oggi, le decine di case vendute e la soddisfazione dei clienti dimostrano che un'alternativa equa esiste davvero. Uniamo la solidità di un'istituzione tradizionale all'efficienza tecnologica moderna.
             </p>
             
-            <div className="grid grid-cols-2 gap-8 pt-8 border-t border-gray-100">
+            <div className="grid grid-cols-2 gap-6 md:gap-8 pt-8 border-t border-gray-100">
               <div>
-                <p className="text-4xl font-bold text-[#94b0ab] mb-2">10+</p>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Anni di Esperienza</p>
+                <p className="text-3xl md:text-4xl font-bold text-[#94b0ab] mb-2">10+</p>
+                <p className="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-widest">Anni di Esperienza</p>
               </div>
               <div>
-                <p className="text-4xl font-bold text-[#94b0ab] mb-2">500+</p>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Clienti Soddisfatti</p>
+                <p className="text-3xl md:text-4xl font-bold text-[#94b0ab] mb-2">500+</p>
+                <p className="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-widest">Clienti Soddisfatti</p>
               </div>
             </div>
           </motion.div>
