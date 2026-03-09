@@ -13,10 +13,10 @@ const AboutSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-[10px] font-bold tracking-[0.2em] text-[#94b0ab] uppercase mb-6 block">La Nostra Storia</span>
-            <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-8 text-[#1a1a1a]">Ridefiniamo il mercato di Bergamo.</h2>
+            <span className="text-[10px] font-bold tracking-[0.2em] text-[#94b0ab] uppercase mb-6 block">L'Evoluzione</span>
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tighter mb-8 text-[#1a1a1a]">Da innovatori a nuovo standard di mercato.</h2>
             <p className="text-lg md:text-xl text-gray-500 leading-relaxed mb-12">
-              Il Tuo Immobiliare nasce con una visione chiara: rendere la vendita di una casa un processo onesto, trasparente e privo di commissioni inutili per chi vende. Siamo un team di professionisti radicati nel territorio bergamasco.
+              Siamo partiti con l'obiettivo di cambiare le regole. Oggi, le decine di case vendute e la soddisfazione dei clienti dimostrano che un'alternativa equa esiste davvero. Uniamo la solidità di un'istituzione tradizionale all'efficienza tecnologica moderna.
             </p>
             
             <div className="grid grid-cols-2 gap-8 pt-8 border-t border-gray-100">

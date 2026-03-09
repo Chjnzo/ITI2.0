@@ -12,9 +12,9 @@ const TeamContact = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2">
             <div className="p-8 md:p-16">
               <span className="text-[10px] font-bold tracking-[0.2em] text-[#94b0ab] uppercase mb-4 block">Contatti</span>
-              <h2 className="text-4xl md:text-6xl font-bold text-[#1a1a1a] mb-8 tracking-tighter">Siamo qui per te.</h2>
+              <h2 className="text-4xl md:text-6xl font-bold text-[#1a1a1a] mb-8 tracking-tighter">Scopri il vero valore di casa tua.</h2>
               <p className="text-lg text-gray-500 mb-12 leading-relaxed max-w-md">
-                Che tu stia cercando la casa dei tuoi sogni o voglia vendere la tua proprietà a zero provvigioni, il nostro team è pronto ad aiutarti.
+                Contattaci per una valutazione oggettiva e gratuita. Scopri quanto vale realmente il tuo immobile sul mercato di oggi, senza alcun vincolo.
               </p>
               
               <div className="space-y-8">

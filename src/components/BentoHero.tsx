@@ -30,7 +30,7 @@ const BentoHero = () => {
         >
           {/* Badge superiore pulito */}
           <div className="inline-flex items-center gap-2 px-5 py-2 bg-white border border-gray-100 rounded-full text-[#94b0ab] text-[10px] font-bold uppercase tracking-[0.2em] mb-12 shadow-sm">
-            <Sparkles size={12} /> L'immobiliare a Bergamo
+            <Sparkles size={12} /> L'Agenzia di Riferimento a Bergamo
           </div>
           
           {/* Titolo Monumentale */}
@@ -41,7 +41,7 @@ const BentoHero = () => {
           
           {/* Copy unificato */}
           <p className="text-xl md:text-2xl text-gray-500 font-medium mb-16 max-w-2xl mx-auto leading-relaxed tracking-tight">
-            Dimentica le vecchie agenzie. Un servizio premium per chi vende, senza costi nascosti e con la massima trasparenza.
+            Un servizio premium per chi vende, basato sui dati e senza costi nascosti. La tranquillità di un'agenzia tradizionale, ma con zero provvigioni a tuo carico.
           </p>
 
           {/* Azioni */}
@@ -60,9 +60,9 @@ const BentoHero = () => {
 
           {/* Footer Hero */}
           <div className="mt-24 flex flex-wrap justify-center gap-12 md:gap-20 opacity-20 grayscale">
-            <span className="text-xs font-bold tracking-[0.4em] uppercase">Affidabilità</span>
+            <span className="text-xs font-bold tracking-[0.4em] uppercase">Autorità</span>
             <span className="text-xs font-bold tracking-[0.4em] uppercase">Trasparenza</span>
-            <span className="text-xs font-bold tracking-[0.4em] uppercase">Innovazione</span>
+            <span className="text-xs font-bold tracking-[0.4em] uppercase">Risultati Reali</span>
           </div>
         </motion.div>
       </div>

@@ -8,22 +8,22 @@ const features = [
   {
     icon: <Shield className="w-8 h-8 text-[#94b0ab]" />,
     title: "Zero Provvigioni",
-    text: "Siamo professionisti nel settore... chi possiede un immobile non deve sostenere costi per venderlo!"
+    text: "Nessun costo per chi vende. Una garanzia contrattuale e una questione di trasparenza radicale, non uno slogan."
   },
   {
     icon: <FileText className="w-8 h-8 text-[#94b0ab]" />,
-    title: "Report Gratuito",
-    text: "Un'analisi chiara e dettagliata per scoprire il vero valore di mercato del tuo immobile."
+    title: "Valutazione Data-Driven",
+    text: "Niente opinioni. Analisi di mercato matematica e dossier verificato per posizionare l'immobile al suo reale valore."
   },
   {
     icon: <Star className="w-8 h-8 text-[#94b0ab]" />,
-    title: "Servizio Premium",
-    text: "Gestiamo ogni fase della vendita con la massima cura e professionalità."
+    title: "Gestione Istituzionale",
+    text: "Un team strutturato che gestisce ogni pratica burocratica, tutelandoti dal primo appuntamento fino al rogito."
   },
   {
     icon: <TrendingUp className="w-8 h-8 text-[#94b0ab]" />,
-    title: "Massimo Valore",
-    text: "Ottimizziamo la presentazione del tuo immobile per attirare gli acquirenti giusti."
+    title: "Vendita Rapida",
+    text: "Un'infrastruttura di marketing avanzata che ci permette di chiudere le vendite ben al di sotto della media cittadina."
   }
 ];
 
@@ -32,9 +32,9 @@ const ValueProposition = () => {
     <section id="servizi" className="py-24 bg-white">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#1a1a1a] mb-4 tracking-tight">Perché sceglierci?</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-[#1a1a1a] mb-4 tracking-tight">Da Promessa a Certezza.</h2>
           <p className="text-gray-600 text-lg">
-            La nostra missione è semplificare la vendita immobiliare eliminando i costi superflui per chi vende.
+            La fiducia si costruisce con la trasparenza. Ecco come tuteliamo il tuo patrimonio in ogni fase della vendita.
           </p>
         </div>
 
