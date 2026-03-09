@@ -9,6 +9,8 @@ import BentoHero from '@/components/BentoHero';
 import StatsBento from '@/components/StatsBento';
 import PropertyBento from '@/components/PropertyBento';
 import ValueProposition from '@/components/ValueProposition';
+import MethodSection from '@/components/MethodSection';
+import TestimonialsBento from '@/components/TestimonialsBento';
 import AboutSection from '@/components/AboutSection';
 import TeamContact from '@/components/TeamContact';
 
@@ -38,8 +40,10 @@ const Index = () => {
         <BentoHero />
         <StatsBento />
         <ValueProposition />
+        <MethodSection />
         <AboutSection />
         <PropertyBento />
+        <TestimonialsBento />
         <TeamContact />
       </main>
 
