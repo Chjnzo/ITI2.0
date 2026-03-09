@@ -20,7 +20,7 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-4 left-4 right-4 z-50 flex items-center gap-2 max-w-4xl mx-auto">
+    <header className="fixed top-4 left-4 right-4 z-50 hidden md:flex items-center gap-2 max-w-4xl mx-auto">
       {isDetailPage && (
         <Link 
           to="/immobili" 
@@ -51,7 +51,6 @@ const Header = () => {
           Parliamo
         </button>
 
-        {/* Mobile Placeholder to balance logo if needed on detail */}
         {!isDetailPage && <div className="md:hidden w-6" />}
       </div>
     </header>
