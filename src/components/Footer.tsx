@@ -15,7 +15,13 @@ const Footer = () => {
           
           {/* Brand & Info */}
           <div className="md:col-span-5 space-y-6">
-            <h3 className="text-2xl font-bold tracking-tighter uppercase">IL TUO <span className="text-[#94b0ab]">IMMOBILIARE</span></h3>
+            <Link to="/" className="block">
+              <img 
+                src="/Logo.svg" 
+                alt="Il Tuo Immobiliare" 
+                className="h-10 md:h-12 w-auto object-contain grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500" 
+              />
+            </Link>
             <p className="text-gray-500 text-sm max-w-sm leading-relaxed">
               L'immobiliare a Bergamo che rivoluziona il mercato con il metodo a zero provvigioni per chi vende. Qualità, trasparenza e innovazione digitale.
             </p>
