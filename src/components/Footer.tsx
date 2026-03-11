@@ -14,37 +14,40 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
           
           {/* Brand & Info */}
-          <div className="md:col-span-5 space-y-6">
-            <Link to="/" className="block">
+          <div className="md:col-span-5 space-y-10">
+            <div className="space-y-6">
+              <p className="text-gray-500 text-sm max-w-sm leading-relaxed">
+                L'immobiliare a Bergamo che rivoluziona il mercato con il metodo a zero provvigioni per chi vende. Qualità, trasparenza e innovazione digitale.
+              </p>
+              <div className="text-gray-400 text-sm space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-[#94b0ab]">
+                    <MapPin size={16}/>
+                  </div>
+                  <span>Via G. Adelasio 18, Ranica (BG)</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-[#94b0ab]">
+                    <Phone size={16}/>
+                  </div>
+                  <span>+39 035 123 4567</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-[#94b0ab]">
+                    <Mail size={16}/>
+                  </div>
+                  <span>info@iltuoimmobiliare.it</span>
+                </div>
+              </div>
+            </div>
+
+            <Link to="/" className="block pt-4">
               <img 
                 src="/Logo.svg" 
                 alt="Il Tuo Immobiliare" 
-                className="h-24 md:h-32 w-auto object-contain" 
+                className="h-40 md:h-56 w-auto object-contain" 
               />
             </Link>
-            <p className="text-gray-500 text-sm max-w-sm leading-relaxed">
-              L'immobiliare a Bergamo che rivoluziona il mercato con il metodo a zero provvigioni per chi vende. Qualità, trasparenza e innovazione digitale.
-            </p>
-            <div className="text-gray-400 text-sm space-y-3">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-[#94b0ab]">
-                  <MapPin size={16}/>
-                </div>
-                <span>Via G. Adelasio 18, Ranica (BG)</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-[#94b0ab]">
-                  <Phone size={16}/>
-                </div>
-                <span>+39 035 123 4567</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-[#94b0ab]">
-                  <Mail size={16}/>
-                </div>
-                <span>info@iltuoimmobiliare.it</span>
-              </div>
-            </div>
           </div>
 
           {/* Navigation Links */}
