@@ -34,8 +34,8 @@ const Header = () => {
         "flex-1 bg-white/70 backdrop-blur-xl border border-white/40 rounded-3xl flex items-center justify-between px-6 md:px-8 shadow-lg shadow-black/5 transition-all duration-300",
         isDetailPage ? "h-12 md:h-14" : "h-14 md:h-16 w-full"
       )}>
-        <Link to="/" className="text-[13px] md:text-lg font-bold tracking-tight text-[#1a1a1a] uppercase whitespace-nowrap">
-          IL TUO <span className="text-[#94b0ab]">IMMOBILIARE</span>
+        <Link to="/" className="flex items-center">
+          <img src="/Logo.svg" alt="Il Tuo Immobiliare" className="h-7 md:h-8 w-auto object-contain" />
         </Link>
         
         <nav className="hidden md:flex items-center gap-8">
