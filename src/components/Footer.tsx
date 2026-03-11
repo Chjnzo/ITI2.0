@@ -14,7 +14,15 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
           
           {/* Brand & Info */}
-          <div className="md:col-span-5 space-y-10">
+          <div className="md:col-span-5 space-y-8">
+            <Link to="/" className="block">
+              <img 
+                src="/Logo.svg" 
+                alt="Il Tuo Immobiliare" 
+                className="h-8 md:h-10 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300" 
+              />
+            </Link>
+
             <div className="space-y-6">
               <p className="text-gray-500 text-sm max-w-sm leading-relaxed">
                 L'immobiliare a Bergamo che rivoluziona il mercato con il metodo a zero provvigioni per chi vende. Qualità, trasparenza e innovazione digitale.
@@ -40,14 +48,6 @@ const Footer = () => {
                 </div>
               </div>
             </div>
-
-            <Link to="/" className="block pt-4">
-              <img 
-                src="/Logo.svg" 
-                alt="Il Tuo Immobiliare" 
-                className="h-40 md:h-56 w-auto object-contain" 
-              />
-            </Link>
           </div>
 
           {/* Navigation Links */}
