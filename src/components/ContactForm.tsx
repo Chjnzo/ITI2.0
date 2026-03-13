@@ -8,11 +8,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 interface ContactFormProps {
   propertyTitle?: string;
+  propertyId?: string;
 }
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 
-const ContactForm = ({ propertyTitle }: ContactFormProps) => {
+const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
   const [status, setStatus] = useState<FormStatus>('idle');
   const [formData, setFormData] = useState({
     nome: '',
@@ -39,6 +40,7 @@ const ContactForm = ({ propertyTitle }: ContactFormProps) => {
           telefono: formData.telefono,
           messaggio: formData.messaggio,
           immobile_interesse: propertyTitle || 'Generico dal Sito',
+          immobile_id: propertyId,
           stato: 'nuovo'
         }]);
 

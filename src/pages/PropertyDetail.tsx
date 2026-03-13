@@ -289,7 +289,7 @@ const PropertyDetail = () => {
 
               <div id="contact-section-mobile" className="lg:hidden p-8 bg-white rounded-[32px] border border-gray-100 shadow-sm">
                  <h3 className="text-xl font-bold mb-6">Inviaci un messaggio</h3>
-                 <ContactForm propertyTitle={property.titolo} />
+                 <ContactForm propertyTitle={property.titolo} propertyId={property.id} />
               </div>
 
             </div>
@@ -326,7 +326,7 @@ const PropertyDetail = () => {
                       </div>
                     ) : null}
                     <p className="text-[11px] font-bold text-gray-500 uppercase tracking-widest px-1">Richiedi Informazioni</p>
-                    <ContactForm propertyTitle={property.titolo} />
+                    <ContactForm propertyTitle={property.titolo} propertyId={property.id} />
                   </div>
                 </div>
               </div>
