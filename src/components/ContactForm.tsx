@@ -32,47 +32,17 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
     setStatus('submitting');
 
     try {
-      // Step A: Check if lead already exists by email
-      const { data: existingLeads, error: fetchError } = await supabase
-        .from('leads')
-        .select('id, messaggio')
-        .eq('email', formData.email)
-        .maybeSingle();
+      // Using the secure RPC function to handle deduplication and RLS bypass
+      const { error: rpcError } = await supabase.rpc('upsert_lead', {
+        p_nome: formData.nome,
+        p_email: formData.email,
+        p_telefono: formData.telefono,
+        p_messaggio: formData.messaggio,
+        p_immobile_id: propertyId || null,
+        p_immobile_interesse: propertyTitle || 'Generico dal Sito'
+      });
 
-      if (fetchError) throw fetchError;
-
-      if (existingLeads) {
-        // Step B: Update existing lead
-        const updatedMessage = `${existingLeads.messaggio}\n\n--- Nuova richiesta (${new Date().toLocaleDateString('it-IT')}): ---\n${formData.messaggio}`;
-        
-        const { error: updateError } = await supabase
-          .from('leads')
-          .update({
-            messaggio: updatedMessage,
-            immobile_id: propertyId || null,
-            immobile_interesse: propertyTitle || 'Richiesta Multipla',
-            stato: 'nuovo', // Reset status to ensure it pops up in Kanban
-            telefono: formData.telefono // Update phone in case it changed
-          })
-          .eq('id', existingLeads.id);
-
-        if (updateError) throw updateError;
-      } else {
-        // Step C: Insert new lead
-        const { error: insertError } = await supabase
-          .from('leads')
-          .insert([{
-            nome: formData.nome,
-            email: formData.email,
-            telefono: formData.telefono,
-            messaggio: formData.messaggio,
-            immobile_interesse: propertyTitle || 'Generico dal Sito',
-            immobile_id: propertyId || null,
-            stato: 'nuovo'
-          }]);
-
-        if (insertError) throw insertError;
-      }
+      if (rpcError) throw rpcError;
 
       setStatus('success');
       setFormData({ nome: '', email: '', telefono: '', messaggio: '' });
