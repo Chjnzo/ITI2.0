@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { User, Mail, Phone, Send, Loader2, CheckCircle2 } from 'lucide-react';
 import CustomInput from './CustomInput';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 interface ContactFormProps {
   propertyTitle?: string;
@@ -32,24 +32,52 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
     setStatus('submitting');
 
     try {
-      const { error } = await supabase
+      // Step A: Check if lead already exists by email
+      const { data: existingLeads, error: fetchError } = await supabase
         .from('leads')
-        .insert([{
-          nome: formData.nome,
-          email: formData.email,
-          telefono: formData.telefono,
-          messaggio: formData.messaggio,
-          immobile_interesse: propertyTitle || 'Generico dal Sito',
-          immobile_id: propertyId,
-          stato: 'nuovo'
-        }]);
+        .select('id, messaggio')
+        .eq('email', formData.email)
+        .maybeSingle();
 
-      if (error) throw error;
+      if (fetchError) throw fetchError;
+
+      if (existingLeads) {
+        // Step B: Update existing lead
+        const updatedMessage = `${existingLeads.messaggio}\n\n--- Nuova richiesta (${new Date().toLocaleDateString('it-IT')}): ---\n${formData.messaggio}`;
+        
+        const { error: updateError } = await supabase
+          .from('leads')
+          .update({
+            messaggio: updatedMessage,
+            immobile_id: propertyId || null,
+            immobile_interesse: propertyTitle || 'Richiesta Multipla',
+            stato: 'nuovo', // Reset status to ensure it pops up in Kanban
+            telefono: formData.telefono // Update phone in case it changed
+          })
+          .eq('id', existingLeads.id);
+
+        if (updateError) throw updateError;
+      } else {
+        // Step C: Insert new lead
+        const { error: insertError } = await supabase
+          .from('leads')
+          .insert([{
+            nome: formData.nome,
+            email: formData.email,
+            telefono: formData.telefono,
+            messaggio: formData.messaggio,
+            immobile_interesse: propertyTitle || 'Generico dal Sito',
+            immobile_id: propertyId || null,
+            stato: 'nuovo'
+          }]);
+
+        if (insertError) throw insertError;
+      }
 
       setStatus('success');
       setFormData({ nome: '', email: '', telefono: '', messaggio: '' });
     } catch (err) {
-      console.error("Error submitting lead:", err);
+      console.error("Error processing lead:", err);
       setStatus('error');
     }
   };
@@ -97,6 +125,7 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
           type="email" 
           placeholder="mario@esempio.it" 
           icon={Mail}
+          required
           value={formData.email}
           onChange={handleChange}
           disabled={status === 'submitting'}
