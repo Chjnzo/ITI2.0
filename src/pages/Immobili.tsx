@@ -54,7 +54,7 @@ const Immobili = () => {
         images: [db.copertina_url, ...(db.immagini_urls || [])],
         agent: {
           name: db.agente_nome || "Team Il Tuo Immobiliare",
-          phone: db.agente_tel || "+39 035 123 4567",
+          phone: db.agente_tel || "+39 375 822 7321",
           email: db.agente_email || "info@iltuoimmobiliare.it"
         }
       }));
@@ -89,8 +89,9 @@ const Immobili = () => {
   return (
     <div className="min-h-screen bg-[#f8f9fa] font-sans text-[#1a1a1a]">
       <Helmet>
-        <title>Immobili in Vendita | Il Tuo Immobiliare</title>
-        <meta name="description" content="Esplora la nostra selezione di immobili in vendita a Bergamo e provincia. Appartamenti, ville e loft a zero commissioni per l'acquirente." />
+        <title>Immobili in Vendita a Bergamo | Il Tuo Immobiliare</title>
+        <meta name="description" content="Esplora gli immobili in vendita a Bergamo e provincia. Zero provvigioni per chi vende. Trilocali, bilocali, ville indipendenti selezionati." />
+        <link rel="canonical" href="https://www.iltuoimmobiliare.it/immobili" />
       </Helmet>
 
       <Header />

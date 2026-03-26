@@ -24,7 +24,7 @@ const TeamContact = () => {
                   </div>
                   <div>
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Telefono</p>
-                    <p className="text-lg font-bold text-[#1a1a1a]">+39 035 123 4567</p>
+                    <p className="text-lg font-bold text-[#1a1a1a]">+39 375 822 7321</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-6">

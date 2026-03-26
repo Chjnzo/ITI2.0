@@ -96,11 +96,12 @@ const PropertyDetail = () => {
       <Helmet>
         <title>{property.titolo} a {property.zona || 'Bergamo'} | Il Tuo Immobiliare</title>
         <meta name="description" content={`In vendita: ${property.titolo} a ${property.zona || 'Bergamo'} - € ${property.prezzo?.toLocaleString('it-IT')}. ${property.locali} locali, ${property.mq} mq. Scopri di più!`} />
+        <link rel="canonical" href={`https://www.iltuoimmobiliare.it/immobile/${property.id}`} />
       </Helmet>
 
       <Header />
       
-      <main className="pt-24 md:pt-32">
+      <main className="pt-24 md:pt-32 pb-16 md:pb-20">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
             <div className="lg:col-span-8 space-y-12">
