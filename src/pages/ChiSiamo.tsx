@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import ManifestoSection from '@/components/ManifestoSection';
 import { motion, Variants } from 'framer-motion';
 import { Cpu, Map as MapIcon, Coffee, ArrowUpRight } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 const ChiSiamo = () => {
   const containerVariants: Variants = {
@@ -27,6 +28,11 @@ const ChiSiamo = () => {
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] font-sans text-[#1a1a1a] selection:bg-[#94b0ab] selection:text-white">
+      <Helmet>
+        <title>Chi Siamo | Il Tuo Immobiliare Bergamo</title>
+        <meta name="description" content="Scopri il team di Il Tuo Immobiliare: professionisti del settore immobiliare a Bergamo con un metodo trasparente e zero provvigioni per chi vende." />
+        <link rel="canonical" href="https://www.iltuoimmobiliare.it/chi-siamo" />
+      </Helmet>
       <Header />
       
       <main className="pt-24 pb-20 md:pt-44 md:pb-32">

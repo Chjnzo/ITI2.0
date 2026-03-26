@@ -30,8 +30,28 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-[#f8f9fa] selection:bg-[#94b0ab] selection:text-white font-sans text-[#1a1a1a]">
       <Helmet>
-        <title>Il Tuo Immobiliare | Agenzia Immobiliare a Bergamo</title>
-        <meta name="description" content="Vendi o compra casa a Bergamo a zero provvigioni per chi vende. Scopri il nostro metodo verificato e i nostri immobili in esclusiva." />
+        <title>Il Tuo Immobiliare | Agenzia Immobiliare a Bergamo a Zero Provvigioni</title>
+        <meta name="description" content="Vendi casa a Bergamo senza pagare provvigioni. Valutazione gratuita, marketing professionale e gestione completa. Scopri il metodo Il Tuo Immobiliare." />
+        <link rel="canonical" href="https://www.iltuoimmobiliare.it/" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "RealEstateAgent",
+          "name": "Il Tuo Immobiliare",
+          "url": "https://www.iltuoimmobiliare.it",
+          "logo": "https://www.iltuoimmobiliare.it/Logo.svg",
+          "description": "Agenzia immobiliare a Bergamo a zero provvigioni per chi vende.",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Via Giovanni Adelasio, 18",
+            "addressLocality": "Ranica",
+            "addressRegion": "BG",
+            "postalCode": "24020",
+            "addressCountry": "IT"
+          },
+          "telephone": "+39-375-822-7321",
+          "email": "info@iltuoimmobiliare.it",
+          "areaServed": "Bergamo e provincia"
+        })}</script>
       </Helmet>
 
       <Header />

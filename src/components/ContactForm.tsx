@@ -17,6 +17,7 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
   const [status, setStatus] = useState<FormStatus>('idle');
   const [formData, setFormData] = useState({
     nome: '',
+    cognome: '',
     email: '',
     telefono: '',
     messaggio: ''
@@ -35,6 +36,7 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
       // Using the secure RPC function to handle deduplication and RLS bypass
       const { error: rpcError } = await supabase.rpc('upsert_lead', {
         p_nome: formData.nome,
+        p_cognome: formData.cognome,
         p_email: formData.email,
         p_telefono: formData.telefono,
         p_messaggio: formData.messaggio,
@@ -45,7 +47,7 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
       if (rpcError) throw rpcError;
 
       setStatus('success');
-      setFormData({ nome: '', email: '', telefono: '', messaggio: '' });
+      setFormData({ nome: '', cognome: '', email: '', telefono: '', messaggio: '' });
     } catch (err) {
       console.error("Error processing lead:", err);
       setStatus('error');
@@ -79,40 +81,52 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <CustomInput 
-          label="Nome" 
+        <CustomInput
+          label="Nome"
           name="nome"
-          placeholder="Mario Rossi" 
+          placeholder="Mario"
           icon={User}
           required
           value={formData.nome}
           onChange={handleChange}
           disabled={status === 'submitting'}
         />
-        <CustomInput 
-          label="Email" 
+        <CustomInput
+          label="Cognome"
+          name="cognome"
+          placeholder="Rossi"
+          icon={User}
+          required
+          value={formData.cognome}
+          onChange={handleChange}
+          disabled={status === 'submitting'}
+        />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <CustomInput
+          label="Email"
           name="email"
-          type="email" 
-          placeholder="mario@esempio.it" 
+          type="email"
+          placeholder="mario@esempio.it"
           icon={Mail}
           required
           value={formData.email}
           onChange={handleChange}
           disabled={status === 'submitting'}
         />
+        <CustomInput
+          label="Telefono"
+          name="telefono"
+          type="tel"
+          placeholder="+39 333 1234567"
+          icon={Phone}
+          required
+          value={formData.telefono}
+          onChange={handleChange}
+          disabled={status === 'submitting'}
+        />
       </div>
-      
-      <CustomInput 
-        label="Telefono" 
-        name="telefono"
-        type="tel"
-        placeholder="+39 333 1234567" 
-        icon={Phone}
-        required
-        value={formData.telefono}
-        onChange={handleChange}
-        disabled={status === 'submitting'}
-      />
 
       <div className="space-y-2">
         <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-1">Messaggio</label>

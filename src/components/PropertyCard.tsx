@@ -64,7 +64,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
         <div className="p-6 md:p-8 flex flex-col flex-1 rounded-b-3xl md:rounded-b-[40px] bg-white">
           <div className="mb-4 md:mb-6">
             <h3 className={cn(
-              "text-xl md:text-2xl font-bold mb-1 md:mb-2 transition-colors line-clamp-1",
+              "text-xl md:text-2xl font-bold mb-1 md:mb-2 transition-colors line-clamp-2",
               !isSold && "group-hover:text-[#94b0ab]"
             )}>
               {property.title}
@@ -76,34 +76,34 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
           </div>
           
           <div className="grid grid-cols-3 gap-2 pt-4 md:pt-6 border-t border-gray-50 mt-auto">
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1 min-w-0">
               <div className="flex items-center gap-1.5 text-[#1a1a1a]">
                 <Euro size={12} className={cn("shrink-0", !isSold ? "text-[#94b0ab]" : "text-gray-300")} />
-                <span className={cn("text-[11px] md:text-xs font-bold truncate", isSold && "text-gray-400")}>
+                <span className={cn("text-[11px] md:text-xs font-bold", isSold && "text-gray-400")}>
                   {property.price.replace('€ ', '')}
                 </span>
               </div>
               <span className="text-[8px] md:text-[9px] text-gray-400 uppercase font-bold tracking-widest">Prezzo</span>
             </div>
 
-            <div className="flex flex-col gap-1 border-x border-gray-50 px-2">
+            <div className="flex flex-col gap-1 border-x border-gray-50 px-2 min-w-0">
               <div className="flex items-center gap-1.5 text-[#1a1a1a]">
                 <Maximize2 size={12} className={cn("shrink-0", !isSold ? "text-[#94b0ab]" : "text-gray-300")} />
-                <span className={cn("text-[11px] md:text-xs font-bold truncate", isSold && "text-gray-400")}>
+                <span className={cn("text-[11px] md:text-xs font-bold", isSold && "text-gray-400")}>
                   {property.specs.mq} mq
                 </span>
               </div>
               <span className="text-[8px] md:text-[9px] text-gray-400 uppercase font-bold tracking-widest">Superficie</span>
             </div>
 
-            <div className="flex flex-col gap-1 pl-2">
+            <div className="flex flex-col gap-1 pl-2 min-w-0">
               <div className="flex items-center gap-1.5 text-[#1a1a1a]">
                 {property.piano ? (
                   <Layers size={12} className={cn("shrink-0", !isSold ? "text-[#94b0ab]" : "text-gray-300")} />
                 ) : (
                   <Package size={12} className={cn("shrink-0", !isSold ? "text-[#94b0ab]" : "text-gray-300")} />
                 )}
-                <span className={cn("text-[11px] md:text-xs font-bold truncate", isSold && "text-gray-400")}>
+                <span className={cn("text-[11px] md:text-xs font-bold", isSold && "text-gray-400")}>
                   {formatPiano(property.piano, property.garage)}
                 </span>
               </div>

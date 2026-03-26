@@ -38,7 +38,7 @@ const Footer = () => {
                   <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-[#94b0ab]">
                     <Phone size={16}/>
                   </div>
-                  <span>+39 035 123 4567</span>
+                  <span>+39 375 822 7321</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-[#94b0ab]">
@@ -77,9 +77,10 @@ const Footer = () => {
             </div>
             <div className="pt-6 border-t border-gray-50">
               <p className="text-[10px] text-gray-400 leading-relaxed uppercase tracking-tighter">
-                Il Tuo Immobiliare S.r.l.<br />
-                P.IVA: 01234567890 • REA: BG-000000<br />
-                Sede Legale: Via G. Adelasio 18, Ranica (BG)
+                IL TUO IMMOBILIARE S.R.L.<br />
+                P.IVA: 04898550167 · REA: BG-497456<br />
+                Sede Legale: Via Matteotti 3, Albino (BG)<br />
+                Sede Operativa: Via G. Adelasio 18, Ranica (BG)
               </p>
             </div>
           </div>
