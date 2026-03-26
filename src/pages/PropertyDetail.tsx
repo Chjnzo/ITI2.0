@@ -97,6 +97,32 @@ const PropertyDetail = () => {
         <title>{property.titolo} a {property.zona || 'Bergamo'} | Il Tuo Immobiliare</title>
         <meta name="description" content={`In vendita: ${property.titolo} a ${property.zona || 'Bergamo'} - € ${property.prezzo?.toLocaleString('it-IT')}. ${property.locali} locali, ${property.mq} mq. Scopri di più!`} />
         <link rel="canonical" href={`https://www.iltuoimmobiliare.it/immobile/${property.id}`} />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "RealEstateListing",
+          "name": property.titolo,
+          "description": property.descrizione || `${property.tipologia || 'Immobile'} in vendita a ${property.zona}, Bergamo`,
+          "url": `https://www.iltuoimmobiliare.it/immobile/${property.id}`,
+          "image": property.copertina_url || "",
+          "offers": {
+            "@type": "Offer",
+            "price": property.prezzo,
+            "priceCurrency": "EUR",
+            "availability": "https://schema.org/InStock"
+          },
+          "floorSize": {
+            "@type": "QuantitativeValue",
+            "value": property.mq,
+            "unitCode": "MTK"
+          },
+          "numberOfRooms": property.locali,
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": property.zona,
+            "addressRegion": "BG",
+            "addressCountry": "IT"
+          }
+        })}</script>
       </Helmet>
 
       <Header />

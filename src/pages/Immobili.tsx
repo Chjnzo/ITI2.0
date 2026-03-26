@@ -92,6 +92,24 @@ const Immobili = () => {
         <title>Immobili in Vendita a Bergamo | Il Tuo Immobiliare</title>
         <meta name="description" content="Esplora gli immobili in vendita a Bergamo e provincia. Zero provvigioni per chi vende. Trilocali, bilocali, ville indipendenti selezionati." />
         <link rel="canonical" href="https://www.iltuoimmobiliare.it/immobili" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.iltuoimmobiliare.it/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Immobili in Vendita",
+              "item": "https://www.iltuoimmobiliare.it/immobili"
+            }
+          ]
+        })}</script>
       </Helmet>
 
       <Header />

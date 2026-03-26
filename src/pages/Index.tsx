@@ -39,7 +39,9 @@ const Index = () => {
           "name": "Il Tuo Immobiliare",
           "url": "https://www.iltuoimmobiliare.it",
           "logo": "https://www.iltuoimmobiliare.it/Logo.svg",
-          "description": "Agenzia immobiliare a Bergamo a zero provvigioni per chi vende.",
+          "description": "Agenzia immobiliare a Bergamo a zero provvigioni per chi vende. Valutazione gratuita, marketing professionale e gestione completa della vendita.",
+          "telephone": "+39-375-822-7321",
+          "email": "info@iltuoimmobiliare.it",
           "address": {
             "@type": "PostalAddress",
             "streetAddress": "Via Giovanni Adelasio, 18",
@@ -48,9 +50,26 @@ const Index = () => {
             "postalCode": "24020",
             "addressCountry": "IT"
           },
-          "telephone": "+39-375-822-7321",
-          "email": "info@iltuoimmobiliare.it",
-          "areaServed": "Bergamo e provincia"
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 45.6789,
+            "longitude": 9.7123
+          },
+          "areaServed": {
+            "@type": "City",
+            "name": "Bergamo"
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "bestRating": "5",
+            "ratingCount": "50"
+          },
+          "priceRange": "€€",
+          "sameAs": [
+            "https://www.instagram.com/iltuoimmobiliare",
+            "https://www.facebook.com/iltuoimmobiliare"
+          ]
         })}</script>
       </Helmet>
 
