@@ -97,6 +97,16 @@ const PropertyDetail = () => {
         <title>{property.titolo} a {property.zona || 'Bergamo'} | Il Tuo Immobiliare</title>
         <meta name="description" content={`In vendita: ${property.titolo} a ${property.zona || 'Bergamo'} - € ${property.prezzo?.toLocaleString('it-IT')}. ${property.locali} locali, ${property.mq} mq. Scopri di più!`} />
         <link rel="canonical" href={`https://www.iltuoimmobiliare.it/immobile/${property.id}`} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`https://www.iltuoimmobiliare.it/immobile/${property.id}`} />
+        <meta property="og:title" content={`${property.titolo} a ${property.zona || 'Bergamo'} | Il Tuo Immobiliare`} />
+        <meta property="og:description" content={`In vendita: ${property.titolo} a ${property.zona || 'Bergamo'} — € ${property.prezzo?.toLocaleString('it-IT')}. ${property.locali} locali, ${property.mq} mq.`} />
+        <meta property="og:image" content={property.copertina_url || 'https://www.iltuoimmobiliare.it/og-image.jpg'} />
+        <meta property="og:locale" content="it_IT" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${property.titolo} a ${property.zona || 'Bergamo'} | Il Tuo Immobiliare`} />
+        <meta name="twitter:description" content={`In vendita: ${property.titolo} a ${property.zona || 'Bergamo'} — € ${property.prezzo?.toLocaleString('it-IT')}. ${property.locali} locali, ${property.mq} mq.`} />
+        <meta name="twitter:image" content={property.copertina_url || 'https://www.iltuoimmobiliare.it/og-image.jpg'} />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "RealEstateListing",
@@ -287,7 +297,7 @@ const PropertyDetail = () => {
                       {property.zona || property.citta || 'Bergamo'}
                     </h4>
                     <p className="text-gray-400 font-medium mb-8 max-w-sm">
-                      Posizione approssimativa. L'indirizzo esatto verrà fornito in fase di appuntamento.
+                      Clicca qui per vedere la posizione esatta, se non disponibile contattaci per ricervela!
                     </p>
                     <a 
                       href={externalMapUrl}

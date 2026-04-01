@@ -12,7 +12,7 @@ const features = [
   },
   {
     icon: <FileText className="w-6 h-6 md:w-8 md:h-8 text-[#94b0ab]" />,
-    title: "Valutazione Data-Driven",
+    title: "Analisi oggettive",
     text: "Niente opinioni. Analisi di mercato matematica e dossier verificato per posizionare l'immobile al suo reale valore."
   },
   {
@@ -23,7 +23,7 @@ const features = [
   {
     icon: <TrendingUp className="w-6 h-6 md:w-8 md:h-8 text-[#94b0ab]" />,
     title: "Vendita Rapida",
-    text: "Un'infrastruttura di marketing avanzata che ci permette di chiudere le vendite ben al di sotto della media cittadina."
+    text: "Un'infrastruttura di marketing avanzata che ci permette di chiudere le vendite ben al di sotto della media."
   }
 ];
 

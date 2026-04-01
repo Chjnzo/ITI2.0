@@ -5,7 +5,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ManifestoSection from '@/components/ManifestoSection';
 import { motion, Variants } from 'framer-motion';
-import { Cpu, Map as MapIcon, Coffee, ArrowUpRight } from 'lucide-react';
+import { Cpu, Coffee, ArrowUpRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
 const ChiSiamo = () => {
@@ -32,6 +33,16 @@ const ChiSiamo = () => {
         <title>Chi Siamo | Il Tuo Immobiliare Bergamo</title>
         <meta name="description" content="Scopri il team di Il Tuo Immobiliare: professionisti del settore immobiliare a Bergamo con un metodo trasparente e zero provvigioni per chi vende." />
         <link rel="canonical" href="https://www.iltuoimmobiliare.it/chi-siamo" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.iltuoimmobiliare.it/chi-siamo" />
+        <meta property="og:title" content="Chi Siamo | Il Tuo Immobiliare Bergamo" />
+        <meta property="og:description" content="Scopri il team di Il Tuo Immobiliare: professionisti del settore immobiliare a Bergamo con un metodo trasparente e zero provvigioni per chi vende." />
+        <meta property="og:image" content="https://www.iltuoimmobiliare.it/og-image.jpg" />
+        <meta property="og:locale" content="it_IT" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Chi Siamo | Il Tuo Immobiliare Bergamo" />
+        <meta name="twitter:description" content="Scopri il team di Il Tuo Immobiliare: professionisti del settore immobiliare a Bergamo con un metodo trasparente e zero provvigioni per chi vende." />
+        <meta name="twitter:image" content="https://www.iltuoimmobiliare.it/og-image.jpg" />
       </Helmet>
       <Header />
       
@@ -100,8 +111,8 @@ const ChiSiamo = () => {
               className="md:col-span-3 bg-white p-8 md:p-10 rounded-3xl md:rounded-[48px] border border-gray-100 shadow-sm flex flex-col md:flex-row items-center gap-8 md:gap-12 overflow-hidden"
             >
               <div className="flex-1">
-                <div className="w-12 h-12 md:w-14 md:h-14 bg-[#94b0ab]/10 rounded-2xl flex items-center justify-center text-[#94b0ab] mb-4 md:mb-6">
-                  <MapIcon size={24} />
+                <div className="w-12 h-12 md:w-14 md:h-14 bg-[#94b0ab]/10 rounded-2xl flex items-center justify-center mb-4 md:mb-6 p-2.5">
+                  <img src="/Logo.svg" alt="Il Tuo Immobiliare" className="w-full h-full object-contain" />
                 </div>
                 <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">Radici solide</h3>
                 <p className="text-gray-500 text-sm md:text-base leading-relaxed max-w-sm">
@@ -128,11 +139,11 @@ const ChiSiamo = () => {
             {[
               { 
                 name: "Matteo Roggeri", 
-                role: "Founder", 
+                role: "Co-Founder", 
                 quote: "Il nostro successo si misura sui risultati che facciamo ottenere ai clienti, non sulle provvigioni." 
               },
               { 
-                name: "Gabriele", 
+                name: "Gabriele Sturniolo", 
                 role: "Co-Founder", 
                 quote: "Uniamo la tecnologia più avanzata all'esperienza umana per vendere il tuo immobile alle migliori condizioni di mercato." 
               }
@@ -168,8 +179,8 @@ const ChiSiamo = () => {
                 <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'linear-gradient(#94b0ab 1px, transparent 1px), linear-gradient(90deg, #94b0ab 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center">
-                    <div className="w-12 h-12 md:w-16 md:h-16 bg-white rounded-2xl md:rounded-3xl shadow-xl flex items-center justify-center text-[#94b0ab] mx-auto mb-4">
-                      <MapIcon size={24} />
+                    <div className="w-16 h-16 md:w-20 md:h-20 bg-white rounded-2xl md:rounded-3xl shadow-xl flex items-center justify-center mx-auto mb-4 p-3">
+                      <img src="/Logo.svg" alt="Il Tuo Immobiliare" className="w-full h-full object-contain" />
                     </div>
                     <p className="font-bold text-[#1a1a1a] text-sm md:text-base">Ranica, Bergamo</p>
                   </div>
@@ -183,9 +194,12 @@ const ChiSiamo = () => {
                   Via Giovanni Adelasio 18,<br />
                   24020 Ranica (BG)
                 </p>
-                <button className="w-full md:w-fit h-14 md:h-16 px-8 md:px-10 border-2 border-[#94b0ab] text-[#94b0ab] rounded-2xl md:rounded-3xl font-bold flex items-center justify-center gap-3 hover:bg-[#94b0ab] hover:text-white transition-all group">
-                  Valutiamo il tuo immobile <Coffee size={20} className="group-hover:rotate-12 transition-transform" />
-                </button>
+                <Link
+                  to="/#contatti"
+                  className="w-full md:w-fit h-14 md:h-16 px-8 md:px-10 border-2 border-[#94b0ab] text-[#94b0ab] rounded-2xl md:rounded-3xl font-bold flex items-center justify-center gap-3 hover:bg-[#94b0ab] hover:text-white transition-all group"
+                >
+                  Vieni a prendere un caffè <Coffee size={20} className="group-hover:rotate-12 transition-transform" />
+                </Link>
               </div>
             </div>
           </div>

@@ -12,6 +12,7 @@ import ValueProposition from '@/components/ValueProposition';
 import MethodSection from '@/components/MethodSection';
 import TestimonialsBento from '@/components/TestimonialsBento';
 import AboutSection from '@/components/AboutSection';
+import SocialSection from '@/components/SocialSection';
 import TeamContact from '@/components/TeamContact';
 
 const Index = () => {
@@ -33,6 +34,16 @@ const Index = () => {
         <title>Il Tuo Immobiliare | Agenzia Immobiliare a Bergamo a Zero Provvigioni</title>
         <meta name="description" content="Vendi casa a Bergamo senza pagare provvigioni. Valutazione gratuita, marketing professionale e gestione completa. Scopri il metodo Il Tuo Immobiliare." />
         <link rel="canonical" href="https://www.iltuoimmobiliare.it/" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.iltuoimmobiliare.it/" />
+        <meta property="og:title" content="Il Tuo Immobiliare | Agenzia Immobiliare a Bergamo a Zero Provvigioni" />
+        <meta property="og:description" content="Vendi casa a Bergamo senza pagare provvigioni. Valutazione gratuita, marketing professionale e gestione completa." />
+        <meta property="og:image" content="https://www.iltuoimmobiliare.it/og-image.jpg" />
+        <meta property="og:locale" content="it_IT" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Il Tuo Immobiliare | Agenzia Immobiliare a Bergamo a Zero Provvigioni" />
+        <meta name="twitter:description" content="Vendi casa a Bergamo senza pagare provvigioni. Valutazione gratuita, marketing professionale e gestione completa." />
+        <meta name="twitter:image" content="https://www.iltuoimmobiliare.it/og-image.jpg" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "RealEstateAgent",
@@ -67,8 +78,9 @@ const Index = () => {
           },
           "priceRange": "€€",
           "sameAs": [
-            "https://www.instagram.com/iltuoimmobiliare",
-            "https://www.facebook.com/iltuoimmobiliare"
+            "https://www.instagram.com/iltuo.immobiliare/",
+            "https://www.facebook.com/p/Il-Tuo-Immobiliare-61574878302324/",
+            "https://www.tiktok.com/@il.tuo.immobiliare"
           ]
         })}</script>
       </Helmet>
@@ -83,6 +95,7 @@ const Index = () => {
         <TestimonialsBento />
         <PropertyBento />
         <AboutSection />
+        <SocialSection />
         <TeamContact />
       </main>
 
