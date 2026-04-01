@@ -2,8 +2,13 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MadeWithDyad } from "./made-with-dyad";
-import { Instagram, Facebook, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
+import { Instagram, Facebook, Mail, Phone, MapPin } from 'lucide-react';
+
+const TikTokIcon = ({ size = 20 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/>
+  </svg>
+);
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -65,10 +70,16 @@ const Footer = () => {
           <div className="md:col-span-4 space-y-6">
             <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Seguici</h4>
             <div className="flex gap-4">
-              {[Instagram, Facebook, Linkedin].map((Icon, i) => (
-                <a 
-                  key={i} 
-                  href="#" 
+              {[
+                { Icon: Instagram, href: "https://www.instagram.com/iltuo.immobiliare/" },
+                { Icon: Facebook, href: "https://www.facebook.com/p/Il-Tuo-Immobiliare-61574878302324/" },
+                { Icon: TikTokIcon, href: "https://www.tiktok.com/@il.tuo.immobiliare" },
+              ].map(({ Icon, href }, i) => (
+                <a
+                  key={i}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-10 h-10 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-400 hover:bg-[#94b0ab] hover:text-white hover:border-[#94b0ab] transition-all"
                 >
                   <Icon size={20} />
@@ -91,9 +102,6 @@ const Footer = () => {
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
             © {currentYear} IL TUO IMMOBILIARE. TUTTI I DIRITTI RISERVATI.
           </p>
-          <div className="flex items-center gap-2">
-            <MadeWithDyad />
-          </div>
         </div>
       </div>
     </footer>

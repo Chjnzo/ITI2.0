@@ -7,7 +7,7 @@ import { Target, Camera, CheckCircle } from 'lucide-react';
 const steps = [
   {
     icon: Target,
-    title: "1. Analisi Data-Driven",
+    title: "1. Analisi su misura",
     text: "Valutazione oggettiva dell'immobile basata sui dati di mercato reali e check documentale completo."
   },
   {

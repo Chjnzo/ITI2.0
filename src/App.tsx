@@ -39,7 +39,6 @@ const App = () => (
               <Route path="/immobile/:id" element={<PropertyDetail />} />
               <Route path="/chi-siamo" element={<ChiSiamo />} />
               <Route path="/privacy" element={<Privacy />} />
-              <Route path="/property/:slug" element={<PropertyDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

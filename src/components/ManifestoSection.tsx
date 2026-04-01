@@ -27,7 +27,8 @@ const ManifestoSection = () => {
                 La Scommessa <br className="hidden md:block" /> Vinta.
               </h2>
               <p className="text-lg md:text-2xl text-gray-500 font-medium leading-relaxed max-w-2xl">
-                Diciotto mesi fa siamo nati con un'idea che in molti definivano impossibile. Oggi, con decine di case vendute e un tempo medio di vendita di soli 45 giorni, non siamo più un esperimento. Siamo la certezza a cui si affidano le famiglie bergamasche per proteggere e valorizzare il proprio patrimonio.
+                Due anni fa siamo partiti con un’idea che in molti definivano impossibile: schierarci dalla vostra parte e permettervi di vendere casa senza pagare provvigioni. 
+                <br className="hidden md:block" />Oggi i fatti parlano chiaro e dimostrano che la scommessa del "zero commissioni" è stata vinta con risultati evidenti. Siamo la certezza a cui si affidano le famiglie per proteggere e valorizzare il proprio patrimonio.
               </p>
             </div>
           </motion.div>
