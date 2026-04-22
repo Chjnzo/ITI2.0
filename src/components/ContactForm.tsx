@@ -15,6 +15,8 @@ type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 
 const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
   const [status, setStatus] = useState<FormStatus>('idle');
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  const [privacyError, setPrivacyError] = useState(false);
   const [formData, setFormData] = useState({
     nome: '',
     cognome: '',
@@ -30,6 +32,11 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!privacyAccepted) {
+      setPrivacyError(true);
+      return;
+    }
+    setPrivacyError(false);
     setStatus('submitting');
 
     try {
@@ -48,6 +55,7 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
 
       setStatus('success');
       setFormData({ nome: '', cognome: '', email: '', telefono: '', messaggio: '' });
+      setPrivacyAccepted(false);
     } catch (err) {
       console.error("Error processing lead:", err);
       setStatus('error');
@@ -143,9 +151,37 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
       </div>
 
       <div className="space-y-4">
-        <button 
+        <label className="flex items-start gap-3 cursor-pointer group">
+          <input
+            type="checkbox"
+            checked={privacyAccepted}
+            onChange={(e) => { setPrivacyAccepted(e.target.checked); if (e.target.checked) setPrivacyError(false); }}
+            disabled={status === 'submitting'}
+            className="mt-0.5 w-4 h-4 shrink-0 accent-[#94b0ab] cursor-pointer disabled:opacity-50"
+          />
+          <span className="text-xs text-gray-500 leading-relaxed group-hover:text-gray-700 transition-colors">
+            Ho letto e accetto l&apos;{' '}
+            <a
+              href="/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#94b0ab] underline underline-offset-2 hover:text-[#83a19b] transition-colors font-medium"
+              onClick={(e) => e.stopPropagation()}
+            >
+              Informativa sulla Privacy
+            </a>
+          </span>
+        </label>
+
+        {privacyError && (
+          <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest">
+            Devi accettare l&apos;informativa sulla privacy per procedere.
+          </p>
+        )}
+
+        <button
           type="submit"
-          disabled={status === 'submitting'}
+          disabled={status === 'submitting' || !privacyAccepted}
           className="w-full py-5 bg-[#94b0ab] text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-[#83a19b] transition-all shadow-lg shadow-[#94b0ab]/20 disabled:opacity-70"
         >
           {status === 'submitting' ? (
