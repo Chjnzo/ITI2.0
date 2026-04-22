@@ -34,25 +34,24 @@ const PropertyDetail = () => {
         .from('immobili').select('*').eq('id', id).single();
       if (propError) throw propError;
 
-      // 2. Fetch Open House
+      // 2. Fetch all upcoming Open Houses
       const today = new Date().toISOString().split('T')[0];
       const { data: ohData } = await supabase
         .from('open_houses')
         .select('*')
         .eq('immobile_id', propData.id)
         .gte('data_evento', today)
-        .order('data_evento', { ascending: true })
-        .limit(1)
-        .maybeSingle();
+        .order('data_evento', { ascending: true });
 
-      return { property: propData, openHouse: ohData };
+      return { property: propData, openHouses: ohData ?? [] };
     },
     enabled: !!id,
     staleTime: 1000 * 60 * 5,
   });
 
   const property = combinedData?.property;
-  const openHouse = combinedData?.openHouse;
+  const upcomingOpenHouses = combinedData?.openHouses ?? [];
+  const nextOpenHouse = upcomingOpenHouses[0] ?? null;
 
   const handleScroll = () => {
     if (galleryRef.current) {
@@ -142,8 +141,8 @@ const PropertyDetail = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
             <div className="lg:col-span-8 space-y-12">
               
-              {openHouse && (
-                <motion.div 
+              {upcomingOpenHouses.length > 0 && (
+                <motion.div
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="bg-[#94b0ab] text-white p-6 rounded-[32px] flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl shadow-[#94b0ab]/20"
@@ -153,14 +152,16 @@ const PropertyDetail = () => {
                       <Calendar className="text-white" size={24} />
                     </div>
                     <div>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-80">Evento in programma</p>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-80">
+                        {upcomingOpenHouses.length > 1 ? `${upcomingOpenHouses.length} date disponibili` : 'Evento in programma'}
+                      </p>
                       <h4 className="text-lg md:text-xl font-bold">
-                        Open House: {format(new Date(openHouse.data_evento), 'd MMMM', { locale: it })} • {openHouse.ora_inizio.slice(0,5)}-{openHouse.ora_fine.slice(0,5)}
+                        Open House: {format(new Date(nextOpenHouse!.data_evento), 'd MMMM', { locale: it })} • {nextOpenHouse!.ora_inizio.slice(0,5)}-{nextOpenHouse!.ora_fine.slice(0,5)}
                       </h4>
                     </div>
                   </div>
-                  <OpenHouseBooking 
-                    openHouse={openHouse}
+                  <OpenHouseBooking
+                    openHouses={upcomingOpenHouses}
                     propertyTitle={property.titolo}
                     trigger={
                       <button className="h-12 px-6 bg-white text-[#94b0ab] rounded-xl font-bold text-sm hover:bg-gray-50 transition-colors">
@@ -341,10 +342,10 @@ const PropertyDetail = () => {
                     </div>
                   </div>
                   <div className="space-y-4">
-                    {openHouse ? (
+                    {upcomingOpenHouses.length > 0 ? (
                       <div className="space-y-3">
-                        <OpenHouseBooking 
-                          openHouse={openHouse}
+                        <OpenHouseBooking
+                          openHouses={upcomingOpenHouses}
                           propertyTitle={property.titolo}
                           trigger={
                             <button className="w-full h-16 bg-[#94b0ab] text-white rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-[#94b0ab]/20 hover:scale-[1.02] transition-transform">
@@ -354,7 +355,11 @@ const PropertyDetail = () => {
                         />
                         <div className="flex items-center justify-center gap-2 text-gray-400">
                           <Users size={14} />
-                          <span className="text-[10px] font-bold uppercase tracking-widest">Posti limitati (Max {openHouse.posti_totali})</span>
+                          <span className="text-[10px] font-bold uppercase tracking-widest">
+                            {upcomingOpenHouses.length > 1
+                              ? `${upcomingOpenHouses.length} date disponibili`
+                              : `Posti limitati (Max ${nextOpenHouse!.posti_totali})`}
+                          </span>
                         </div>
                         <div className="relative py-4">
                           <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-gray-100"></span></div>
@@ -377,9 +382,9 @@ const PropertyDetail = () => {
           <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Prezzo</p>
           <div className="text-2xl font-bold text-[#1a1a1a] tracking-tight">{priceFormatted}</div>
         </div>
-        {openHouse ? (
-          <OpenHouseBooking 
-            openHouse={openHouse}
+        {upcomingOpenHouses.length > 0 ? (
+          <OpenHouseBooking
+            openHouses={upcomingOpenHouses}
             propertyTitle={property.titolo}
             trigger={
               <button className="h-14 px-8 bg-[#94b0ab] text-white rounded-2xl font-bold text-sm tracking-tight shadow-xl shadow-[#94b0ab]/20 flex items-center justify-center gap-2">
