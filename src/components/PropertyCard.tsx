@@ -71,7 +71,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             </h3>
             <div className="flex items-center gap-2 text-gray-400 text-sm font-medium">
               <MapPin size={14} className={cn(!isSold ? "text-[#94b0ab]" : "text-gray-300")} />
-              <span className="line-clamp-1">{property.location}, Bergamo</span>
+              <span className="line-clamp-1">{property.location}</span>
             </div>
           </div>
           

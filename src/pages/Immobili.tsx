@@ -90,7 +90,7 @@ const Immobili = () => {
         title: db.titolo,
         price: `€ ${db.prezzo?.toLocaleString('it-IT')}`,
         rawPrice: db.prezzo ?? 0,
-        location: db.zona,
+        location: db.zona || db.citta,
         category: db.locali || "Appartamento",
         description: db.descrizione,
         piano: db.piano,
