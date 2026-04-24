@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { MapPin, Maximize2, Euro, Layers, Package } from 'lucide-react';
 import { Property } from '@/data/properties';
 import { cn } from '@/lib/utils';
+import LazyImage from './LazyImage';
 
 interface PropertyCardProps {
   property: Property;
@@ -38,12 +39,11 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
       <div className="bg-white rounded-3xl md:rounded-[40px] overflow-hidden border border-gray-100 flex flex-col h-full relative isolate">
         
         <div className="relative aspect-[4/5] md:aspect-[4/3] overflow-hidden shrink-0 rounded-t-3xl md:rounded-t-[40px] z-10 [transform:translateZ(0)] [-webkit-mask-image:-webkit-radial-gradient(white,black)]">
-          <img 
-            src={property.images[0]} 
+          <LazyImage
+            src={property.images[0]}
             alt={property.title}
-            loading="lazy"
             className={cn(
-              "w-full h-full object-cover transition-transform duration-700 will-change-transform",
+              "object-cover transition-transform duration-700 will-change-transform",
               !isSold && "group-hover:scale-110",
               isSold && "grayscale opacity-80"
             )}

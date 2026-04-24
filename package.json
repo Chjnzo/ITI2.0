@@ -65,6 +65,12 @@
     "vaul": "^0.9.3",
     "zod": "^3.23.8"
   },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-arm64-gnu": "^4.0.0",
+    "@rollup/rollup-linux-arm64-musl": "^4.0.0",
+    "@rollup/rollup-linux-x64-gnu": "^4.0.0",
+    "@rollup/rollup-linux-x64-musl": "^4.0.0"
+  },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.26.1",
     "@eslint/js": "^9.9.0",

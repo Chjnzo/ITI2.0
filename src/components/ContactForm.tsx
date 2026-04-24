@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
+import { logger } from '@/utils/logger';
 import { User, Mail, Phone, Send, Loader2, CheckCircle2 } from 'lucide-react';
 import CustomInput from './CustomInput';
 import { motion } from 'framer-motion';
@@ -15,6 +16,7 @@ type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 
 const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
   const [status, setStatus] = useState<FormStatus>('idle');
+  const [submitCooldown, setSubmitCooldown] = useState(false);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [privacyError, setPrivacyError] = useState(false);
   const [formData, setFormData] = useState({
@@ -30,6 +32,11 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const startCooldown = () => {
+    setSubmitCooldown(true);
+    setTimeout(() => setSubmitCooldown(false), 3000);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!privacyAccepted) {
@@ -40,7 +47,6 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
     setStatus('submitting');
 
     try {
-      // Using the secure RPC function to handle deduplication and RLS bypass
       const { error: rpcError } = await supabase.rpc('upsert_lead', {
         p_nome: formData.nome,
         p_cognome: formData.cognome,
@@ -57,8 +63,10 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
       setFormData({ nome: '', cognome: '', email: '', telefono: '', messaggio: '' });
       setPrivacyAccepted(false);
     } catch (err) {
-      console.error("Error processing lead:", err);
+      logger.error('Lead submission failed', { error: String(err) });
       setStatus('error');
+    } finally {
+      startCooldown();
     }
   };
 
@@ -181,12 +189,13 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
 
         <button
           type="submit"
-          disabled={status === 'submitting' || !privacyAccepted}
+          disabled={status === 'submitting' || submitCooldown || !privacyAccepted}
           className="w-full py-5 bg-[#94b0ab] text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-[#83a19b] transition-all shadow-lg shadow-[#94b0ab]/20 disabled:opacity-70"
         >
-          {status === 'submitting' ? (
+          {status === 'submitting' || submitCooldown ? (
             <>
-              <Loader2 size={18} className="animate-spin" /> Invio in corso...
+              <Loader2 size={18} className="animate-spin" />
+              {status === 'submitting' ? 'Invio in corso...' : 'Attendere...'}
             </>
           ) : (
             <>
