@@ -46,7 +46,7 @@ const Index = () => {
         <meta name="twitter:image" content="https://www.iltuoimmobiliare.it/og-image.jpg" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "RealEstateAgent",
+          "@type": ["LocalBusiness", "RealEstateAgent"],
           "name": "Il Tuo Immobiliare",
           "url": "https://www.iltuoimmobiliare.it",
           "logo": "https://www.iltuoimmobiliare.it/Logo.svg",

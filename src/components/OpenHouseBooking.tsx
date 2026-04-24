@@ -41,18 +41,25 @@ const OpenHouseBooking = ({ openHouses, propertyTitle, trigger }: OpenHouseBooki
     openHouses.length === 1 ? openHouses[0] : null
   );
   const [submitting, setSubmitting] = useState(false);
+  const [submitCooldown, setSubmitCooldown] = useState(false);
   const [formData, setFormData] = useState({ nome: '', email: '', telefono: '' });
 
   const resetDialog = () => {
     setStep(openHouses.length === 1 ? 'form' : 'select-date');
     setSelectedOpenHouse(openHouses.length === 1 ? openHouses[0] : null);
     setSubmitting(false);
+    setSubmitCooldown(false);
     setFormData({ nome: '', email: '', telefono: '' });
   };
 
   const handleSelect = (oh: OpenHouse) => {
     setSelectedOpenHouse(oh);
     setStep('form');
+  };
+
+  const startCooldown = () => {
+    setSubmitCooldown(true);
+    setTimeout(() => setSubmitCooldown(false), 3000);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -76,6 +83,7 @@ const OpenHouseBooking = ({ openHouses, propertyTitle, trigger }: OpenHouseBooki
       console.error('Booking error:', err);
     } finally {
       setSubmitting(false);
+      startCooldown();
     }
   };
 
@@ -188,10 +196,10 @@ const OpenHouseBooking = ({ openHouses, propertyTitle, trigger }: OpenHouseBooki
                 <div className="pt-4">
                   <button
                     type="submit"
-                    disabled={submitting}
+                    disabled={submitting || submitCooldown}
                     className="w-full h-16 bg-[#94b0ab] text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-[#83a19b] transition-all disabled:opacity-70"
                   >
-                    {submitting ? (
+                    {submitting || submitCooldown ? (
                       <Loader2 className="animate-spin" />
                     ) : (
                       <>Conferma Prenotazione <CalendarDays size={18} /></>

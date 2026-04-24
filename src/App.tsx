@@ -7,6 +7,8 @@ import { HelmetProvider } from "react-helmet-async";
 import { lazy, Suspense } from "react";
 import ScrollToTop from "./components/ScrollToTop";
 import BottomDock from "./components/BottomDock";
+import ErrorBoundary from "./components/ErrorBoundary";
+import CookieBanner from "./components/CookieBanner";
 
 // Lazy loading pages
 const Index = lazy(() => import("./pages/Index"));
@@ -19,34 +21,37 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 const queryClient = new QueryClient();
 
 const LoadingScreen = () => (
-  <div className="min-h-screen flex items-center justify-center bg-[#f8f9fa]">
-    <div className="w-8 h-8 border-4 border-[#94b0ab] border-t-transparent rounded-full animate-spin"></div>
+  <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--secondary)' }}>
+    <div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: 'var(--primary)', borderTopColor: 'transparent' }}></div>
   </div>
 );
 
 const App = () => (
-  <HelmetProvider>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <ScrollToTop />
-          <Suspense fallback={<LoadingScreen />}>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/immobili" element={<Immobili />} />
-              <Route path="/immobile/:id" element={<PropertyDetail />} />
-              <Route path="/chi-siamo" element={<ChiSiamo />} />
-              <Route path="/privacy" element={<Privacy />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-          <BottomDock />
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
-  </HelmetProvider>
+  <ErrorBoundary>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <ScrollToTop />
+            <Suspense fallback={<LoadingScreen />}>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/immobili" element={<Immobili />} />
+                <Route path="/immobile/:id" element={<PropertyDetail />} />
+                <Route path="/chi-siamo" element={<ChiSiamo />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+            <BottomDock />
+            <CookieBanner />
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
+  </ErrorBoundary>
 );
 
 export default App;

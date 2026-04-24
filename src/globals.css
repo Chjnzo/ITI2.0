@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Brand palette — use via var(--primary) / var(--secondary) / var(--text-main) */
+:root {
+  --primary: #94b0ab;
+  --secondary: #f8f9fa;
+  --text-main: #333333;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

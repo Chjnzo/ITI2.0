@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import ContactForm from '@/components/ContactForm';
 import OpenHouseBooking from '@/components/OpenHouseBooking';
+import LazyImage from '@/components/LazyImage';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
@@ -181,7 +182,7 @@ const PropertyDetail = () => {
                 <h1 className="text-4xl md:text-6xl font-bold tracking-tighter leading-[1.1]">{property.titolo}</h1>
                 <div className="flex items-center gap-2 text-gray-400 font-medium">
                   <MapPin size={18} className="text-[#94b0ab]" />
-                  {property.zona}, {property.citta || 'Bergamo'}
+                  {[property.zona, property.citta || 'Bergamo'].filter(Boolean).join(', ')}
                 </div>
               </div>
 
@@ -193,7 +194,7 @@ const PropertyDetail = () => {
                 >
                   {images.map((img, i) => (
                     <div key={i} className="flex-none w-full h-full snap-center">
-                      <img src={img} className="w-full h-full object-cover" loading="lazy" alt={`${property.titolo} ${i + 1}`} />
+                      <LazyImage src={img} alt={`${property.titolo} ${i + 1}`} className="object-cover" />
                     </div>
                   ))}
                 </div>
