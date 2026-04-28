@@ -29,4 +29,6 @@ dist-ssr
 !.dev.vars.example
 .env*
 !.env.example
-.dyad/
+.env
+.env.local
+.env.*.local

@@ -79,7 +79,7 @@ const Privacy = () => {
             <h2 className="text-base font-bold text-[#1a1a1a] mb-3">5. Chi ha accesso ai tuoi dati (Responsabili del Trattamento)</h2>
             <p className="mb-3">I tuoi dati non saranno mai venduti o ceduti a terzi per scopi commerciali. Potranno però essere condivisi con soggetti esterni strettamente necessari per l&apos;erogazione dei nostri servizi, nominati "Responsabili Esterni del Trattamento":</p>
             <ul className="space-y-2 list-none pl-0">
-              <li><strong className="text-[#1a1a1a]">Fornitori di servizi Cloud e Database:</strong> Per l&apos;archiviazione sicura dei dati (es. Supabase, Vercel) i cui server sono localizzati all&apos;interno dell&apos;Unione Europea (es. Francoforte).</li>
+              <li><strong className="text-[#1a1a1a]">Fornitori di servizi Cloud e Database:</strong> Per l&apos;archiviazione sicura dei dati (es. Supabase, Cloudflare) i cui server sono localizzati all&apos;interno dell&apos;Unione Europea (es. Francoforte).</li>
               <li><strong className="text-[#1a1a1a]">Fornitori di servizi Email:</strong> Per l&apos;invio automatizzato dei report di valutazione o delle conferme di appuntamento (es. Resend).</li>
               <li><strong className="text-[#1a1a1a]">Consulenti e tecnici IT:</strong> Incaricati dello sviluppo e della manutenzione del nostro sito web e gestionale, vincolati da rigorosi accordi di riservatezza.</li>
             </ul>
