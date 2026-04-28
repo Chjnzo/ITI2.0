@@ -40,7 +40,13 @@ const CookieBanner = () => {
                   to="/privacy"
                   className="text-[#94b0ab] underline underline-offset-2 font-medium hover:text-[#83a19b] transition-colors"
                 >
-                  Informativa sulla Privacy
+                  Privacy Policy
+                </Link>{' '}e la nostra{' '}
+                <Link
+                  to="/cookies"
+                  className="text-[#94b0ab] underline underline-offset-2 font-medium hover:text-[#83a19b] transition-colors"
+                >
+                  Cookie Policy
                 </Link>.
               </p>
             </div>

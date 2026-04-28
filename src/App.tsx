@@ -16,6 +16,8 @@ const Immobili = lazy(() => import("./pages/Immobili"));
 const PropertyDetail = lazy(() => import("./pages/PropertyDetail"));
 const ChiSiamo = lazy(() => import("./pages/ChiSiamo"));
 const Privacy = lazy(() => import("./pages/Privacy"));
+const Terms = lazy(() => import("./pages/Terms"));
+const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -42,6 +44,8 @@ const App = () => (
                 <Route path="/immobile/:id" element={<PropertyDetail />} />
                 <Route path="/chi-siamo" element={<ChiSiamo />} />
                 <Route path="/privacy" element={<Privacy />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/cookies" element={<CookiePolicy />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>

@@ -47,7 +47,7 @@ const PropertyBento = () => {
         }
 
         // 3. Map to Property Interface
-        const mapped = finalProps.slice(0, 3).map((db: any) => ({
+        const mapped = finalProps.slice(0, 3).map((db: Record<string, unknown>) => ({
           id: db.id,
           slug: db.slug,
           title: db.titolo,

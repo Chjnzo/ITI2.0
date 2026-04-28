@@ -1,3 +1,5 @@
+import { Sentry } from '@/lib/sentry';
+
 type LogLevel = 'error' | 'warn' | 'info';
 
 interface LogExtra {
@@ -5,9 +7,9 @@ interface LogExtra {
 }
 
 function log(level: LogLevel, message: string, extra?: LogExtra): void {
-  // Replace this block with Sentry.captureException / PostHog.capture when ready
   if (level === 'error') {
     console.error(`[ITI] ${message}`, extra ?? '');
+    Sentry.captureException(new Error(message), { extra });
   } else if (level === 'warn') {
     console.warn(`[ITI] ${message}`, extra ?? '');
   } else {

@@ -26,7 +26,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
     return piano;
   };
 
-  const CardWrapper: any = isSold ? 'div' : Link;
+  const CardWrapper = (isSold ? 'div' : Link) as React.ElementType;
 
   return (
     <CardWrapper 

@@ -12,13 +12,17 @@ interface ContactFormProps {
   propertyId?: string;
 }
 
-type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
+type FormStatus = 'idle' | 'submitting' | 'success' | 'error' | 'rate_limited';
+
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const COOLDOWN_MS = 30_000;
 
 const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
   const [status, setStatus] = useState<FormStatus>('idle');
   const [submitCooldown, setSubmitCooldown] = useState(false);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [privacyError, setPrivacyError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
   const [formData, setFormData] = useState({
     nome: '',
     cognome: '',
@@ -30,20 +34,29 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    if (name === 'email') setEmailError(false);
   };
 
   const startCooldown = () => {
     setSubmitCooldown(true);
-    setTimeout(() => setSubmitCooldown(false), 3000);
+    setTimeout(() => setSubmitCooldown(false), COOLDOWN_MS);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!privacyAccepted) {
       setPrivacyError(true);
       return;
     }
     setPrivacyError(false);
+
+    if (!EMAIL_REGEX.test(formData.email)) {
+      setEmailError(true);
+      return;
+    }
+    setEmailError(false);
+
     setStatus('submitting');
 
     try {
@@ -57,7 +70,14 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
         p_immobile_interesse: propertyTitle || 'Generico dal Sito'
       });
 
-      if (rpcError) throw rpcError;
+      if (rpcError) {
+        if (rpcError.code === 'P0001' && rpcError.message?.includes('Too many requests')) {
+          setStatus('rate_limited');
+          startCooldown();
+          return;
+        }
+        throw rpcError;
+      }
 
       setStatus('success');
       setFormData({ nome: '', cognome: '', email: '', telefono: '', messaggio: '' });
@@ -72,7 +92,7 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
 
   if (status === 'success') {
     return (
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         className="bg-white p-12 rounded-[32px] text-center border border-[#94b0ab]/20 shadow-xl shadow-[#94b0ab]/5"
@@ -84,7 +104,7 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
         <p className="text-gray-500 leading-relaxed mb-8">
           Grazie per averci contattato. Il nostro team prenderà in carico la tua richiesta e ti risponderà entro 24 ore.
         </p>
-        <button 
+        <button
           onClick={() => setStatus('idle')}
           className="text-[#94b0ab] font-bold uppercase tracking-widest text-xs hover:underline"
         >
@@ -120,17 +140,24 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <CustomInput
-          label="Email"
-          name="email"
-          type="email"
-          placeholder="mario@esempio.it"
-          icon={Mail}
-          required
-          value={formData.email}
-          onChange={handleChange}
-          disabled={status === 'submitting'}
-        />
+        <div className="space-y-1">
+          <CustomInput
+            label="Email"
+            name="email"
+            type="email"
+            placeholder="mario@esempio.it"
+            icon={Mail}
+            required
+            value={formData.email}
+            onChange={handleChange}
+            disabled={status === 'submitting'}
+          />
+          {emailError && (
+            <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest px-1">
+              Inserisci un&apos;email valida.
+            </p>
+          )}
+        </div>
         <CustomInput
           label="Telefono"
           name="telefono"
@@ -146,10 +173,10 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
 
       <div className="space-y-2">
         <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-1">Messaggio</label>
-        <textarea 
+        <textarea
           name="messaggio"
-          rows={4} 
-          placeholder="Come possiamo aiutarti?" 
+          rows={4}
+          placeholder="Come possiamo aiutarti?"
           required
           value={formData.messaggio}
           onChange={handleChange}
@@ -206,7 +233,13 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
 
         {status === 'error' && (
           <p className="text-center text-red-500 text-[10px] font-bold uppercase tracking-widest">
-            Errore nell'invio. Riprova o chiamaci direttamente.
+            Errore nell&apos;invio. Riprova o chiamaci direttamente.
+          </p>
+        )}
+
+        {status === 'rate_limited' && (
+          <p className="text-center text-amber-500 text-[10px] font-bold uppercase tracking-widest">
+            Hai inviato di recente. Riprova tra 15 minuti.
           </p>
         )}
       </div>

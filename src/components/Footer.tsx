@@ -63,6 +63,8 @@ const Footer = () => {
               <Link to="/immobili" className="text-sm font-bold text-gray-600 hover:text-[#94b0ab] transition-colors">Catalogo Immobili</Link>
               <Link to="/chi-siamo" className="text-sm font-bold text-gray-600 hover:text-[#94b0ab] transition-colors">La Nostra Storia</Link>
               <Link to="/privacy" className="text-sm font-bold text-gray-600 hover:text-[#94b0ab] transition-colors">Privacy Policy</Link>
+              <Link to="/cookies" className="text-sm font-bold text-gray-600 hover:text-[#94b0ab] transition-colors">Cookie Policy</Link>
+              <Link to="/terms" className="text-sm font-bold text-gray-600 hover:text-[#94b0ab] transition-colors">Termini di Servizio</Link>
             </nav>
           </div>
 
@@ -79,7 +81,7 @@ const Footer = () => {
                   key={i}
                   href={href}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noopener noreferrer nofollow"
                   className="w-10 h-10 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-400 hover:bg-[#94b0ab] hover:text-white hover:border-[#94b0ab] transition-all"
                 >
                   <Icon size={20} />

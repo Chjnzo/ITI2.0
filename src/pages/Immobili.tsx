@@ -12,6 +12,30 @@ import { Property } from '@/data/properties';
 import PropertyCard from '@/components/PropertyCard';
 import { useQuery } from '@tanstack/react-query';
 
+interface DbImmobile {
+  id: string;
+  slug?: string;
+  titolo?: string;
+  prezzo?: number;
+  zona?: string;
+  citta?: string;
+  locali?: string;
+  descrizione?: string;
+  piano?: string;
+  garage?: boolean;
+  stato?: string;
+  mq?: number;
+  bagni?: number;
+  caratteristiche?: string[];
+  copertina_url?: string;
+  immagini_urls?: string[];
+  agente_nome?: string;
+  agente_tel?: string;
+  agente_email?: string;
+}
+
+type MappedProperty = Property & { rawPrice: number };
+
 const tipoOptions = [
   { label: "Monolocale", value: "mono" },
   { label: "Bilocale", value: "bilo" },
@@ -84,7 +108,7 @@ const Immobili = () => {
 
       if (supabaseError) throw supabaseError;
 
-      return (data || []).map((db: any) => ({
+      return (data || []).map((db: DbImmobile) => ({
         id: db.id,
         slug: db.slug,
         title: db.titolo,
@@ -114,7 +138,7 @@ const Immobili = () => {
   });
 
   // Filter Logic
-  const filteredAll = properties.filter((p: any) => {
+  const filteredAll = (properties as MappedProperty[]).filter((p) => {
     const matchesType = selectedTypes.length === 0 || selectedTypes.some(t => {
       const cat = p.category.toLowerCase();
       if (t === "villa") return cat.includes("villa") || cat.includes("indipendente");
@@ -133,8 +157,8 @@ const Immobili = () => {
   });
 
   // Split Logic
-  const availableProperties = filteredAll.filter((p: any) => p.stato !== 'Venduto');
-  const soldProperties = filteredAll.filter((p: any) => p.stato === 'Venduto');
+  const availableProperties = filteredAll.filter((p) => p.stato !== 'Venduto');
+  const soldProperties = filteredAll.filter((p) => p.stato === 'Venduto');
 
   return (
     <div className="min-h-screen bg-[#f8f9fa] font-sans text-[#1a1a1a]">
@@ -382,7 +406,7 @@ const Immobili = () => {
                 ) : (
                   <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <AnimatePresence mode="popLayout">
-                      {availableProperties.map((prop: any) => (
+                      {availableProperties.map((prop) => (
                         <motion.div
                           layout
                           key={prop.id}
@@ -412,7 +436,7 @@ const Immobili = () => {
 
                   <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <AnimatePresence mode="popLayout">
-                      {soldProperties.map((prop: any) => (
+                      {soldProperties.map((prop) => (
                         <motion.div
                           layout
                           key={prop.id}
