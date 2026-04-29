@@ -32,7 +32,7 @@ const PropertyDetail = () => {
     queryFn: async () => {
       // 1. Fetch Property
       const { data: propData, error: propError } = await supabase
-        .from('immobili').select('*').eq('id', id).single();
+        .from('immobili').select('*').eq('id', id).eq('is_deleted', false).single();
       if (propError) throw propError;
 
       // 2. Fetch all upcoming Open Houses

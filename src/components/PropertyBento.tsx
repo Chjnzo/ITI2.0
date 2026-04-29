@@ -23,6 +23,7 @@ const PropertyBento = () => {
           .from('immobili')
           .select('*')
           .eq('stato', 'Disponibile')
+          .eq('is_deleted', false)
           .eq('in_evidenza', true)
           .order('created_at', { ascending: false })
           .limit(3);
@@ -38,6 +39,7 @@ const PropertyBento = () => {
             .from('immobili')
             .select('*')
             .eq('stato', 'Disponibile')
+            .eq('is_deleted', false)
             .not('id', 'in', `(${excludedIds.join(',') || '00000000-0000-0000-0000-000000000000'})`)
             .order('created_at', { ascending: false })
             .limit(3 - finalProps.length);

@@ -129,23 +129,24 @@ const ChiSiamo = () => {
 
         <ManifestoSection />
 
+        {/* SEZIONE TEAM — temporaneamente nascosta, reintegrare quando arrivano le foto
         <section className="container mx-auto px-4 mb-20 md:mb-40 mt-20 md:mt-40">
           <div className="text-center mb-12 md:mb-20">
             <h2 className="text-3xl md:text-6xl font-bold tracking-tighter mb-4">I professionisti al tuo fianco.</h2>
             <p className="text-gray-400 text-sm md:text-base font-medium">Competenza, trasparenza e un unico obiettivo: tutelare i tuoi interessi.</p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-5xl mx-auto">
             {[
-              { 
-                name: "Matteo Roggeri", 
-                role: "Co-Founder", 
-                quote: "Il nostro successo si misura sui risultati che facciamo ottenere ai clienti, non sulle provvigioni." 
+              {
+                name: "Matteo Roggeri",
+                role: "Co-Founder",
+                quote: "Il nostro successo si misura sui risultati che facciamo ottenere ai clienti, non sulle provvigioni."
               },
-              { 
-                name: "Gabriele Sturniolo", 
-                role: "Co-Founder", 
-                quote: "Uniamo la tecnologia più avanzata all'esperienza umana per vendere il tuo immobile alle migliori condizioni di mercato." 
+              {
+                name: "Gabriele Sturniolo",
+                role: "Co-Founder",
+                quote: "Uniamo la tecnologia più avanzata all'esperienza umana per vendere il tuo immobile alle migliori condizioni di mercato."
               }
             ].map((member, i) => (
               <motion.div
@@ -155,8 +156,8 @@ const ChiSiamo = () => {
               >
                 <div className="bg-white/40 rounded-[22px] md:rounded-[38px] p-8 md:p-10 h-full">
                   <div className="w-24 h-24 md:w-32 md:h-32 bg-gray-200 rounded-2xl md:rounded-[32px] mb-6 md:mb-8 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
-                    <img 
-                      src={`https://images.unsplash.com/photo-${i === 0 ? '1560250097-0b93528c311a' : '1472099645785-5658abf4ff4e'}?q=80&w=400&auto=format&fit=crop`} 
+                    <img
+                      src={`https://images.unsplash.com/photo-${i === 0 ? '1560250097-0b93528c311a' : '1472099645785-5658abf4ff4e'}?q=80&w=400&auto=format&fit=crop`}
                       alt={member.name}
                       className="w-full h-full object-cover"
                     />
@@ -171,6 +172,7 @@ const ChiSiamo = () => {
             ))}
           </div>
         </section>
+        */}
 
         <section className="container mx-auto px-4">
           <div className="bg-white rounded-3xl md:rounded-[48px] overflow-hidden border border-gray-100 shadow-sm">

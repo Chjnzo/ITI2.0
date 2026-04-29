@@ -104,6 +104,7 @@ const Immobili = () => {
       const { data, error: supabaseError } = await supabase
         .from('immobili')
         .select('*')
+        .eq('is_deleted', false)
         .order('created_at', { ascending: false });
 
       if (supabaseError) throw supabaseError;
@@ -112,7 +113,7 @@ const Immobili = () => {
         id: db.id,
         slug: db.slug,
         title: db.titolo,
-        price: `€ ${db.prezzo?.toLocaleString('it-IT')}`,
+        price: db.prezzo ? `€ ${db.prezzo.toLocaleString('it-IT')}` : 'Su richiesta',
         rawPrice: db.prezzo ?? 0,
         location: db.zona || db.citta,
         category: db.locali || "Appartamento",
@@ -404,21 +405,21 @@ const Immobili = () => {
                     <p className="text-gray-400 font-medium">Nessun immobile disponibile in questa categoria.</p>
                   </div>
                 ) : (
-                  <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <AnimatePresence mode="popLayout">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <AnimatePresence>
                       {availableProperties.map((prop) => (
                         <motion.div
-                          layout
                           key={prop.id}
-                          initial={{ opacity: 0, scale: 0.9 }}
+                          initial={{ opacity: 0, scale: 0.95 }}
                           animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.9 }}
+                          exit={{ opacity: 0, scale: 0.95 }}
+                          transition={{ duration: 0.2 }}
                         >
                           <PropertyCard property={prop} />
                         </motion.div>
                       ))}
                     </AnimatePresence>
-                  </motion.div>
+                  </div>
                 )}
               </section>
 
@@ -434,21 +435,21 @@ const Immobili = () => {
                     <p className="text-gray-500">Queste proprietà hanno già trovato il loro nuovo proprietario attraverso il nostro metodo innovativo.</p>
                   </div>
 
-                  <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <AnimatePresence mode="popLayout">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <AnimatePresence>
                       {soldProperties.map((prop) => (
                         <motion.div
-                          layout
                           key={prop.id}
-                          initial={{ opacity: 0, scale: 0.9 }}
+                          initial={{ opacity: 0, scale: 0.95 }}
                           animate={{ opacity: 0.7, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.9 }}
+                          exit={{ opacity: 0, scale: 0.95 }}
+                          transition={{ duration: 0.2 }}
                         >
                           <PropertyCard property={prop} />
                         </motion.div>
                       ))}
                     </AnimatePresence>
-                  </motion.div>
+                  </div>
                 </section>
               )}
 
