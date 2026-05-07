@@ -211,7 +211,7 @@ const PropertyDetail = () => {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
                   { label: 'Superficie', value: `${property.mq} m²`, icon: Maximize2 },
-                  { label: 'Locali', value: property.locali, icon: Home },
+                  { label: 'Locali', value: property.stanze, icon: Home },
                   { label: 'Bagni', value: property.bagni, icon: Bath },
                   { label: 'Piano', value: property.piano || 'Terra', icon: Layers },
                 ].map((stat, i) => (
