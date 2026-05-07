@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const BentoHero = () => {
@@ -28,7 +28,7 @@ const BentoHero = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <div className="inline-flex items-center gap-2 px-5 py-2 bg-white border border-gray-100 rounded-full text-[#94b0ab] text-[10px] font-bold uppercase tracking-[0.2em] mb-8 md:mb-12 shadow-sm">
-            <Sparkles size={12} /> L'Agenzia di Riferimento a Bergamo
+            L'Agenzia di Riferimento a Bergamo
           </div>
           
           <h1 className="text-5xl md:text-9xl font-bold text-[#1a1a1a] mb-8 md:mb-10 leading-[0.95] tracking-tighter max-w-5xl mx-auto">
