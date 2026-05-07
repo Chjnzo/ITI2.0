@@ -20,6 +20,7 @@ interface DbImmobile {
   zona?: string;
   citta?: string;
   locali?: string;
+  stanze?: number;
   descrizione?: string;
   piano?: string;
   garage?: boolean;
@@ -123,7 +124,7 @@ const Immobili = () => {
         stato: db.stato,
         specs: {
           mq: db.mq,
-          rooms: db.locali,
+          rooms: db.stanze,
           baths: db.bagni
         },
         features: db.caratteristiche || [],

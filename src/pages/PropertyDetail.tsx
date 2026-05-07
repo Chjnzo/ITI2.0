@@ -176,7 +176,12 @@ const PropertyDetail = () => {
               <div className="space-y-4">
                 <div className="flex flex-wrap gap-3">
                   <span className="px-4 py-1.5 bg-white border border-gray-100 rounded-full text-[10px] font-bold uppercase tracking-widest text-gray-400">
-                    {property.locali}
+                    {(() => {
+                      const locali = property.locali || '';
+                      const impliciti = ['monolocale', 'bilocale', 'trilocale', 'quadrilocale'];
+                      const implica = impliciti.some(t => locali.toLowerCase().includes(t));
+                      return !implica && property.stanze ? `${locali} · ${property.stanze} locali` : locali;
+                    })()}
                   </span>
                 </div>
                 <h1 className="text-4xl md:text-6xl font-bold tracking-tighter leading-[1.1]">{property.titolo}</h1>

@@ -11,8 +11,19 @@ interface PropertyCardProps {
   property: Property;
 }
 
+const LOCALI_IMPLICITI = ['monolocale', 'bilocale', 'trilocale', 'quadrilocale'];
+
 const PropertyCard = ({ property }: PropertyCardProps) => {
   const isSold = property.stato === 'Venduto';
+
+  const categoryLabel = (() => {
+    const cat = property.category || '';
+    const catLower = cat.toLowerCase();
+    const impliesRooms = LOCALI_IMPLICITI.some(t => catLower.includes(t));
+    const rooms = property.specs.rooms;
+    if (!impliesRooms && rooms) return `${cat} · ${rooms} locali`;
+    return cat;
+  })();
 
   const formatPiano = (piano?: string, garage?: boolean) => {
     if (!piano) return garage ? "Box Auto" : "Disponibile";
@@ -56,7 +67,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
                 ? "bg-red-600 shadow-red-600/20" 
                 : "bg-white/20 backdrop-blur-md border border-white/30 drop-shadow-md"
             )}>
-              {isSold ? "VENDUTO" : property.category}
+              {isSold ? "VENDUTO" : categoryLabel}
             </span>
           </div>
         </div>
