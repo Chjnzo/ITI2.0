@@ -10,6 +10,7 @@ import { motion } from 'framer-motion';
 interface ContactFormProps {
   propertyTitle?: string;
   propertyId?: string;
+  unitInfo?: { tipologia: string; piano: string; superficie_mq: number; prezzo: number | null } | null;
 }
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error' | 'rate_limited';
@@ -18,19 +19,24 @@ type TipoInteresse = 'acquistare' | 'vendere';
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const COOLDOWN_MS = 30_000;
 
-const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
+const ContactForm = ({ propertyTitle, propertyId, unitInfo }: ContactFormProps) => {
   const [status, setStatus] = useState<FormStatus>('idle');
   const [submitCooldown, setSubmitCooldown] = useState(false);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [privacyError, setPrivacyError] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [tipoInteresse, setTipoInteresse] = useState<TipoInteresse>('acquistare');
+
+  const unitPrefix = unitInfo
+    ? `Sono interessato all'unità: ${unitInfo.tipologia}, ${unitInfo.piano}, ${unitInfo.superficie_mq} mq.\n\n`
+    : '';
+
   const [formData, setFormData] = useState({
     nome: '',
     cognome: '',
     email: '',
     telefono: '',
-    messaggio: ''
+    messaggio: unitPrefix
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -125,40 +131,42 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Tipo interesse switch */}
-      <div className="grid grid-cols-2 gap-3 p-1.5 bg-gray-100 rounded-2xl">
-        {tipoOptions.map(({ value, label, sublabel, icon: Icon }) => (
-          <button
-            key={value}
-            type="button"
-            onClick={() => setTipoInteresse(value)}
-            disabled={status === 'submitting'}
-            className={`relative flex flex-col items-center gap-1 py-4 px-3 rounded-xl text-center transition-all duration-200 disabled:opacity-50 ${
-              tipoInteresse === value
-                ? 'bg-white shadow-md shadow-[#94b0ab]/15 text-[#94b0ab]'
-                : 'text-gray-400 hover:text-gray-600'
-            }`}
-          >
-            <Icon
-              size={22}
-              className={`transition-colors duration-200 ${tipoInteresse === value ? 'text-[#94b0ab]' : 'text-gray-400'}`}
-            />
-            <span className={`text-xs font-bold tracking-wide transition-colors duration-200 ${tipoInteresse === value ? 'text-[#1a1a1a]' : 'text-gray-400'}`}>
-              {label}
-            </span>
-            <span className={`text-[10px] transition-colors duration-200 ${tipoInteresse === value ? 'text-gray-400' : 'text-gray-300'}`}>
-              {sublabel}
-            </span>
-            {tipoInteresse === value && (
-              <motion.div
-                layoutId="tipo-indicator"
-                className="absolute inset-0 rounded-xl ring-1 ring-[#94b0ab]/30"
-                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+      {/* Tipo interesse switch — solo nel form generico, non sugli immobili */}
+      {!propertyId && (
+        <div className="grid grid-cols-2 gap-3 p-1.5 bg-gray-100 rounded-2xl">
+          {tipoOptions.map(({ value, label, sublabel, icon: Icon }) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setTipoInteresse(value)}
+              disabled={status === 'submitting'}
+              className={`relative flex flex-col items-center gap-1 py-4 px-3 rounded-xl text-center transition-all duration-200 disabled:opacity-50 ${
+                tipoInteresse === value
+                  ? 'bg-white shadow-md shadow-[#94b0ab]/15 text-[#94b0ab]'
+                  : 'text-gray-400 hover:text-gray-600'
+              }`}
+            >
+              <Icon
+                size={22}
+                className={`transition-colors duration-200 ${tipoInteresse === value ? 'text-[#94b0ab]' : 'text-gray-400'}`}
               />
-            )}
-          </button>
-        ))}
-      </div>
+              <span className={`text-xs font-bold tracking-wide transition-colors duration-200 ${tipoInteresse === value ? 'text-[#1a1a1a]' : 'text-gray-400'}`}>
+                {label}
+              </span>
+              <span className={`text-[10px] transition-colors duration-200 ${tipoInteresse === value ? 'text-gray-400' : 'text-gray-300'}`}>
+                {sublabel}
+              </span>
+              {tipoInteresse === value && (
+                <motion.div
+                  layoutId="tipo-indicator"
+                  className="absolute inset-0 rounded-xl ring-1 ring-[#94b0ab]/30"
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                />
+              )}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <CustomInput

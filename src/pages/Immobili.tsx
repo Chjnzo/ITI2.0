@@ -106,6 +106,7 @@ const Immobili = () => {
         .from('immobili')
         .select('*')
         .eq('is_deleted', false)
+        .eq('visibile', true)
         .order('created_at', { ascending: false });
 
       if (supabaseError) throw supabaseError;
@@ -212,7 +213,7 @@ const Immobili = () => {
             </div>
 
             {/* Filter bar */}
-            <div className="flex items-center gap-3 w-full">
+            <div className="flex flex-col md:flex-row md:items-center gap-3 w-full">
 
               {/* Search */}
               <div className="relative flex-1">
@@ -231,12 +232,14 @@ const Immobili = () => {
                 )}
               </div>
 
+              <div className="flex items-center gap-3">
+
               {/* Dropdown: Tipologia */}
-              <div className="relative shrink-0" ref={tipoRef}>
+              <div className="relative flex-1 md:flex-none shrink-0" ref={tipoRef}>
                 <button
                   onClick={() => setOpenDropdown(prev => prev === "tipo" ? null : "tipo")}
                   className={cn(
-                    "h-14 px-6 rounded-2xl border text-sm font-bold flex items-center gap-2.5 transition-all shadow-sm whitespace-nowrap",
+                    "w-full h-14 px-5 md:px-6 rounded-2xl border text-sm font-bold flex items-center justify-center md:justify-start gap-2.5 transition-all shadow-sm whitespace-nowrap",
                     selectedTypes.length > 0 || openDropdown === "tipo"
                       ? "bg-[#94b0ab] text-white border-[#94b0ab]"
                       : "bg-white text-[#1a1a1a] border-gray-100 hover:border-gray-300"
@@ -306,11 +309,11 @@ const Immobili = () => {
               </div>
 
               {/* Dropdown: Prezzo */}
-              <div className="relative shrink-0" ref={prezzoRef}>
+              <div className="relative flex-1 md:flex-none shrink-0" ref={prezzoRef}>
                 <button
                   onClick={() => setOpenDropdown(prev => prev === "prezzo" ? null : "prezzo")}
                   className={cn(
-                    "h-14 px-6 rounded-2xl border text-sm font-bold flex items-center gap-2.5 transition-all shadow-sm whitespace-nowrap",
+                    "w-full h-14 px-5 md:px-6 rounded-2xl border text-sm font-bold flex items-center justify-center md:justify-start gap-2.5 transition-all shadow-sm whitespace-nowrap",
                     selectedPrices.length > 0 || openDropdown === "prezzo"
                       ? "bg-[#94b0ab] text-white border-[#94b0ab]"
                       : "bg-white text-[#1a1a1a] border-gray-100 hover:border-gray-300"
@@ -379,6 +382,7 @@ const Immobili = () => {
                 </AnimatePresence>
               </div>
 
+              </div>
             </div>
           </div>
 

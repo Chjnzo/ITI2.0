@@ -7,11 +7,11 @@ import { Helmet } from 'react-helmet-async';
 import { supabase } from '@/lib/supabaseClient';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { 
-  MapPin, ExternalLink, 
-  Loader2, Maximize2, Layers, Bath, 
+import {
+  MapPin, ExternalLink,
+  Loader2, Maximize2, Layers, Bath,
   ChevronDown, Home, Calendar,
-  Users, Check, ShieldCheck
+  Users, Check, ShieldCheck, Building2, Wind
 } from 'lucide-react';
 import ContactForm from '@/components/ContactForm';
 import OpenHouseBooking from '@/components/OpenHouseBooking';
@@ -21,30 +21,45 @@ import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useQuery } from '@tanstack/react-query';
 
+interface ImmobileUnita {
+  id: string;
+  tipologia: string;
+  piano: string;
+  superficie_mq: number;
+  camere: number;
+  bagni: number;
+  prezzo: number | null;
+  stato: string;
+  terrazzo?: boolean;
+}
+
 const PropertyDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [isDescExpanded, setIsDescExpanded] = useState(false);
   const [currentImgIdx, setCurrentImgIdx] = useState(1);
   const galleryRef = useRef<HTMLDivElement>(null);
 
+  const [inquiryUnit, setInquiryUnit] = useState<ImmobileUnita | null>(null);
+
   const { data: combinedData, isLoading: loading } = useQuery({
     queryKey: ['property', id],
     queryFn: async () => {
       // 1. Fetch Property
       const { data: propData, error: propError } = await supabase
-        .from('immobili').select('*').eq('id', id).eq('is_deleted', false).single();
+        .from('immobili').select('*').eq('id', id).eq('is_deleted', false).eq('visibile', true).single();
       if (propError) throw propError;
 
-      // 2. Fetch all upcoming Open Houses
+      // 2. Fetch all upcoming Open Houses + units for NC
       const today = new Date().toISOString().split('T')[0];
-      const { data: ohData } = await supabase
-        .from('open_houses')
-        .select('*')
-        .eq('immobile_id', propData.id)
-        .gte('data_evento', today)
-        .order('data_evento', { ascending: true });
+      const [ohResult, unitaResult] = await Promise.all([
+        supabase.from('open_houses').select('*').eq('immobile_id', propData.id)
+          .gte('data_evento', today).order('data_evento', { ascending: true }),
+        propData.locali === 'Nuova costruzione'
+          ? supabase.from('immobile_unita').select('*').eq('immobile_id', propData.id).order('created_at')
+          : Promise.resolve({ data: [] }),
+      ]);
 
-      return { property: propData, openHouses: ohData ?? [] };
+      return { property: propData, openHouses: ohResult.data ?? [], unita: unitaResult.data ?? [] };
     },
     enabled: !!id,
     staleTime: 1000 * 60 * 5,
@@ -52,6 +67,8 @@ const PropertyDetail = () => {
 
   const property = combinedData?.property;
   const upcomingOpenHouses = combinedData?.openHouses ?? [];
+  const unita: ImmobileUnita[] = combinedData?.unita ?? [];
+  const isNC = property?.locali === 'Nuova costruzione';
   const nextOpenHouse = upcomingOpenHouses[0] ?? null;
 
   const handleScroll = () => {
@@ -83,7 +100,12 @@ const PropertyDetail = () => {
   );
 
   const images = [property.copertina_url, ...(property.immagini_urls || [])];
-  const priceFormatted = `€ ${property.prezzo?.toLocaleString('it-IT')}`;
+  const ncMinPrice = isNC && unita.length > 0
+    ? unita.filter(u => u.prezzo !== null).reduce((min: number | null, u: ImmobileUnita) => min === null || (u.prezzo !== null && u.prezzo < min) ? u.prezzo : min, null)
+    : null;
+  const priceFormatted = isNC
+    ? (ncMinPrice !== null ? `Da € ${ncMinPrice.toLocaleString('it-IT')}` : 'Su richiesta')
+    : `€ ${property.prezzo?.toLocaleString('it-IT')}`;
   const encodedAddress = encodeURIComponent(`${property.indirizzo || ''} ${property.zona || ''} Bergamo Italia`);
   const externalMapUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
   
@@ -208,20 +230,37 @@ const PropertyDetail = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {[
-                  { label: 'Superficie', value: `${property.mq} m²`, icon: Maximize2 },
-                  { label: 'Locali', value: property.stanze, icon: Home },
-                  { label: 'Bagni', value: property.bagni, icon: Bath },
-                  { label: 'Piano', value: property.piano || 'Terra', icon: Layers },
-                ].map((stat, i) => (
-                  <div key={i} className="bg-white p-5 rounded-[24px] border border-gray-100 shadow-sm flex flex-col items-start">
-                    <stat.icon size={18} className="text-[#94b0ab] mb-3" />
-                    <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1">{stat.label}</p>
-                    <p className="text-base font-bold">{stat.value}</p>
-                  </div>
-                ))}
-              </div>
+              {isNC ? (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {[
+                    { label: 'Tipologia', value: 'Nuova Costruzione', icon: Building2 },
+                    { label: 'Unità Totali', value: unita.length || '—', icon: Home },
+                    { label: 'Disponibili', value: unita.filter(u => u.stato === 'Disponibile').length || '—', icon: Check },
+                    { label: 'A partire da', value: ncMinPrice !== null ? `€ ${ncMinPrice.toLocaleString('it-IT')}` : 'Su richiesta', icon: Layers },
+                  ].map((stat, i) => (
+                    <div key={i} className="bg-white p-5 rounded-[24px] border border-gray-100 shadow-sm flex flex-col items-start">
+                      <stat.icon size={18} className="text-[#94b0ab] mb-3" />
+                      <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1">{stat.label}</p>
+                      <p className="text-base font-bold">{stat.value}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {[
+                    { label: 'Superficie', value: `${property.mq} m²`, icon: Maximize2 },
+                    { label: 'Locali', value: property.stanze, icon: Home },
+                    { label: 'Bagni', value: property.bagni, icon: Bath },
+                    { label: 'Piano', value: property.piano || 'Terra', icon: Layers },
+                  ].map((stat, i) => (
+                    <div key={i} className="bg-white p-5 rounded-[24px] border border-gray-100 shadow-sm flex flex-col items-start">
+                      <stat.icon size={18} className="text-[#94b0ab] mb-3" />
+                      <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1">{stat.label}</p>
+                      <p className="text-base font-bold">{stat.value}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
 
               <div className="space-y-6">
                 <h3 className="text-2xl font-bold tracking-tight">Comfort e Dotazioni</h3>
@@ -233,6 +272,61 @@ const PropertyDetail = () => {
                   ))}
                 </div>
               </div>
+
+              {isNC && unita.length > 0 && (
+                <div className="space-y-6">
+                  <h3 className="text-2xl font-bold tracking-tight">Unità Disponibili</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {unita.map((u) => (
+                      <div key={u.id} className="bg-white p-5 rounded-[24px] border border-gray-100 shadow-sm space-y-4">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-base">{u.tipologia}</span>
+                          <span className={cn(
+                            "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tight border",
+                            u.stato === 'Disponibile' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' :
+                            u.stato === 'Riservato'   ? 'bg-amber-50 text-amber-700 border-amber-100' :
+                                                        'bg-gray-100 text-gray-500 border-gray-200'
+                          )}>{u.stato}</span>
+                        </div>
+                        <div className="grid grid-cols-3 gap-2 text-sm">
+                          <div>
+                            <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Piano</p>
+                            <p className="font-bold">{u.piano}</p>
+                          </div>
+                          <div>
+                            <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Mq</p>
+                            <p className="font-bold">{u.superficie_mq} m²</p>
+                          </div>
+                          <div>
+                            <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Locali</p>
+                            <p className="font-bold">{u.camere} cam · {u.bagni} bagni</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between pt-1">
+                          <div className="flex items-center gap-3">
+                            <span className="font-bold text-lg text-[#1a1a1a]">
+                              {u.prezzo !== null ? `€ ${u.prezzo.toLocaleString('it-IT')}` : 'Su richiesta'}
+                            </span>
+                            {u.terrazzo && (
+                              <span className="flex items-center gap-1 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                                <Wind size={12} className="text-[#94b0ab]" /> Terrazzo
+                              </span>
+                            )}
+                          </div>
+                          {u.stato === 'Disponibile' && (
+                            <button
+                              onClick={() => { setInquiryUnit(u); scrollToContact(); }}
+                              className="px-4 py-2 bg-[#94b0ab] text-white rounded-xl text-xs font-bold hover:bg-[#7a948f] transition-colors"
+                            >
+                              Informa
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="space-y-6">
                 <h3 className="text-2xl font-bold tracking-tight">Descrizione</h3>
@@ -333,7 +427,7 @@ const PropertyDetail = () => {
 
               <div id="contact-section-mobile" className="lg:hidden p-8 bg-white rounded-[32px] border border-gray-100 shadow-sm">
                  <h3 className="text-xl font-bold mb-6">Inviaci un messaggio</h3>
-                 <ContactForm propertyTitle={property.titolo} propertyId={property.id} />
+                 <ContactForm propertyTitle={property.titolo} propertyId={property.id} unitInfo={inquiryUnit} />
               </div>
 
             </div>
@@ -374,7 +468,7 @@ const PropertyDetail = () => {
                       </div>
                     ) : null}
                     <p className="text-[11px] font-bold text-gray-500 uppercase tracking-widest px-1">Richiedi Informazioni</p>
-                    <ContactForm propertyTitle={property.titolo} propertyId={property.id} />
+                    <ContactForm propertyTitle={property.titolo} propertyId={property.id} unitInfo={inquiryUnit} />
                   </div>
                 </div>
               </div>

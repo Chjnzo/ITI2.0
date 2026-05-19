@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Maximize2, Euro, Layers, Package } from 'lucide-react';
+import { MapPin, Maximize2, Euro, Layers, Package, Building2 } from 'lucide-react';
 import { Property } from '@/data/properties';
 import { cn } from '@/lib/utils';
 import LazyImage from './LazyImage';
@@ -15,6 +15,7 @@ const LOCALI_IMPLICITI = ['monolocale', 'bilocale', 'trilocale', 'quadrilocale']
 
 const PropertyCard = ({ property }: PropertyCardProps) => {
   const isSold = property.stato === 'Venduto';
+  const isNC = property.category === 'Nuova costruzione';
 
   const categoryLabel = (() => {
     const cat = property.category || '';
@@ -101,7 +102,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
               <div className="flex items-center gap-1.5 text-[#1a1a1a]">
                 <Maximize2 size={12} className={cn("shrink-0", !isSold ? "text-[#94b0ab]" : "text-gray-300")} />
                 <span className={cn("text-[11px] md:text-xs font-bold", isSold && "text-gray-400")}>
-                  {property.specs.mq} mq
+                  {isNC || !property.specs.mq ? '—' : `${property.specs.mq} mq`}
                 </span>
               </div>
               <span className="text-[8px] md:text-[9px] text-gray-400 uppercase font-bold tracking-widest">Superficie</span>
@@ -109,17 +110,19 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
 
             <div className="flex flex-col gap-1 pl-2 min-w-0">
               <div className="flex items-center gap-1.5 text-[#1a1a1a]">
-                {property.piano ? (
+                {isNC ? (
+                  <Building2 size={12} className={cn("shrink-0", !isSold ? "text-[#94b0ab]" : "text-gray-300")} />
+                ) : property.piano ? (
                   <Layers size={12} className={cn("shrink-0", !isSold ? "text-[#94b0ab]" : "text-gray-300")} />
                 ) : (
                   <Package size={12} className={cn("shrink-0", !isSold ? "text-[#94b0ab]" : "text-gray-300")} />
                 )}
                 <span className={cn("text-[11px] md:text-xs font-bold", isSold && "text-gray-400")}>
-                  {formatPiano(property.piano, property.garage)}
+                  {isNC ? 'N. Costruz.' : formatPiano(property.piano, property.garage)}
                 </span>
               </div>
               <span className="text-[8px] md:text-[9px] text-gray-400 uppercase font-bold tracking-widest">
-                {property.piano ? "Piano" : "Extra"}
+                {isNC ? 'Tipologia' : property.piano ? 'Piano' : 'Extra'}
               </span>
             </div>
           </div>
