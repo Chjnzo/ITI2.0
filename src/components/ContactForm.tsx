@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { logger } from '@/utils/logger';
-import { User, Mail, Phone, Send, Loader2, CheckCircle2 } from 'lucide-react';
+import { User, Mail, Phone, Send, Loader2, CheckCircle2, Home, TrendingUp } from 'lucide-react';
 import CustomInput from './CustomInput';
 import { motion } from 'framer-motion';
 
@@ -13,6 +13,7 @@ interface ContactFormProps {
 }
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error' | 'rate_limited';
+type TipoInteresse = 'acquistare' | 'vendere';
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const COOLDOWN_MS = 30_000;
@@ -23,6 +24,7 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [privacyError, setPrivacyError] = useState(false);
   const [emailError, setEmailError] = useState(false);
+  const [tipoInteresse, setTipoInteresse] = useState<TipoInteresse>('acquistare');
   const [formData, setFormData] = useState({
     nome: '',
     cognome: '',
@@ -67,7 +69,8 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
         p_telefono: formData.telefono,
         p_messaggio: formData.messaggio,
         p_immobile_id: propertyId || null,
-        p_immobile_interesse: propertyTitle || 'Generico dal Sito'
+        p_immobile_interesse: propertyTitle || 'Generico dal Sito',
+        p_tipo_interesse: tipoInteresse
       });
 
       if (rpcError) {
@@ -82,6 +85,7 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
       setStatus('success');
       setFormData({ nome: '', cognome: '', email: '', telefono: '', messaggio: '' });
       setPrivacyAccepted(false);
+      setTipoInteresse('acquistare');
     } catch (err) {
       logger.error('Lead submission failed', { error: String(err) });
       setStatus('error');
@@ -114,8 +118,48 @@ const ContactForm = ({ propertyTitle, propertyId }: ContactFormProps) => {
     );
   }
 
+  const tipoOptions: { value: TipoInteresse; label: string; sublabel: string; icon: React.ElementType }[] = [
+    { value: 'acquistare', label: 'Voglio Acquistare', sublabel: 'Cerco un immobile', icon: Home },
+    { value: 'vendere', label: 'Voglio Vendere', sublabel: 'Ho un immobile da vendere', icon: TrendingUp },
+  ];
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Tipo interesse switch */}
+      <div className="grid grid-cols-2 gap-3 p-1.5 bg-gray-100 rounded-2xl">
+        {tipoOptions.map(({ value, label, sublabel, icon: Icon }) => (
+          <button
+            key={value}
+            type="button"
+            onClick={() => setTipoInteresse(value)}
+            disabled={status === 'submitting'}
+            className={`relative flex flex-col items-center gap-1 py-4 px-3 rounded-xl text-center transition-all duration-200 disabled:opacity-50 ${
+              tipoInteresse === value
+                ? 'bg-white shadow-md shadow-[#94b0ab]/15 text-[#94b0ab]'
+                : 'text-gray-400 hover:text-gray-600'
+            }`}
+          >
+            <Icon
+              size={22}
+              className={`transition-colors duration-200 ${tipoInteresse === value ? 'text-[#94b0ab]' : 'text-gray-400'}`}
+            />
+            <span className={`text-xs font-bold tracking-wide transition-colors duration-200 ${tipoInteresse === value ? 'text-[#1a1a1a]' : 'text-gray-400'}`}>
+              {label}
+            </span>
+            <span className={`text-[10px] transition-colors duration-200 ${tipoInteresse === value ? 'text-gray-400' : 'text-gray-300'}`}>
+              {sublabel}
+            </span>
+            {tipoInteresse === value && (
+              <motion.div
+                layoutId="tipo-indicator"
+                className="absolute inset-0 rounded-xl ring-1 ring-[#94b0ab]/30"
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              />
+            )}
+          </button>
+        ))}
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <CustomInput
           label="Nome"
