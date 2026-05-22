@@ -88,6 +88,18 @@ const ContactForm = ({ propertyTitle, propertyId, unitInfo }: ContactFormProps) 
         throw rpcError;
       }
 
+      // Fire-and-forget: non blocchiamo il form se la mail fallisce
+      supabase.functions.invoke('notify-new-lead', {
+        body: {
+          nome: formData.nome,
+          cognome: formData.cognome,
+          email: formData.email,
+          telefono: formData.telefono,
+          messaggio: formData.messaggio,
+          immobile_interesse: propertyTitle || 'Generico dal Sito',
+        },
+      }).catch((err) => logger.error('notify-new-lead failed', { error: String(err) }));
+
       setStatus('success');
       setFormData({ nome: '', cognome: '', email: '', telefono: '', messaggio: '' });
       setPrivacyAccepted(false);
