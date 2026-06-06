@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 const stats = [
-  { label: "Vendita", value: "45gg", sub: "Media", color: "text-[#94b0ab]" },
+  { label: "Vendita", value: "25gg", sub: "Media", color: "text-[#94b0ab]" },
   { label: "Commissioni", value: "0%", sub: "Venditori", color: "text-[#1a1a1a]" },
   { label: "Rating", value: "4.9", sub: "Google", color: "text-[#94b0ab]" },
   { label: "Valore Gestito", value: "27 M", sub: "Locali", color: "text-[#1a1a1a]" }

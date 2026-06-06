@@ -45,7 +45,7 @@ const ManifestoSection = () => {
                 <Clock size={20} />
               </div>
               <div>
-                <p className="text-2xl md:text-4xl font-bold tracking-tighter mb-1">45 Giorni</p>
+                <p className="text-2xl md:text-4xl font-bold tracking-tighter mb-1">25 Giorni</p>
                 <p className="text-[8px] md:text-[10px] font-bold text-gray-400 uppercase tracking-widest">Media Vendita</p>
               </div>
             </motion.div>

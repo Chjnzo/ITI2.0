@@ -54,7 +54,7 @@ const PropertyBento = () => {
           slug: db.slug,
           title: db.titolo,
           price: `€ ${db.prezzo?.toLocaleString('it-IT')}`,
-          location: db.zona || db.indirizzo,
+          location: db.citta || db.zona,
           category: db.locali || "Appartamento",
           description: db.descrizione,
           piano: db.piano,
